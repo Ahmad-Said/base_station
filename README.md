@@ -23,7 +23,7 @@ The expectations from the students selecting this project is to deliver accordin
 - T0 + 9 weeks: Beta version of the complete application (end-to-end testing done).
 - T0 + 10 weeks: Final release
 
-## Pre-requisites:
+## Pre-requisites
 
 - Development under JAVA.
 - Database
