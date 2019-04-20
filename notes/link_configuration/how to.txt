@@ -1,0 +1,17 @@
+at first from wamp go to apache >> alias directory >> add alias;
+
+type : base
+path : to public directory
+
+then configure vhost: 
+
+<VirtualHost *:80>
+    ServerName base.test
+    DocumentRoot "C:\Users\user\Desktop\Me Files\Git_Repo\Config_Base_Station\public"
+</VirtualHost>
+
+then add to C:\Windows\System32\drivers\etc\hosts
+the following line: 
+127.0.0.1 base.test
+
+access your url using base.test tata
