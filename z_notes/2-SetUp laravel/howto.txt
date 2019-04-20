@@ -1,0 +1,18 @@
+requiretments:
+wamp
+php
+composer
+git
+..
+
+command i used:
+composer update --no-scripts
+php artisan key:generate
+php artisan serve
+
+
+-------
+
+if i want to add this repo and get update i copied the .git folder form project and paste it into the testing package
+to get update run:
+git pull origin master
