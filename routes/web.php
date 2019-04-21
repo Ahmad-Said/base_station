@@ -11,9 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Pages controller
+Route::get('/', 'PagesController@index');
+Route::get('/test','PagesController@test');
+Route::get('/profile', 'PagesController@prof');
+Route::post('/profile','PagesController@update');
+Route::get('showfile/{file}', 'PagesController@showfile');
+Route::get('/about','PagesController@about');
+Route::get('/references','PagesController@references');
+
+
+
 
 Auth::routes();
 

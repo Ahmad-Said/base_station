@@ -56,26 +56,25 @@
                                 return;
                             }
                             var html = '';
-                            var i=1;
                             html += '<tr>';
                                 html += '<td><input type="text" name="item_name[]" class="form-control item_name" /></td>';
                                 html += '<td><input type="text" name="item_quantity[]" class="form-control item_quantity" /></td>';
-                                html += '<td><select name="technologie" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>';                     
-                                html += '<td><select name="port" id="port" class="form-control ggg"><option value="">Select number of Port</option> </select></td>';
+                                html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>';                     
+                                html += '<td><select name="port[]" id="port" class="form-control ports"><option value="">Select number of Port</option> </select></td>';
                                 html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
                                 $('#item_table').append(html);
                                 $('#error').html('');
                             };
                             $(document).on('change', '.dynamic', function(){                                   
                                 if((this).value=="2g")
-                                $("#port").html("<option>2 port</option><option>4 port</option>");
+                                     $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option>");
                                 if((this).value=="3g"){                              
-                                $("tr").children("select.ggg").first().html("<option>2 port</option><option>4 port</option><option>6 port</option>"); 
+                                    $(this).closest('tr').next().find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option>"); 
                                 }
                                 if((this).value=="4g")
-                                $("#port").html("<option>2 port</option><option>4 port</option><option>6 port</option><option>8 port</option>");
-                                });            
-
+                                    $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option><option>8 port</option>");
+                                });
+                                  
                             $(document).on('click', '.add',function(){
                                 add_to_table();
                                 $('#system_number').val($('#item_table tr').length -1);
@@ -105,7 +104,6 @@
                                 }
                             if(error=='')
                                  $('#error').html('');
-                           
 
                             var times=Math.abs(this.value-rowcount +1);
                              if(rowcount-1 < this.value)
@@ -178,10 +176,6 @@
                        });
                        
                       });
-
-                      </script>
-                    <script>
-                     
                       </script>
                 </div>
                 
