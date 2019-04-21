@@ -10,15 +10,17 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       {{-- style="padding-left: 500px;" --}}
       <ul class="navbar-nav mr-auto" > 
-        @if(Auth::user()->type=='admin')
-          @include('admin.nav')
-        @else
-          @if(Auth::user()->type=='salesman')
-            @include('salesman.nav')
-          @else
+        @guest
             @include('other.nav')
-          @endif
-        @endif
+        @else
+              @if(Auth::user()->type=='admin')
+                 @include('admin.nav')
+            @else
+              @if(Auth::user()->type=='salesman')
+                @include('salesman.nav')
+                @endif
+            @endif
+        @endguest
       </ul>
   
       {{-- <form class="form-inline my-2 my-lg-0">
