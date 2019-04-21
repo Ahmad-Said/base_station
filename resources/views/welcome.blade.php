@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-xs-12">
             <div class="card">
                 <div class="card-header">  
                      <h4 align="center">Enter Item Details</h4></div>
@@ -14,12 +14,28 @@
                          <form method="post" id="insert_form">
                             <br>
                              <div class="form-group row">
-                                    <label for="number-system" class="col-md-4 col-form-label text-md-right">{{ __('Number Of System') }}</label>
+                                    <label for="number_system" class="col-md-4 col-form-label text-md-right">{{ __('Number Of System') }}</label>
         
                                     <div class="col-md-4">
-                                        <input  type="number" class="form-control" id="system_number" name="system_number" min=0 max=13>
+                                        <input  type="number" class="form-control" id="system_number" name="system_number" min=0 max=13 value=1>
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                        <label for="antenna_per_sector" class="col-md-4 col-form-label text-md-right">{{ __('Max Antennas per sector') }}</label>
+            
+                                        <div class="col-md-4">
+                                            <input  type="number" class="form-control" id="antenna_per_sector" name="antenna_per_sector" min=1>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                            <label for="max_height" class="col-md-4 col-form-label text-md-right">{{ __('Max Height') }}</label>
+                
+                                            <div class="col-md-4">
+                                                <input  type="number" class="form-control" id="max_height" name="max_height" min=1>
+                                            </div>
+                                        </div>
 
                           <div class="table-repsonsive">
                            <span id="error"></span>
@@ -31,6 +47,14 @@
                              <th>Number of Port</th>
                              <th><button type="button" name="add" class="btn btn-success btn-sm add float-right"><span class="fas fa-plus-circle"></span></button></th>
                             </tr>
+                            <tr>
+                                    <td><input type="text" name="item_name[]" class="form-control item_name" /></td>
+                                    <td><input type="text" name="item_quantity[]" class="form-control item_quantity" /></td>
+                                    <td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>
+                                    <td><select name="port[]" id="port" class="form-control ports"><option value="">Select number of Port</option> </select></td>
+                                    <td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td>
+                            </tr>
+                                   
                            </table>
                            <div align="center">
                             <input type="submit" name="submit" class="btn btn-info" value="Insert" />
@@ -44,6 +68,7 @@
                     
 
                       $(document).ready(function(){
+                          
                        // define a function see 
                        // https://stackoverflow.com/questions/907634/is-this-how-you-define-a-function-in-jquery
                         var add_to_table=function(){
@@ -69,7 +94,7 @@
                                 if((this).value=="2g")
                                      $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option>");
                                 if((this).value=="3g"){                              
-                                    $(this).closest('tr').next().find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option>"); 
+                                    $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option>"); 
                                 }
                                 if((this).value=="4g")
                                     $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option><option>8 port</option>");
@@ -77,14 +102,21 @@
                                   
                             $(document).on('click', '.add',function(){
                                 add_to_table();
-                                $('#system_number').val($('#item_table tr').length -1);
                             });
                        
                        $(document).on('click', '.remove', function(){
                         $('#error').html('');
-                        $(this).closest('tr').remove();
                         var rowcount=$('#item_table tr').length;
-                        $('#system_number').val(rowcount-1);
+                        var error='';
+                        if(rowcount ==2)
+                        {
+                            error+="Number of System must be at least 1";
+                            $('#error').html('<div class="alert alert-danger">'+error+'</div>');
+                            return;
+                        }
+
+                        $(this).closest('tr').remove();
+                        $('#system_number').val(rowcount-2);
                        });
 
                        $('#system_number').change(function(){
@@ -176,10 +208,9 @@
                        });
                        
                       });
+                      
                       </script>
                 </div>
-                
-                {{ csrf_field() }}
             </div>
         </div>
     </div>

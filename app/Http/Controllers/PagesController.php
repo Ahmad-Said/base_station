@@ -40,7 +40,6 @@ class PagesController extends Controller
                 $user->name=$request->input("name");
                 $user->email=$request->input("email");
                 $user->save();
-        
         return  redirect()->back()->withInput()->with('success', 'Profile Updated Successfully!');
 
     }
