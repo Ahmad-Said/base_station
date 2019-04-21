@@ -1,7 +1,7 @@
 
 
       <li class="nav-item">
-        <a class="nav-link" href="/register">Register Coach</a>
+        <a class="nav-link" href="/register">Register Salesman</a>
       </li>
       <li class="nav-item">
               <a class="nav-link" href="/project">Default Project</a>

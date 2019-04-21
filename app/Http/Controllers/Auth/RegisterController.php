@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -37,7 +41,9 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        // old
+        // $this->middleware('guest');
+        $this->middleware('auth');
     }
 
     /**
@@ -50,7 +56,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
+            'email' => ['required', 'string', 'email', 'regex:/(.*)@rfsworld\.com/i', 'max:255', 'unique:usersWeb'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -69,4 +75,67 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+
+    /*
+    *
+    *this method is override for normal register way the commented was the original
+    * it is used to control access to registration form post
+    */
+
+    public function register(Request $request)
+    {
+        
+        //$this->guard()->login($user);
+
+       // return $this->registered($request, $user)?: redirect($this->redirectPath());
+        // return $request->all();
+        if(auth::user()->type !='admin'){
+            return redirect('/home')->with('error', 'You cannot register Other Users!<br>Ask admin for access code.. redirect later with input box..');
+        }
+        $this->validator($request->all())->validate();
+
+
+        // event(new Registered($user = $this->create($request->all())));
+
+        $user= new User();
+        $user->name=$request->input('name');
+        $user->email=$request->input('email');
+        $user->password=Hash::make($request->input('password'));
+        $user->type=$request->input('type');
+        $user->save();
+        return Redirect::back()->with('success','Operation Successful !<br> User id: '.$user->id.'<br>Username: '.$user->name.'<br>Email: '.$user->email.'<br>Type: '.$user->type );
+    }
+
+    // we can make href for button submitted from the form
+    public function register_with_code($code)
+    {
+        // create database code generated table and check if exist...
+        // if not redirect back with error not found
+       
+        // if yes 
+
+        //$this->guard()->login($user);
+
+       // return $this->registered($request, $user)?: redirect($this->redirectPath());
+    }
+
+
+    /*
+    *
+    *this method is override for normal get to register way the commented was the original
+    */
+
+    public function showRegistrationForm()
+     {
+        //  // if registration is closed, deny access
+        //  if (!config('backpack.base.registration_open')) {
+        //      abort(403, trans('backpack::base.registration_closed'));
+        //  }
+        //  $this->data['title'] = trans('backpack::base.register'); // set the page title
+        // //  return view('backpack::auth.register', $this->data);
+        //  return view('backpack::auth.register', $this->data);
+
+        return view('auth.register');
+     }
 }

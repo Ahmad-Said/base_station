@@ -1,0 +1,2 @@
+add a global setting for laravel if registration is open or not
+check links out

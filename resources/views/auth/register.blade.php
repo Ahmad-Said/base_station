@@ -25,6 +25,21 @@
                             </div>
                         </div>
 
+                        
+                        @if(Auth::user() && auth::user()->type=='admin')
+                        <div class="form-group row">
+                            <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
+
+                            <div class="col-md-6">
+                                    <select id="type" name="type" class="form-control">
+                                            <option value="salesman" selected="selected" class="form-control">Salesman</option>
+                                          </select>
+                            </div>
+                        </div>
+                        @else
+                        <input  name='type' id='type' type='hidden' value='salesman'>
+                        @endif
+
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 

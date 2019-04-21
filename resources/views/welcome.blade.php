@@ -6,15 +6,12 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Dashboard</div>
-
+                <div class="card-header">  
+                     <h4 align="center">Enter Item Details</h4></div>
                 <div class="card-body">
-                
-                        <br />
-                         <br />
-                         <h4 align="center">Enter Item Details</h4>
+                             
+                                              
                          <form method="post" id="insert_form">
-
                             <br>
                              <div class="form-group row">
                                     <label for="number-system" class="col-md-4 col-form-label text-md-right">{{ __('Number Of System') }}</label>
@@ -31,6 +28,7 @@
                              <th>Enter Item Name</th>
                              <th>Enter Quantity</th>
                              <th>Select Unit</th>
+                             <th>Number of Port</th>
                              <th><button type="button" name="add" class="btn btn-success btn-sm add float-right"><span class="fas fa-plus-circle"></span></button></th>
                             </tr>
                            </table>
@@ -39,11 +37,12 @@
                            </div>
                           </div>
                          </form>
-                       <input type="text" id="show" value="hewfew"> 
+
                        <br>
-                       another input: <input type="text" id="show2" value="hewfew"> 
                       
                       <script>
+                    
+
                       $(document).ready(function(){
                        // define a function see 
                        // https://stackoverflow.com/questions/907634/is-this-how-you-define-a-function-in-jquery
@@ -60,12 +59,22 @@
                             html += '<tr>';
                                 html += '<td><input type="text" name="item_name[]" class="form-control item_name" /></td>';
                                 html += '<td><input type="text" name="item_quantity[]" class="form-control item_quantity" /></td>';
-                                html += '<td><select name="item_unit[]" class="form-control item_unit"><option value="">Select Unit</option><option> some value</option></select></td>';
+                                html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>';                     
+                                html += '<td><select name="port[]" id="port" class="form-control ports"><option value="">Select number of Port</option> </select></td>';
                                 html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
                                 $('#item_table').append(html);
                                 $('#error').html('');
                             };
-                            
+                            $(document).on('change', '.dynamic', function(){                                   
+                                if((this).value=="2g")
+                                     $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option>");
+                                if((this).value=="3g"){                              
+                                    $(this).closest('tr').next().find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option>"); 
+                                }
+                                if((this).value=="4g")
+                                    $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option><option>8 port</option>");
+                                });
+                                  
                             $(document).on('click', '.add',function(){
                                 add_to_table();
                                 $('#system_number').val($('#item_table tr').length -1);
@@ -95,8 +104,7 @@
                                 }
                             if(error=='')
                                  $('#error').html('');
-                             $('#show').val(this.value);
-                             $('#show2').val(rowcount);
+
 
                             var times=Math.abs(this.value-rowcount +1);
                              if(rowcount-1 < this.value)
