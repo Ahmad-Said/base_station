@@ -84,7 +84,7 @@
                             html += '<tr>';
                                 html += '<td><input type="text" name="item_name[]" class="form-control item_name" /></td>';
                                 html += '<td><input type="text" name="item_quantity[]" class="form-control item_quantity" /></td>';
-                                html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>';                     
+                                html += '<td><select disabled name="technologie[]" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>';                     
                                 html += '<td><select name="port[]" id="port" class="form-control ports"><option value="">Select number of Port</option> </select></td>';
                                 html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
                                 $('#item_table').append(html);
@@ -102,6 +102,8 @@
                                   
                             $(document).on('click', '.add',function(){
                                 add_to_table();
+                                var rowcount=$('#item_table tr').length;
+                                $('#system_number').val(rowcount-1);
                             });
                        
                        $(document).on('click', '.remove', function(){
