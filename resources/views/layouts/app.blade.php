@@ -7,9 +7,7 @@
 </script>
 
     <div id="app" >
-        @if(Auth::user())
             @include('inc.navbar')
-        @endif
             <br><br>
             <div class="container">
                 <main class="py-4">
