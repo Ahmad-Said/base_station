@@ -2,6 +2,16 @@
 
 @section('content')
 
+
+<script>
+        var g2=["2 ports","4 ports"];
+        var g3=["2 ports","4 ports"];
+        var g4=["2 ports","4 ports","8 ports"];
+        var g5=["2 ports","4 ports","8 ports","12 ports"];
+        var toprint='';
+        
+        </script>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-xs-12">
@@ -41,17 +51,15 @@
                            <span id="error"></span>
                            <table class="table table-bordered" id="item_table">
                             <tr>
-                             <th>Enter Item Name</th>
-                             <th>Enter Quantity</th>
                              <th>Select Unit</th>
                              <th>Number of Port</th>
+                             <th>Frequency</th>
                              <th><button type="button" name="add" class="btn btn-success btn-sm add float-right"><span class="fas fa-plus-circle"></span></button></th>
                             </tr>
                             <tr>
-                                    <td><input type="text" name="item_name[]" class="form-control item_name" /></td>
-                                    <td><input type="text" name="item_quantity[]" class="form-control item_quantity" /></td>
-                                    <td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>
-                                    <td><select name="port[]" id="port" class="form-control ports"><option value="">Select number of Port</option> </select></td>
+                                    <td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="" disabled selected>Technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option><option value="5g">5G</option></select></td>
+                                    <td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>
+                                    <td><select name="band[]" id="band" class="form-control band" disabled><option value="" disabled selected>Frequency</option></select></td>
                                     <td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td>
                             </tr>
                                    
@@ -82,26 +90,51 @@
                             }
                             var html = '';
                             html += '<tr>';
-                                html += '<td><input type="text" name="item_name[]" class="form-control item_name" /></td>';
-                                html += '<td><input type="text" name="item_quantity[]" class="form-control item_quantity" /></td>';
-                                html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="">Select technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option></select></td>';                     
-                                html += '<td><select name="port[]" id="port" class="form-control ports"><option value="">Select number of Port</option> </select></td>';
+                                html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="" disabled selected>Technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option><option value="5g">5G</option></select></td>';                     
+                                html += '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
+                                html += '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
                                 html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
                                 $('#item_table').append(html);
                                 $('#error').html('');
                             };
                             $(document).on('change', '.dynamic', function(){                                   
                                 if((this).value=="2g")
-                                     $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option>");
-                                if((this).value=="3g"){                              
-                                    $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option>"); 
+                                {
+                                    toprint="";
+                                    for(var i in g2)
+                                    toprint+="<option>"+g2[i]+"</option>";
+                                     $(this).closest('tr').find('.ports').html(toprint);
+                                }
+                                if((this).value=="3g")
+                                {
+                                    toprint="";
+                                    for(var i in g3)
+                                    toprint+="<option>"+g2[i]+"</option>";
+                                     $(this).closest('tr').find('.ports').html(toprint);
                                 }
                                 if((this).value=="4g")
-                                    $(this).closest('tr').find('.ports').html("<option>2 port</option><option>4 port</option><option>6 port</option><option>8 port</option>");
-                                });
+                                {
+                                    toprint="";
+                                    for(var i in g4)
+                                    toprint+="<option>"+g4[i]+"</option>";
+                                     $(this).closest('tr').find('.ports').html(toprint);
+                                }
+                                if((this).value=="5g")
+                                {
+                                    toprint="";
+                                    for(var i in g5)
+                                    toprint+="<option>"+g5[i]+"</option>";
+                                     $(this).closest('tr').find('.ports').html(toprint);
+                                }
+                                $(this).closest('tr').find('.ports').prop("disabled", false);
+                                $(this).closest('tr').find('.bands').prop("disabled", false);
+                             });
+
                                   
-                            $(document).on('click', '.add',function(){
+                             $(document).on('click', '.add',function(){
                                 add_to_table();
+                                var rowcount=$('#item_table tr').length;
+                                $('#system_number').val(rowcount-1);
                             });
                        
                        $(document).on('click', '.remove', function(){
