@@ -1,20 +1,50 @@
 @extends('layouts.app')
 
 @section('content')
-
-
 <script>
-        var g2=["2 ports","4 ports"];
-        var g3=["2 ports","4 ports"];
-        var g4=["2 ports","4 ports","8 ports"];
-        var g5=["2 ports","4 ports","8 ports","12 ports"];
-        var toprint='';
-        
-        </script>
+
+        function generategp (array) {
+            var st='';
+            var nb=2;
+            array.forEach(element => {
+                st+='<option value='+nb+'>'+element+'</option>';
+                nb*=2;
+            });
+            return st;
+        }
+
+        var gp2=["2 ports","4 ports"];
+        var gp3=["2 ports","4 ports"];
+        var gp4=["2 ports","4 ports","8 ports"];
+        var gp5=["2 ports","4 ports","8 ports","12 ports"];
+        var stgp2=generategp(gp2);
+        var stgp3=generategp(gp3);
+        var stgp4=generategp(gp4);
+        var stgp5=generategp(gp5);
+      
+
+        function generategf (array) {
+            var st='';
+            array.forEach(element => {
+                st+='<option value='+element.id+'>'+element.symbol+'</option>';
+            });
+            return st;
+        }
+        var gf2 = <?php echo  json_encode($band2); ?>;
+        var gf3 = <?php echo  json_encode($band3); ?>;
+        var gf4 = <?php echo  json_encode($band4); ?>;
+        var gf5 = <?php echo  json_encode($band5); ?>;
+
+        var stgf2=generategf(gf2);
+        var stgf3=generategf(gf3);
+        var stgf4=generategf(gf4);
+        var stgf5=generategf(gf5);
+</script>
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-xs-12">
+        {{--  <div class="col-xs-12">  --}}
+        <div class="col-md-16">
             <div class="card">
                 <div class="card-header">  
                      <h4 align="center">Enter Item Details</h4></div>
@@ -57,9 +87,9 @@
                              <th><button type="button" name="add" class="btn btn-success btn-sm add float-right"><span class="fas fa-plus-circle"></span></button></th>
                             </tr>
                             <tr>
-                                    <td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="" disabled selected>Technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option><option value="5g">5G</option></select></td>
+                                    <td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="" disabled selected>Technologie</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>
                                     <td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>
-                                    <td><select name="band[]" id="band" class="form-control band" disabled><option value="" disabled selected>Frequency</option></select></td>
+                                    <td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>
                                     <td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td>
                             </tr>
                                    
@@ -90,7 +120,7 @@
                             }
                             var html = '';
                             html += '<tr>';
-                                html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="" disabled selected>Technologie</option><option value="2g">2G</option><option value="3g">3G</option><option value="4g">4G</option><option value="5g">5G</option></select></td>';                     
+                                html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="" disabled selected>Technologie</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>';                     
                                 html += '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
                                 html += '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
                                 html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
@@ -98,34 +128,28 @@
                                 $('#error').html('');
                             };
                             $(document).on('change', '.dynamic', function(){                                   
-                                if((this).value=="2g")
+                                toprint="";
+                                if((this).value=="2")
                                 {
-                                    toprint="";
-                                    for(var i in g2)
-                                    toprint+="<option>"+g2[i]+"</option>";
-                                     $(this).closest('tr').find('.ports').html(toprint);
-                                }
-                                if((this).value=="3g")
+                                    $(this).closest('tr').find('.ports').html(stgp2);
+                                    $(this).closest('tr').find('.bands').html(stgf2);
+                                }                        
+                                
+                                if((this).value=="3")
                                 {
-                                    toprint="";
-                                    for(var i in g3)
-                                    toprint+="<option>"+g2[i]+"</option>";
-                                     $(this).closest('tr').find('.ports').html(toprint);
-                                }
-                                if((this).value=="4g")
+                                    $(this).closest('tr').find('.ports').html(stgp3);
+                                    $(this).closest('tr').find('.bands').html(stgf3);
+                                }     
+                                if((this).value=="4")
                                 {
-                                    toprint="";
-                                    for(var i in g4)
-                                    toprint+="<option>"+g4[i]+"</option>";
-                                     $(this).closest('tr').find('.ports').html(toprint);
-                                }
-                                if((this).value=="5g")
+                                    $(this).closest('tr').find('.ports').html(stgp4);
+                                    $(this).closest('tr').find('.bands').html(stgf4);
+                                }     
+                                if((this).value=="5")
                                 {
-                                    toprint="";
-                                    for(var i in g5)
-                                    toprint+="<option>"+g5[i]+"</option>";
-                                     $(this).closest('tr').find('.ports').html(toprint);
-                                }
+                                    $(this).closest('tr').find('.ports').html(stgp5);
+                                    $(this).closest('tr').find('.bands').html(stgf5);
+                                }     
                                 $(this).closest('tr').find('.ports').prop("disabled", false);
                                 $(this).closest('tr').find('.bands').prop("disabled", false);
                              });

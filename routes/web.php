@@ -12,7 +12,6 @@
 */
 
 // Pages controller
-Route::get('/', 'PagesController@index');
 Route::get('/test','PagesController@test');
 Route::get('/profile', 'PagesController@prof');
 Route::post('/profile','PagesController@update');
@@ -21,7 +20,8 @@ Route::get('/about','PagesController@about');
 Route::get('/references','PagesController@references');
 
 
-
+// Analyser Controller
+Route::get('/', 'AnalyserController@index');
 
 Auth::routes();
 
