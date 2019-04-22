@@ -85,12 +85,12 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        
+
         //$this->guard()->login($user);
 
-       // return $this->registered($request, $user)?: redirect($this->redirectPath());
+        // return $this->registered($request, $user)?: redirect($this->redirectPath());
         // return $request->all();
-        if(auth::user()->type !='admin'){
+        if (auth::user()->type !='admin') {
             return redirect('/home')->with('error', 'You cannot register Other Users!<br>Ask admin for access code.. redirect later with input box..');
         }
         $this->validator($request->all())->validate();
@@ -104,7 +104,7 @@ class RegisterController extends Controller
         $user->password=Hash::make($request->input('password'));
         $user->type=$request->input('type');
         $user->save();
-        return Redirect::back()->with('success','Operation Successful !<br> User id: '.$user->id.'<br>Username: '.$user->name.'<br>Email: '.$user->email.'<br>Type: '.$user->type );
+        return Redirect::back()->with('success', 'Operation Successful !<br> User id: '.$user->id.'<br>Username: '.$user->name.'<br>Email: '.$user->email.'<br>Type: '.$user->type);
     }
 
     // we can make href for button submitted from the form
@@ -112,8 +112,8 @@ class RegisterController extends Controller
     {
         // create database code generated table and check if exist...
         // if not redirect back with error not found
-       
-        // if yes 
+
+        // if yes
 
         //$this->guard()->login($user);
 
@@ -127,7 +127,7 @@ class RegisterController extends Controller
     */
 
     public function showRegistrationForm()
-     {
+    {
         //  // if registration is closed, deny access
         //  if (!config('backpack.base.registration_open')) {
         //      abort(403, trans('backpack::base.registration_closed'));
@@ -137,5 +137,5 @@ class RegisterController extends Controller
         //  return view('backpack::auth.register', $this->data);
 
         return view('auth.register');
-     }
+    }
 }

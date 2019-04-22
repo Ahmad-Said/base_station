@@ -25,7 +25,7 @@ git pull
 https://stackoverflow.com/questions/4157189/git-pull-while-ignoring-local-changes
 
 
----- 
+----
 if somehow old data base:
 run the following command:
 
@@ -37,3 +37,9 @@ $toadd->email="mohamad.naji@ahmad.said.com"
 $toadd->password=Hash::make('123321')
 $toadd->type='admin'
 $toadd->save()
+
+----
+get used of these command: example
+php artisan route:list | grep 'prof'
+
+or install extention laravel artisan

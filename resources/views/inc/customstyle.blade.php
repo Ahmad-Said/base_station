@@ -1,7 +1,7 @@
 <style>
     html {
         line-height: 1.15;
-            -ms-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%;
     }
 
@@ -87,7 +87,7 @@
 
     legend {
         -webkit-box-sizing: border-box;
-                box-sizing: border-box;
+        box-sizing: border-box;
         color: inherit;
         display: table;
         max-width: 100%;
@@ -98,7 +98,7 @@
     [type="checkbox"],
     [type="radio"] {
         -webkit-box-sizing: border-box;
-                box-sizing: border-box;
+        box-sizing: border-box;
         padding: 0;
     }
 
@@ -140,7 +140,7 @@
 
     html {
         -webkit-box-sizing: border-box;
-                box-sizing: border-box;
+        box-sizing: border-box;
         font-family: sans-serif;
     }
 
@@ -148,7 +148,7 @@
     *::before,
     *::after {
         -webkit-box-sizing: inherit;
-                box-sizing: inherit;
+        box-sizing: inherit;
     }
 
     p {
@@ -270,14 +270,14 @@
 
     .items-center {
         -webkit-box-align: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
     }
 
     .justify-center {
         -webkit-box-pack: center;
-            -ms-flex-pack: center;
-                justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
     }
 
     .font-sans {
@@ -441,4 +441,4 @@
             background-position: center;
         }
     }
-    </style>
+</style>

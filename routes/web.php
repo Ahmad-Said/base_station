@@ -12,16 +12,18 @@
 */
 
 // Pages controller
-Route::get('/test','PagesController@test');
+Route::get('/test', 'PagesController@test');
 Route::get('/profile', 'PagesController@prof');
-Route::post('/profile','PagesController@update');
+Route::post('/profile', 'PagesController@update');
 Route::get('showfile/{file}', 'PagesController@showfile');
-Route::get('/about','PagesController@about');
-Route::get('/references','PagesController@references');
+Route::get('/about', 'PagesController@about');
+Route::get('/references', 'PagesController@references');
 
 
 // Analyser Controller
 Route::get('/', 'AnalyserController@index');
+
+Route::get('/profile/{a}', 'PagesController@otherprof');
 
 Auth::routes();
 
