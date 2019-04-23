@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 
 class AnalyserController extends Controller
 {
-    //
+    /**
+     * The welcome page
+     *
+     * @return view - welcome -> /
+     */
     public function index()
     {
         $band2=XgBands::where('xg', 2)->get();
@@ -15,9 +19,9 @@ class AnalyserController extends Controller
         $band4=XgBands::where('xg', 4)->get();
         $band5=XgBands::where('xg', 5)->get();
         return view('welcome')
-                        ->with("band2", $band2)
-                        ->with("band3", $band3)
-                        ->with("band4", $band4)
-                        ->with("band5", $band5);
+            ->with("band2", $band2)
+            ->with("band3", $band3)
+            ->with("band4", $band4)
+            ->with("band5", $band5);
     }
 }

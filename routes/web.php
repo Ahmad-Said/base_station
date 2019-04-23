@@ -13,8 +13,9 @@
 
 // Pages controller
 Route::get('/test', 'PagesController@test');
-Route::get('/profile', 'PagesController@prof');
+Route::get('/profile', 'PagesController@profile');
 Route::post('/profile', 'PagesController@update');
+Route::get('/profile/{a}', 'PagesController@otherProfile');
 Route::get('showfile/{file}', 'PagesController@showfile');
 Route::get('/about', 'PagesController@about');
 Route::get('/references', 'PagesController@references');
@@ -23,7 +24,6 @@ Route::get('/references', 'PagesController@references');
 // Analyser Controller
 Route::get('/', 'AnalyserController@index');
 
-Route::get('/profile/{a}', 'PagesController@otherprof');
 
 Auth::routes();
 

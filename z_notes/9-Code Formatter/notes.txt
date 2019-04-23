@@ -1,0 +1,46 @@
+Get used to select all text ( ctrl + A ) then ( ctrl + shift + F) to auto format things everywhere
+Some formatting rules require adding comments like describing functions parameter...
+
+.php:
+
+    - classes are sorted using "PHP Namespace Resolver"
+    - function respect "phpcs" standard rules mentioned in "phpcs.xml" you will get notified
+      about using this extension:
+       - https://marketplace.visualstudio.com/items?itemName=ikappas.phpcs
+       - run in terminal:
+                - composer global require squizlabs/php_codesniffer
+    - ensure that before each commit the command "phpcs" give no error
+        - good to use: phpcs -a
+    - if somehow you don't know error this is an example of correct syntax:
+        - https://github.com/firegento/phpcs/blob/master/FireGento/Sniffs/Commenting/FileCommentSniff.php
+
+
+
+.blade.php:
+
+    - see links how to format Laravel blade in notes.
+
+useful extension for vscode:
+https://stackoverflow.com/questions/48211622/intellisense-autocompletion-for-model-in-laravel-for-visual-studio-code-or-ano
+https://medium.com/@rohan_78316/how-to-setup-visual-studio-code-for-laravel-php-276643c3013c
+
+
+Developer Options
+---
+
+So after installing "phpcs" tools and extensions check in order to learn how i created xml file:
+    - https://www.youtube.com/playlist?list=PLa_Xqm9JWuydw6f1yBSlrkWQZHJA3P9jA  // to learn about it in general
+    - https://medium.com/@setkyarwalar/setting-up-phpcs-on-laravel-908bccb82db  // setting laravel with phpcs
+    - https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset       // tutorial to create custom standard
+    - https://github.com/squizlabs/PHP_CodeSniffer/issues/1866
+    - https://github.com/squizlabs/PHP_CodeSniffer/issues/1348
+
+    - and so i created a phpcs based on PEAR excluding some classes check "phpcs.xml" in root directory.
+    - commands get used in terminal:
+    - phpcs -i     // -i will show installed coding standard by default globally PEAR is used unless
+                   // there is phpcs.xmls in root directory of project in vscode
+    - phpcs -s     // -s will show which class we are violating also
+    - phpcs --help // show help
+    - phpcbf       // will fix minor bug and stuff in the project
+
+
