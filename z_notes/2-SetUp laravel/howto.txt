@@ -28,8 +28,9 @@ https://stackoverflow.com/questions/4157189/git-pull-while-ignoring-local-change
 ----
 if somehow old data base:
 run the following command:
+    php artisan migrate --seed
 
-php artisan migrate
+if not using seed argument you can also run these:
 php artisan tinker
 $toadd= new App\User()
 $toadd->name='admin'
@@ -38,8 +39,12 @@ $toadd->password=Hash::make('123321')
 $toadd->type='admin'
 $toadd->save()
 
+dump for xg_bands:
+INSERT INTO `xg_bands` (`id`, `xg`, `bands`, `symbol`) VALUES (NULL, '4', '700', 'LTE 700(28)'), (NULL, '3', '2100', 'UMTS 2100'), (NULL, '3', '900', 'UMTS 900'), (NULL, '2', '900', 'GSM 900'), (NULL, '2', '1800', 'GSM 1800'), (NULL, '0', '5000', 'D'), (NULL, '0', '4200', 'D'), (NULL, '0', '3500', 'D'), (NULL, '0', '2550', 'D'), (NULL, '0', '2350', 'D'), (NULL, '0', '2100', 'D'), (NULL, '0', '1950', 'D'), (NULL, '0', '1900', 'D'), (NULL, '0', '1850', 'D'), (NULL, '0', '1800', 'D'), (NULL, '0', '1750', 'D'), (NULL, '0', '1700', 'D'), (NULL, '0', '1400', 'D'), (NULL, '0', '900', 'D'), (NULL, '0', '850', 'D'), (NULL, '0', '800', 'D'), (NULL, '0', '750', 'D'), (NULL, '0', '700', 'D'), (NULL, '0', '600', 'D')
+
 ----
 get used of these command: example
 php artisan route:list | grep 'prof'
 
-or install extention laravel artisan
+or install extension laravel artisan
+

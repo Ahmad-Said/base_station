@@ -1,0 +1,20 @@
+check
+https://laravel.com/docs/5.8/seeding
+
+
+Features:
+now if we have old database it is enough to make this command:
+
+php artisan migrate:refresh --seed
+
+
+or you can run:
+
+    php artisan migrate:reset
+    php artisan migrate --seed
+
+- the reset will down all migration
+- the migrate will up them
+    - and the seed will add data defined in "database\seeds" classes
+    - to create a new one run:
+        php artisan make:seeder UsersTableSeeder
