@@ -12,18 +12,18 @@
             </tr>
             @foreach($allusers as $user)
             <tr>
-                <td>{{$user->id}}</td>
-                <td>{{$user->name}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->type}}</td>
+                <td>{{ $user->id }}</td>
+                <td>{{ $user->name }}</td>
+                <td><a href="mailto:{{ $user->email }}?Subject=Hello%20again" target="_top">{{ $user->email }}</a></td>
+                <td>{{ $user->type }}</td>
                 <th>
-                    <a href="/profile/{{$user->id}}">  <button type="button" class="btn btn-primary btn-sm"><span class="fas fa-user-edit"></span></button></a>
+                    <a href="/profile/{{ $user->id }}}">  <button type="button" class="btn btn-primary btn-sm"><span class="fas fa-user-edit"></span></button></a>
                     <button type="button" class="btn btn-warning btn-sm"><span class="fas fa-user-slash"></span></button>
                     <button type="button" class="btn btn-danger btn-sm"><span class="fas fa-trash-alt"></span></button>
 
                 </th>
             </tr>
-            @endforeach {{$allusers->links()}}
+            @endforeach {{ $allusers->links() }}
         </table>
         @else
         <p>There is not registred users yet.</p>

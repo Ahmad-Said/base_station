@@ -6,6 +6,7 @@ use DB;
 use Auth;
 use App\User;
 use App\Antennas;
+use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
@@ -60,7 +61,7 @@ class PagesController extends Controller
     {
         if (Auth::user()->type != "admin") {
             return redirect()->back()
-                ->with('error', "you have not access to this page");
+                ->with('error', "You have no access to this page");
         }
         $user = User::find($id);
         return view('pages.profile')->with('a', $user);
@@ -69,11 +70,11 @@ class PagesController extends Controller
     /**
      * About page
      *
-     * @return view pages
+     * @return view - pages.about -> /about
      */
     public function about()
     {
-        return view('pages.abou');
+        return view('pages.about');
     }
 
     /**
@@ -86,6 +87,15 @@ class PagesController extends Controller
     public function update(Request $request)
     {
         // return $request->all();
+        $this->validate(
+            $request,
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' =>
+                     ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
+            ]
+        );
+
         $user = User::find($request->input('id'));
 
         $user->name = $request->input("name");

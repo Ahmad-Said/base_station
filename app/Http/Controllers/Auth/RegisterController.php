@@ -58,6 +58,9 @@ class RegisterController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'regex:/(.*)@rfsworld\.com/i', 'max:255', 'unique:usersWeb'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ],
+            [
+                'regex' => 'The Email must respect the following format: example@rfsworld.com'
             ]
         );
     }
@@ -93,7 +96,6 @@ class RegisterController extends Controller
         // $this->guard()->login($user);
         // return $this->registered($request, $user)?: redirect($this->redirectPath());
         // return $request->all();
-
         $this->validator($request->all())->validate();
         event(new Registered($user = $this->create($request->all())));
         return Redirect::back()->with('success', 'Operation Successful !<br>Wait for Site admin to approve it.<br>Have a nice day <i class="far fa-smile"></i>');
