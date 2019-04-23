@@ -41,101 +41,61 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        // old
-        // $this->middleware('guest');
-        $this->middleware('auth');
+        $this->middleware('guest');
     }
 
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'regex:/(.*)@rfsworld\.com/i', 'max:255', 'unique:usersWeb'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        return Validator::make(
+            $data,
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'regex:/(.*)@rfsworld\.com/i', 'max:255', 'unique:usersWeb'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]
+        );
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \App\User
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return User::create(
+            [
+                'name' => $data['name'],
+                'type' => $data['type'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]
+        );
     }
 
 
     /*
     *
-    *this method is override for normal register way the commented was the original
+    * this method is override for normal register way the commented was the original
     * it is used to control access to registration form post
     */
 
     public function register(Request $request)
     {
 
-        //$this->guard()->login($user);
-
+        // $this->guard()->login($user);
         // return $this->registered($request, $user)?: redirect($this->redirectPath());
         // return $request->all();
-        if (auth::user()->type !='admin') {
-            return redirect('/home')->with('error', 'You cannot register Other Users!<br>Ask admin for access code.. redirect later with input box..');
-        }
+
         $this->validator($request->all())->validate();
-
-
-        // event(new Registered($user = $this->create($request->all())));
-
-        $user= new User();
-        $user->name=$request->input('name');
-        $user->email=$request->input('email');
-        $user->password=Hash::make($request->input('password'));
-        $user->type=$request->input('type');
-        $user->save();
-        return Redirect::back()->with('success', 'Operation Successful !<br> User id: '.$user->id.'<br>Username: '.$user->name.'<br>Email: '.$user->email.'<br>Type: '.$user->type);
-    }
-
-    // we can make href for button submitted from the form
-    public function register_with_code($code)
-    {
-        // create database code generated table and check if exist...
-        // if not redirect back with error not found
-
-        // if yes
-
-        //$this->guard()->login($user);
-
-       // return $this->registered($request, $user)?: redirect($this->redirectPath());
-    }
-
-
-    /*
-    *
-    *this method is override for normal get to register way the commented was the original
-    */
-
-    public function showRegistrationForm()
-    {
-        //  // if registration is closed, deny access
-        //  if (!config('backpack.base.registration_open')) {
-        //      abort(403, trans('backpack::base.registration_closed'));
-        //  }
-        //  $this->data['title'] = trans('backpack::base.register'); // set the page title
-        // //  return view('backpack::auth.register', $this->data);
-        //  return view('backpack::auth.register', $this->data);
-
-        return view('auth.register');
+        event(new Registered($user = $this->create($request->all())));
+        return Redirect::back()->with('success', 'Operation Successful !<br>Wait for Site admin to approve it.<br>Have a nice day <i class="far fa-smile"></i>');
     }
 }

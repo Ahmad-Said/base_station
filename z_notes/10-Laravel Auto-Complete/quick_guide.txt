@@ -1,0 +1,18 @@
+for vscode do the following:
+install:
+
+https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client
+
+and so disable other formatter and intellisense tool extensions.
+
+run in terminal:
+
+composer require --dev barryvdh/laravel-ide-helper
+composer require --dev doctrine/dbal
+php artisan ide-helper:generate
+php artisan ide-helper:models
+
+select no and restart vscode
+
+after creating a model run again:
+php artisan ide-helper:models
