@@ -24,15 +24,17 @@
                         <td>@if ($user->is_activated) Enabled @else Disabled @endif
                         </td>
                         <td>
-                            <a href="/profile/{{ $user->id }}">
-                                 <button type="button" class="btn btn-primary btn-sm"><span class="fas fa-user-edit"></span></button>
-                                </a>
-                            <a href="/profile/{{ $user->id }}/edit">
-                                  <button type="button" class="btn btn-warning btn-sm"><span class="fas fa-user-slash"></span></button>
-                                </a>
-                            <a href="/profile/{{ $user->id }}">
-                                    <button type="button" class="btn btn-danger btn-sm"><span class="fas fa-trash-alt"></span></button>
-                                </a>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="/profile/{{ $user->id }}" role="button" class="btn btn-info btn-sm waves-effect  btn-outline-info">
+                                     <span class="fas fa-user-edit"></span>
+                                    </a>
+                                <a href="/profile/{{ $user->id }}/edit" role="button" class="btn btn-warning btn-sm waves-effect  btn-outline-warning">
+                                      <span class="fas fa-user-slash"></span>
+                                    </a>
+                                <a href="/profile/{{ $user->id }}" role="button" class="btn btn-danger btn-sm waves-effect  btn-outline-danger ">
+                                        <span class="fas fa-trash-alt"></span>
+                                    </a>
+                            </div>
 
                         </td>
                     </tr>
