@@ -1,12 +1,13 @@
 @php $but="
-<span class='float-right remove far fa-window-close' style='font-size: 180%'> </span>";
-@endphp @if(count($errors) > 0) @foreach($errors->all()
-as $error)
+<span class='float-right removediv far fa-window-close' style='font-size: 180%;cursor: pointer;'> </span>";
+@endphp @isset($errors)
+{{-- this can be used as follow: $errors = array('helo','ewfwe','wfef'); return View('pages.test')->withErrors($errors);
+--}} @foreach($errors->all() as $error)
 <div class="alert alert-danger">
     {!! $but !!}
     <i class="fas fa-exclamation-circle"></i> {!! $error !!}
 </div>
-@endforeach @endif @if(session('success'))
+@endforeach @endisset @if(session('success'))
 <div class="alert alert-success">
     {!! $but !!}
     <i class="far fa-check-circle"></i> {!! session('success') !!}
@@ -23,8 +24,9 @@ as $error)
 </div>
 @endif
 <script>
-    $(document).on('click', '.remove', function(){
-                                $('.alert').remove();
+    $(document).on('click', '.removediv', function(){
+                                 $(this).closest('div').remove();
+                                //  $('.alert').remove();
             });
 
 </script>
