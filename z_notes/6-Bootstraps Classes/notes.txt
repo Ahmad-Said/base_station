@@ -1,0 +1,19 @@
+https://marketplace.visualstudio.com/items?itemName=ecmel.vscode-html-css
+good tweak to navigate between files:
+press ctrl + p   then name of the file
+good to quick run command : f1
+ctrl + p then @ to navigate in file functions
+to navigate to folder like use ctrl + p /folder_name
+
+also add this in setting json to show suggestion even in string:
+https://stackoverflow.com/questions/40839733/autocomplete-without-ctrlspace
+"editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    },
+
+and to remove a class quickly redefine word separator in setting and like
+i did  remove  tick - from separator to select hole class like btn-primary
+in one click.
+"editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"

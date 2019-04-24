@@ -1,0 +1,14 @@
+install from:
+URL=https://marketplace.visualstudio.com/items?itemName=Janne252.fontawesome-autocomplete
+
+to enable extension to work with blade.php
+overwrite from setting json file and add these lines:
+
+"fontAwesomeAutocomplete.disableTriggerWordAutoClearPatterns": [
+        "**/*.html",
+        "**/*.blade.php"
+      ],
+    "fontAwesomeAutocomplete.patterns": [
+        "**/*.html",
+        "**/*.blade.php"
+      ],

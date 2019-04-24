@@ -1,8 +1,8 @@
-<div class="card text-center">
+<div class="card text-center table-responsive">
     <div class="card-header">Dashboard</div>
     <div class="card-body">
         @if(count($allusers) > 0)
-        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+        <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>ID</th>

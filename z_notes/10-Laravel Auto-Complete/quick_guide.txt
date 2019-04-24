@@ -16,3 +16,11 @@ select no and restart vscode
 
 after creating a model run again:
 php artisan ide-helper:models
+
+
+
+Some time due to use of implicit function that return type of class that
+intellisense could not detect automatically we can give it a hint using this structure:
+/** @var MyClass $x */
+
+https://docs.devsense.com/en/vs/editor/code-completion
