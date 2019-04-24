@@ -17,7 +17,7 @@
 
                  });
             </script>
-            {!! Form::open(['action' => 'PagesController@update', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open(['action' => ['ProfileController@update', $a->id] , 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
             <small>ID:{{ $a->id }} </small>
             <input type="hidden" name='id' value="{{ $a->id }}">
 

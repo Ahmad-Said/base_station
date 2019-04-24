@@ -23,7 +23,7 @@
 
 @if(session('warning'))
     <div class="alert alert-warning">
-            <i class="fas fa-bomb"></i>
+            <i class="far fa-hand-paper"></i>
         {!!session('warning')!!}
     </div>
 @endif

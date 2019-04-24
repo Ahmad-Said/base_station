@@ -26,7 +26,15 @@
         rel="stylesheet"> --}}
     @include('inc.customstyle') {{-- i used this style copeid from page not found button --}}
 
-
+    {{-- added to show good look of users
+        check resources\views\admin\home.blade.php for details
+        link: https://mdbootstrap.com/docs/jquery/tables/search/
+              https://datatables.net/examples/styling/bootstrap4 --}}
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 </head>
 
 <body>

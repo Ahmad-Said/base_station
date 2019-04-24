@@ -12,14 +12,13 @@
 */
 
 // Pages controller
-Route::get('/test', 'PagesController@test');
-Route::get('/profile', 'PagesController@profile');
-Route::post('/profile', 'PagesController@update');
-Route::get('/profile/{a}', 'PagesController@otherProfile');
 Route::get('showfile/{file}', 'PagesController@showfile');
+Route::get('/test', 'PagesController@test');
 Route::get('/about', 'PagesController@about');
 Route::get('/references', 'PagesController@references');
 
+// Profile Controller
+Route::resource('profile', 'ProfileController');
 
 // Analyser Controller
 Route::get('/', 'AnalyserController@index');

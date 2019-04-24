@@ -26,10 +26,12 @@ class HomeController extends Controller
     public function index()
     {
         if (auth()->user()->type == "admin") {
-            $users=User::orderby('id')
-                ->where('id', '!=', Auth::user()->id)->paginate(5);
+            $users = User::orderby('id')
+                ->where('id', '!=', Auth::user()->id)->get();
 
             return view('home')->with('allusers', $users);
+        } else {
+            return redirect('/');
         }
     }
 }

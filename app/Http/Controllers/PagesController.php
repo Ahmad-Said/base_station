@@ -29,42 +29,11 @@ class PagesController extends Controller
     /**
      * Show references pages
      *
-     * @return view - pages.references -> /profile
+     * @return view - pages.references -> /references
      */
     public function references()
     {
         return view('pages.references');
-    }
-
-    /**
-     * Show profile page of authenticated user
-     * with input to update fields
-     *
-     * @return view - pages.profile -> /profile
-     */
-    public function profile()
-    {
-        $a = Auth::user();
-        return view('pages.profile')->with('a', $a);
-    }
-
-    /**
-     * Show profile of authenticated user
-     *
-     * Pages have input to update attributes
-     *
-     * @param int $id - id of user to show
-     *
-     * @return view - pages.profile -> /profile/{a}
-     */
-    public function otherProfile($id)
-    {
-        if (Auth::user()->type != "admin") {
-            return redirect()->back()
-                ->with('error', "You have no access to this page");
-        }
-        $user = User::find($id);
-        return view('pages.profile')->with('a', $user);
     }
 
     /**
@@ -75,34 +44,6 @@ class PagesController extends Controller
     public function about()
     {
         return view('pages.about');
-    }
-
-    /**
-     * Update profile upon Post request
-     *
-     * @param Request $request id | name | email
-     *
-     * @return RedirectResponse
-     */
-    public function update(Request $request)
-    {
-        // return $request->all();
-        $this->validate(
-            $request,
-            [
-                'name' => ['required', 'string', 'max:255'],
-                'email' =>
-                     ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
-            ]
-        );
-
-        $user = User::find($request->input('id'));
-
-        $user->name = $request->input("name");
-        $user->email = $request->input("email");
-        $user->save();
-        return  redirect()->back()->withInput()
-            ->with('success', 'Profile Updated Successfully!');
     }
 
     /**
