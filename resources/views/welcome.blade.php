@@ -162,35 +162,52 @@
                                 toprint="";
                                 if((this).value=="2")
                                 {
-                                    $(this).closest('tr').find('.ports').html(stgp2);
-                                    $(this).closest('tr').find('.bands').html(stgf2);
+                                    error+="Number of System must be less than 12";
+                                    $('#error').html('<div class="alert alert-danger">'+error+'</div>');
+                                    return;
                                 }
+                                var html = '';
+                                html += '<tr>';
+                                    html += '<td><select name="technologie[]" id="technologie" class="form-control dynamic" ><option value="" disabled selected>Technologie</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>';
+                                    html += '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
+                                    html += '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
+                                    html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
+                                    $('#item_table').append(html);
+                                    $('#error').html('');
+                                };
+                                $(document).on('change', '.dynamic', function(){
+                                    toprint="";
+                                    if((this).value=="2")
+                                    {
+                                        $(this).closest('tr').find('.ports').html(stgp2);
+                                        $(this).closest('tr').find('.bands').html(stgf2);
+                                    }
 
-                                if((this).value=="3")
-                                {
-                                    $(this).closest('tr').find('.ports').html(stgp3);
-                                    $(this).closest('tr').find('.bands').html(stgf3);
-                                }
-                                if((this).value=="4")
-                                {
-                                    $(this).closest('tr').find('.ports').html(stgp4);
-                                    $(this).closest('tr').find('.bands').html(stgf4);
-                                }
-                                if((this).value=="5")
-                                {
-                                    $(this).closest('tr').find('.ports').html(stgp5);
-                                    $(this).closest('tr').find('.bands').html(stgf5);
-                                }
-                                $(this).closest('tr').find('.ports').prop("disabled", false);
-                                $(this).closest('tr').find('.bands').prop("disabled", false);
-                             });
+                                    if((this).value=="3")
+                                    {
+                                        $(this).closest('tr').find('.ports').html(stgp3);
+                                        $(this).closest('tr').find('.bands').html(stgf3);
+                                    }
+                                    if((this).value=="4")
+                                    {
+                                        $(this).closest('tr').find('.ports').html(stgp4);
+                                        $(this).closest('tr').find('.bands').html(stgf4);
+                                    }
+                                    if((this).value=="5")
+                                    {
+                                        $(this).closest('tr').find('.ports').html(stgp5);
+                                        $(this).closest('tr').find('.bands').html(stgf5);
+                                    }
+                                    $(this).closest('tr').find('.ports').prop("disabled", false);
+                                    $(this).closest('tr').find('.bands').prop("disabled", false);
+                                });
 
 
-                             $(document).on('click', '.add',function(){
-                                add_to_table();
-                                var rowcount=$('#item_table tr').length;
-                                $('#system_number').val(rowcount-1);
-                            });
+                                $(document).on('click', '.add',function(){
+                                    add_to_table();
+                                    var rowcount=$('#item_table tr').length;
+                                    $('#system_number').val(rowcount-1);
+                                });
 
                        $(document).on('click', '.remove', function(){
                         $('#error').html('');
