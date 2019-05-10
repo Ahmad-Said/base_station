@@ -40,7 +40,24 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request->all();
+        $this->validate(
+            $request,
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' =>
+                ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
+            ]
+        );
+
+        User::whereId($id)->update($request->all('name', 'email'));
+        // old way
+        // $user = User::find($request->input('id'));
+        // $user->name = $request->input("name");
+        // $user->email = $request->input("email");
+        // $user->save();
+        return  redirect()->back()->withInput()
+            ->with('success', 'Profile Updated Successfully!');
     }
 
     /**
@@ -97,23 +114,24 @@ class ProfileController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request id | name | email
-     * @param int                      $id      id
      *
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        return $request->all();
-        $this->validate(
-            $request,
-            [
-                'name' => ['required', 'string', 'max:255'],
-                'email' =>
-                ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
-            ]
-        );
+        $u=User::findOrfail($request->userid);
+        $u->update($request->all());
+        return back();
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'name' => ['required', 'string', 'max:255'],
+        //         'email' =>
+        //         ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
+        //     ]
+        // );
 
-        User::whereId($id)->update($request->all('name', 'email'));
+        // User::whereId($id)->update($request->all('name', 'email'));
         // old way
         // $user = User::find($request->input('id'));
         // $user->name = $request->input("name");
@@ -124,15 +142,16 @@ class ProfileController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete the specified resource in storage.
      *
-     * @param int $id id
+     * @param \Illuminate\Http\Request $request id | name | email
      *
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
-
+        $u=User::findOrfail($request->userid);
+        $u->delete();
+        return back();
     }
 }
