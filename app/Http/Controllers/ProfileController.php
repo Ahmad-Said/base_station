@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Auth;
 use phpDocumentor\Reflection\Types\Boolean;
 
@@ -74,16 +75,16 @@ class ProfileController extends Controller
         //
         // return User::whereId($id)->get()[0];
         $user = User::find($id);
-        $user->is_activated=!$user->is_activated;
+        $user->is_activated = !$user->is_activated;
         $user->save();
         if ($user->is_activated) {
             $msg = "Account <i><b>Activated</b></i> Successfully! ";
-            $type="success";
+            $type = "success";
         } else {
             $msg = "Account <i><b>Deactivated</b></i> Successfully! ";
-            $type="warning";
+            $type = "warning";
         }
-        $msg.="<a href='/profile/$user->id/edit'>Undo Action</a>
+        $msg .= "<a href='/profile/$user->id/edit'>Undo Action</a>
             <br>
             <i class='fas fa-fingerprint'></i> $user->id <br>
             <i class='fas fa-user-tie'></i> $user->name <br>
@@ -103,17 +104,20 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $request->all();
         $this->validate(
             $request,
             [
                 'name' => ['required', 'string', 'max:255'],
                 'email' =>
-                ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
+                ['required', 'string', 'email', 'max:255'],
             ]
         );
-
-        User::whereId($id)->update($request->all('name', 'email'));
+        try {
+            User::whereId($id)->update($request->all('name', 'email'));
+        } catch (\Throwable $th) {
+            return  redirect()->back()->withInput()
+                ->with('warning', 'Something Went Wrong, Email Already Exist!');
+        }
         // old way
         // $user = User::find($request->input('id'));
         // $user->name = $request->input("name");
@@ -133,6 +137,12 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         //
-
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->back()
+            ->with(
+                'success',
+                "User Deleted Successfully!"
+            );
     }
 }
