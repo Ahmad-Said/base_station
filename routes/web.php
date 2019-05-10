@@ -22,7 +22,7 @@ Route::resource('profile', 'ProfileController');
 
 // Analyser Controller
 Route::get('/', 'AnalyserController@index');
-
+Route::post('/', 'AnalyserController@showResult');
 
 Auth::routes();
 

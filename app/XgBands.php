@@ -8,4 +8,19 @@ class XgBands extends Model
 {
     //
     public $timestamps = false;
+
+    /**
+     * Return all bands and their shortcuts
+     *
+     * @return array An associative array of bands ex: index 2 => 2g bands
+     */
+    public static function getBands()
+    {
+        $band2 = XgBands::where('xg', 2)->get();
+        $band3 = XgBands::where('xg', 3)->get();
+        $band4 = XgBands::where('xg', 4)->get();
+        $band5 = XgBands::where('xg', 5)->get();
+        $bands = ["2" => $band2, "3" => $band3, "4" => $band4, "5" => $band5];
+        return $bands;
+    }
 }

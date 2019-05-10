@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\XgBands;
+use App\Antennas;
 use Illuminate\Http\Request;
 
 class AnalyserController extends Controller
@@ -14,14 +15,32 @@ class AnalyserController extends Controller
      */
     public function index()
     {
-        $band2=XgBands::where('xg', 2)->get();
-        $band3=XgBands::where('xg', 3)->get();
-        $band4=XgBands::where('xg', 4)->get();
-        $band5=XgBands::where('xg', 5)->get();
         return view('welcome')
-            ->with("band2", $band2)
-            ->with("band3", $band3)
-            ->with("band4", $band4)
-            ->with("band5", $band5);
+            ->with("bands", XgBands::getBands());
+    }
+
+    /**
+     * Receive form information to analyse them and return result
+     *
+     * @param Request $request system_number | technology[] | port[] | band[]
+     *
+     * @return View The result view
+     */
+    public function showResult(Request $request)
+    {
+        $anten = Antennas::find(62)->bands;
+        $technology = $request->input("technology");
+        $port = $request->input("port");
+        $band = $request->input("band");
+        // return $anten->bands;
+        // return $request->input("technology")[0];
+        // return $anten;
+        // return $request->all();
+        // to the view('pages.test')
+        return view('welcome')
+            ->with("bands", XgBands::getBands())
+            ->with("technology", $technology)
+            ->with("band", $band)
+            ->with("port", $port);
     }
 }
