@@ -41,24 +41,7 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
-        $this->validate(
-            $request,
-            [
-                'name' => ['required', 'string', 'max:255'],
-                'email' =>
-                ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
-            ]
-        );
-
-        User::whereId($id)->update($request->all('name', 'email'));
-        // old way
-        // $user = User::find($request->input('id'));
-        // $user->name = $request->input("name");
-        // $user->email = $request->input("email");
-        // $user->save();
-        return  redirect()->back()->withInput()
-            ->with('success', 'Profile Updated Successfully!');
+        //
     }
 
     /**
@@ -114,11 +97,13 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request id | name | email
+     * @param \Illuminate\Http\Request $request userid | name | email
+     * @param int                      $id      this parameter is sent by url
+     *                                          example:  profile/{id}
      *
      * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $this->validate(
             $request,
@@ -129,6 +114,8 @@ class ProfileController extends Controller
             ]
         );
 
+        // just to get rid off sending id as parameter url such as in modal
+        $id = $request->input('userid');
         try {
             User::whereId($id)->update($request->all('name', 'email'));
         } catch (\Throwable $th) {
@@ -153,7 +140,7 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request)
     {
-        $u=User::findOrfail($request->userid);
+        $u = User::findOrfail($request->userid);
         $u->delete();
         return redirect()->back()
             ->with(

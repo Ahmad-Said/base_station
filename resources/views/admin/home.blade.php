@@ -1,8 +1,3 @@
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
 <script>
     $(document).ready(function () {
         $('#dtBasicExample').DataTable();
@@ -12,13 +7,16 @@
     //https://stackoverflow.com/questions/48862489/creating-an-edit-modal-in-laravel-5
     $(document).ready(function () {
         // on modal show
-        $('#EditDemo').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var id = button.data('userid');
-            var name = button.data('name');// Extract info from data-* attributes
-            var email = button.data('email');// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this);
+        $('.EditBtn').on('click', function (event) {
+            var button = $(this); // Button that triggered the modal
+            var row = button.closest('tr');
+            // get data row
+            var id = row.children('td:first').text();
+            var name = row.children('td:eq(1)').text();
+            var email = row.find('td:eq(2)').text().trim();
+            // Update the modal's content. We'll use jQuery here,
+            // but you could use a data binding library or other methods instead.
+            var modal = $('#EditDemo');
             modal.find('.modal-body #name').val(name);
             modal.find('.modal-body #email').val(email);
             modal.find('.modal-body #user_id').val(id);
@@ -26,16 +24,15 @@
     });
 
     $(document).ready(function () {
-    $('#ConfirmDelete').on('show.bs.modal', function (event) {
+    $('.delbtn').on('click', function (event) {
             console.log('Modal Opened');
-            var button = $(event.relatedTarget)
-            var id = button.data('userid');
-            var modal = $(this);
+            var button = $(this);
+            var id = button.data('userid'); // Extract info from data-* attributes, we could do same as above too
+            var modal = $('#ConfirmDelete');
             modal.find('.modal-body #user_id').val(id);
         });
     });
 </script>
-
 
 <div class="card text-center table-responsive">
     <div class="card-header">Dashboard</div>
@@ -66,16 +63,15 @@
                     </td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-info btn-sm waves-effect  btn-outline-info"
-                                data-name="{{ $user->name }}" data-email="{{ $user->email }}"
-                                data-userid="{{ $user->id }}" data-toggle="modal" data-target="#EditDemo">
+                            <button type="button" class="btn btn-info btn-sm waves-effect  btn-outline-info EditBtn"
+                                data-toggle="modal" data-target="#EditDemo">
                                 <span class="fas fa-user-edit"></span>
                             </button>
                             <a href="/profile/{{ $user->id }}/edit" role="button"
                                 class="btn btn-warning btn-sm waves-effect  btn-outline-warning">
                                 <span class="fas fa-user-slash"></span>
                             </a>
-                            <button type="button" class="btn btn-danger btn-sm waves-effect  btn-outline-danger"
+                            <button type="button" class="btn btn-danger btn-sm waves-effect  btn-outline-danger delbtn"
                                 data-userid="{{ $user->id }}" data-toggle="modal" data-target="#ConfirmDelete">
                                 <span class="fas fa-user-edit"></span>
                             </button>
@@ -105,39 +101,49 @@
 <div class="modal fade" id="EditDemo" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" aria-hidden="true">
     <div class="modal-dialog " role="document">
         <div class="modal-content ">
-            <div class="modal-header ">
+            {{-- <div class="modal-header ">
                 <h5 class="modal-title" id="edit-modal-label">Edit User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span>
                 </button>
-            </div>
+            </div> --}}
             <div class="modal-body" id="attachment-body-content">
-                <form method="POST" action="{{ route('profile.update','prof') }}" id="edit-form"
-                    class="form-horizontal">
-                    {{ method_field('patch') }}
-                    <!-- used for update function -->
-                    {{ csrf_field() }}
-                    <!-- because of pages expired error -->
-                    <div class="card text-white bg-dark mb-0">
-                        <div class="card-header">
-                            <h2 class="m-0">Edit</h2>
+                {!! Form::open([
+                'action' => ['ProfileController@update', 'prof'],
+                'method' => 'POST',
+                'id' => 'edit-form',
+                'class' => 'form-horizontal',
+                'enctype' => 'multipart/form-data'
+                ])
+                !!}
+
+                {{-- <form method="POST" action="{{ route('profile.update','prof') }}" id="edit-form"
+                class="form-horizontal"> --}}
+                {{ method_field('patch') }}
+                <!-- used for update function -->
+                {{ csrf_field() }}
+                <!-- because of pages expired error -->
+                <div class="card text-white bg-dark mb-0">
+                    <div class="card-header">
+                        <h2 class="m-0">Edit User</h2>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="userid" class="form-control" id="user_id" value="">
+                        <div class="form-group">
+                            <label class="col-form-label" for="name">Name</label>
+                            <input type="text" name="name" class="form-control" id="name" required autofocus>
                         </div>
-                        <div class="card-body">
-                            <input type="hidden" name="userid" class="form-control" id="user_id" value="">
-                            <div class="form-group">
-                                <label class="col-form-label" for="name">Name</label>
-                                <input type="text" name="name" class="form-control" id="name" required autofocus>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label" for="email">Email</label>
-                                <input type="text" name="email" class="form-control" id="email" required>
-                            </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="email">Email</label>
+                            <input type="text" name="email" class="form-control" id="email" required
+                                pattern=".*@rfsworld.com" title="example@rfsworld.com">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" value="Save Changes"></input>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary float-right" value="Save Changes">
+                </div>
                 </form>
             </div>
 
@@ -153,27 +159,31 @@
 <div class="modal fade" id="ConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
     aria-hidden="true">
     <form method="POST" action="{{ route('profile.destroy','id') }}" id="delete-form" class="form-horizontal">
-            {{ method_field('delete') }}
-            {{ csrf_field() }}
-        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        {{ method_field('delete') }}
+        {{ csrf_field() }}
+        <div class="modal-dialog modal-sm modal-notify modal-danger modal-confirm" role="document">
             <!--Content-->
             <div class="modal-content text-center">
                 <!--Header-->
                 <div class="modal-header d-flex justify-content-center">
-                    <p class="heading">Are you sure?</p>
+                    <div class="icon-box">
+                        <i class="fas fa-skull-crossbones"> Are you sure?</i>
+                    </div>
                 </div>
                 <!--Body-->
                 <div class="modal-body">
                     <i class="fas fa-times fa-4x animated rotateIn"></i>
-                    <input type="hidden" name="userid" class="form-control" id="user_id" value="" >
+                    <br>
+                    <p>Do you really want to delete this account?<br> This process cannot be undone.</p>
+                    <input type="hidden" name="userid" class="form-control" id="user_id" value="">
                 </div>
-                <div class="modal-footer flex-center">
-                    <button type="submit" class="btn  btn-danger waves-effect" >Yes</button>
-                    <button type="button" class="btn  btn-warning waves-effect" data-dismiss="modal">No</button>
+                <div class="card-footer flex-center">
+                    <button type="button" class="btn  btn-info waves-effect float-left" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn  btn-danger waves-effect float-right">Yes</button>
                 </div>
             </div>
             <!--/.Content-->
         </div>
     </form>
 </div>
-<!--Modal: modalConfirmDelete-->
+<!-- /Modal: modalConfirmDelete -->

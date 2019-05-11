@@ -19,7 +19,7 @@
             </script>
             {!! Form::open(['action' => ['ProfileController@update', $a->id] , 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
             <small>ID:{{ $a->id }} </small>
-            <input type="hidden" name='id' value="{{ $a->id }}">
+            <input type="hidden" name='userid' value="{{ $a->id }}">
 
 
 
