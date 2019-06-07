@@ -52,7 +52,7 @@
                 </div>
                 <div class="card-body">
 
-                    {!! Form::open(['action' => ['AnalyserController@showResult'] , 'method' => 'POST', 'enctype' =>
+                    {!! Form::open(['action' => ['AnalyserController@showResult'] , 'method' => 'GET', 'enctype' =>
                     'multipart/form-data']) !!}
                     <br>
                     <div class="form-group row">
@@ -70,14 +70,25 @@
                             class="col-md-4 col-form-label text-md-right">{{ __('Max Antennas per sector') }}</label>
 
                         <div class="col-md-4">
-                            <input type="number" class="form-control" id="antenna_per_sector" name="antenna_per_sector"
-                                min="1">
+                            <select class="form-control" id="antenna_per_sector" name="antenna_per_sector">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                            <label for="antenna_preferred" class="col-form-label text-md-center" hidden="true"
+                                id="antenna_preferred_label">{{ __('Preferred Antennas Number') }}</label>
+
+
+                            <select class="form-control" id="antenna_preferred" name="antenna_preferred" hidden="true">
+                            </select>
+
                         </div>
+
                     </div>
 
                     <div class="form-group row">
                         <label for="max_height"
-                            class="col-md-4 col-form-label text-md-right">{{ __('Max Height') }}</label>
+                            class="col-md-4 col-form-label text-md-right">{{ __('Max Height (mm)') }}</label>
 
                         <div class="col-md-4">
                             <input type="number" class="form-control" id="max_height" name="max_height" min="1">
@@ -114,17 +125,6 @@
                                     $html .= '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
                                     echo $html;
                                 }
-                                else{
-                                    for ($i=0; $i < count($technology); $i++) {
-                                        $html = '';
-                                        $html .= '<tr>';
-                                        $html .= '<td><select readonly="readonly" name="technology[]" id="technology" class="form-control dynamic"><option value='.$technology[$i].'  selected>'.$technology[$i].'G</option></select></td>';
-                                        $html .= '<td><select readonly="readonly" name="port[]" id="port" class="form-control ports"><option value='.$port[$i].'  selected>'.$port[$i].' ports</option></select></td>';
-                                        $html .= '<td><select readonly="readonly" name="band[]" id="band" class="form-control bands"><option value='.$band[$i].'  selected>'.getBandSymbol($bands[$technology[$i]],$band[$i]).' </option></select></td>';
-                                        $html .= '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
-                                        echo $html;
-                                    }
-                                }
                             ?>
                         </table>
                         <div style="text-align:center">
@@ -159,6 +159,7 @@
                                 $('#error').html('');
                             };
                                 $(document).on('change', '.dynamic', function(){
+                                    // console.log(this);
                                     toprint="";
                                     if((this).value=="2")
                                     {
@@ -240,6 +241,30 @@
                             }
                         });
 
+                        $('#antenna_per_sector').change(function(){
+                           var labelPref = $('#antenna_preferred_label');
+                           var selecPref = $('#antenna_preferred');
+
+                           selecPref.children().each(function(){
+                               $(this).remove();
+                           });
+                           // https://stackoverflow.com/questions/30808723/how-to-change-attribute-hidden-in-jquery/30808762
+                           if($(this).val() == 1){
+                               labelPref.attr("hidden",true);
+                               selecPref.attr("hidden",true);
+                            }else{
+                                labelPref.attr("hidden",false);
+                                selecPref.attr("hidden",false);
+                           }
+                           // https://stackoverflow.com/questions/740195/adding-options-to-a-select-using-jquery
+                           for (let i = 1; i <= $(this).val(); i++) {
+                            selecPref.append($('<option>', {
+                                    value: i,
+                                    text : i
+                                }));
+                           }
+                        });
+
                        $('#insert_form').on('submit', function(event){
                         event.preventDefault();
                         var error = '';
@@ -295,7 +320,60 @@
                         }
                        });
 
+                    //   initializing data table if exist
+                    var doPrevExist = <?php if (isset($technology)) echo  "true"; else echo "false" ?>;
+                    if(doPrevExist)
+                     {
+                        var prevTechno = <?php if (isset($technology)) echo  json_encode($technology); else echo "new Array()" ?>;
+                        var prevPorts = <?php if (isset($technology)) echo  json_encode($port); else echo "new Array()"  ?>;
+                        var prevband = <?php if (isset($technology))echo  json_encode($band); else echo "new Array()"  ?>;
+                        for (let index = 0; index < prevTechno.length; index++) {
+                            add_to_table();
+                            // https://stackoverflow.com/questions/314636/how-do-you-select-a-particular-option-in-a-select-element-in-jquery
+                            var currentRow = $('#item_table tr:last');
+                            // children return a jqury variable that accept it't method change and stuff
+                            // if somehow want the html variable use ..[0]
+                            // also use consol.log(variable); to get more details
+                            var techselect =  currentRow.children('td:first').children('select');
+
+                            currentRow.children('td:first').find('option[value="'+prevTechno[index]+'"]').prop('selected',true);
+                            // initializing selection to corresponding technology
+                            // https://stackoverflow.com/questions/22344497/call-explicitly-jquery-change-event
+                            techselect.change();
+                            currentRow.find('select:eq(1) option[value="'+prevPorts[index]+'"]').prop('selected',true);
+                            currentRow.find('select:eq(2) option[value="'+prevband[index]+'"]').prop('selected',true);
+                        }
+                        // updating system count
+                        var rowcount=$('#item_table tr').length;
+                        $('#system_number').val(rowcount-1);
+
+                        // update other input
+                        $('#antenna_per_sector').children('option:eq(<?php if (isset($technology))echo  $antenna_per_sector-1; else echo "0";  ?>)').prop('selected',true);
+                        $('#antenna_per_sector').change();
+                        $('#max_height').val(<?php if (isset($technology))echo  $max_height;?>);
+                     }
+
+                    // always ensure that second row (first row in data selection) get updated
+                    // this was added cause sometimes on back button using browser
+                    // the first row is bad formed
+                    $('#item_table tr:eq(1)').children('td:first').children('select').change();
+
                       });
+
+
+
+                    // for ($i=0; $i < count($technology); $i++) {
+                    //     $html = '';
+                    //     $html .= '<tr>';
+                    //     $html .= '<td><select readonly="readonly" name="technology[]" id="technology" class="form-control dynamic"><option value='.$technology[$i].'  selected>'.$technology[$i].'G</option></select></td>';
+                    //     $html .= '<td><select readonly="readonly" name="port[]" id="port" class="form-control ports"><option value='.$port[$i].'  selected>'.$port[$i].' ports</option></select></td>';
+                    //     $html .= '<td><select readonly="readonly" name="band[]" id="band" class="form-control bands"><option value='.$band[$i].'  selected>'.getBandSymbol($bands[$technology[$i]],$band[$i]).' </option></select></td>';
+                    //     $html .= '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
+                    //     echo $html;
+                    // }
+
+
+
                     </script>
                 </div>
             </div>

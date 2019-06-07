@@ -92,7 +92,7 @@ CREATE TABLE `antennas` (
   `Tilt range [deg]` text,
   `RET Position` text,
   `RET family` text,
-  `Height (mm)` text,
+  `Height (mm)` int,
   `Width (mm)` text,
   `Depth (mm)` text,
   `Antenna Weight [Kg]` text,

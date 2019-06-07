@@ -1,11 +1,7 @@
 @extends('layouts.style')
 @section('bodysection')
 <!-- Scripts -->
-<script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace( 'article-ckeditor' );
 
-</script>
 
 <div id="app">
     @include('inc.navbar')

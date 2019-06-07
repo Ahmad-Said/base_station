@@ -22,7 +22,8 @@ Route::resource('profile', 'ProfileController');
 
 // Analyser Controller
 Route::get('/', 'AnalyserController@index');
-Route::post('/', 'AnalyserController@showResult');
+Route::get('/result', 'AnalyserController@showResult');
+Route::get('/edit', 'AnalyserController@editForm');
 
 Auth::routes();
 

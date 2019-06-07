@@ -18,16 +18,23 @@
 
         </div>
         <div class="card-header">
+            <h4>Name: </h4>
+            <h5> <label>Ali Daher</label></h5>
+            <h4>Student ID: </h4>
+            <h5> <label>xxxxx</label></h5>
+
+        </div>
+        <div class="card-header">
             <h4> login informatin:</h4>
-            <h5> <label>mohamad.naji@ahmad.said.com</label></h5>
-            <h4>All Password: </h4>
-            <h5> <label>123321</label></h5>
+            <h5> <label>admin@rfsworld.com</label></h5>
+            <h4> <label>Password:</label></h5>
+            <h5> <label>admin@rfsworld.com</label></h5>
 
         </div>
 
         <div class="card-header">
             <h4>Represented To: </h4>
-            <h5> <label>Dr. Ali Ghrayeb  -  Dr.Mohamad Hamze</label></h5>
+            <h5> <label>Dr. Rani Makki</label></h5>
 
         </div>
         <br>

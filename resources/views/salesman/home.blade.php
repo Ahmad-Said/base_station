@@ -125,7 +125,7 @@
                             <?php $i++;?> @endforeach {{-- // coaches manage --}}
                             <?php
                                         $myid=auth::user()->id;
-                                        $members= $users=DB::select("SELECT * FROM users where parentid=$myid and type='coach'");
+                                        $members= $users=DB::select("SELECT * FROM users where parentid=$myid and type='salesman'");
                                         // print_r($members);
                                   ?> @if(count($members)>0)
                             <tbody>
