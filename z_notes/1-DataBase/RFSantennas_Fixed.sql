@@ -344,8 +344,8 @@ INSERT INTO `antennatypes` (`antennaTypeId`, `antennaTypeName`, `antennaFamilyId
 
 CREATE TABLE `bands` (
   `bandId` int(11) NOT NULL,
-  `min` text,
-  `max` text,
+  `min` int,
+  `max` int,
   `color` text,
   `antennaId` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

@@ -57,7 +57,7 @@
                     <br>
                     <div class="form-group row">
                         <label for="number_system"
-                            class="col-md-4 col-form-label text-md-right">{{ __('Number Of System') }}</label>
+                            class="col-md-4 col-form-label text-md-right">{{ __('Number Of System *') }}</label>
 
                         <div class="col-md-4">
                             <input type="number" class="form-control" id="system_number" name="system_number" min="0"
@@ -67,7 +67,7 @@
 
                     <div class="form-group row">
                         <label for="antenna_per_sector"
-                            class="col-md-4 col-form-label text-md-right">{{ __('Max Antennas per sector') }}</label>
+                            class="col-md-4 col-form-label text-md-right">{{ __('Max Antennas per sector *') }}</label>
 
                         <div class="col-md-4">
                             <select class="form-control" id="antenna_per_sector" name="antenna_per_sector">
@@ -88,7 +88,7 @@
 
                     <div class="form-group row">
                         <label for="max_height"
-                            class="col-md-4 col-form-label text-md-right">{{ __('Max Height (mm)') }}</label>
+                            class="col-md-4 col-form-label text-md-right">{{ __('Max Height (mm) (optional)') }}</label>
 
                         <div class="col-md-4">
                             <input type="number" class="form-control" id="max_height" name="max_height" min="1">
@@ -350,7 +350,7 @@
                         // update other input
                         $('#antenna_per_sector').children('option:eq(<?php if (isset($technology))echo  $antenna_per_sector-1; else echo "0";  ?>)').prop('selected',true);
                         $('#antenna_per_sector').change();
-                        $('#max_height').val(<?php if (isset($technology))echo  $max_height;?>);
+                        $('#max_height').val(<?php if (isset($max_height))echo  $max_height;?>);
                      }
 
                     // always ensure that second row (first row in data selection) get updated
