@@ -32,7 +32,7 @@ class Antennas extends Model
         // this simply create Bands Attr when antenna is retrieved
         self::retrieved(
             function ($model) {
-                $model->_Bands = $model->bands();
+                $model->_Bands = $model->bands()->toArray();
             }
         );
     }
@@ -61,7 +61,7 @@ class Antennas extends Model
      *
      * @return array All bands
      */
-    public function getBandsAttribute()
+    public function &getBandsAttribute()
     {
         return $this->_Bands;
     }

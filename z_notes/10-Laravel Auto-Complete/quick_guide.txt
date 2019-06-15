@@ -16,6 +16,7 @@ select no and restart vscode
 
 after creating a model run again:
 php artisan ide-helper:models
+select no and restart vscode
 
 
 

@@ -16,7 +16,7 @@ namespace App{
  *
  * @property int $antennaId
  * @property string|null $xxx
- * @property int|null \{'$Total\ #RF\ ports'}
+ * @property int|null $Total #RF ports
  * @property string|null $Gain (dBi) (<1GHz)
  * @property string|null $Gain (dBi) (1-3GHz)
  * @property string|null $Gain (dBi) (>3GHz)
@@ -37,7 +37,7 @@ namespace App{
  * @property string|null $Tilt range [deg]
  * @property string|null $RET Position
  * @property string|null $RET family
- * @property string|null $Height (mm)
+ * @property int|null $Height (mm)
  * @property string|null $Width (mm)
  * @property string|null $Depth (mm)
  * @property string|null $Antenna Weight [Kg]
@@ -48,7 +48,7 @@ namespace App{
  * @property string|null $Country of Origin
  * @property string|null $Link to product datasheet
  * @property string|null $comments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\AntennasBands[] $bands
+ * @property array $bands
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas query()
@@ -95,8 +95,8 @@ namespace App{
  * App\AntennasBands
  *
  * @property int $bandId
- * @property string|null $min
- * @property string|null $max
+ * @property int|null $min
+ * @property int|null $max
  * @property string|null $color
  * @property int|null $antennaId
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands newModelQuery()
@@ -109,6 +109,29 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereMin($value)
  */
 	class AntennasBands extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\CachedResult
+ *
+ * @property int $query_form
+ * @property string $response_ids
+ * @property int $sum_ports
+ * @property mixed $state_finish
+ * @property int $combination_nb
+ * @property int $antennas_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereAntennasCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereCombinationNb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereQueryForm($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereResponseIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereStateFinish($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereSumPorts($value)
+ */
+	class CachedResult extends \Eloquent {}
 }
 
 namespace App{

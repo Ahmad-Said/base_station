@@ -53,7 +53,7 @@
                 <div class="card-body">
 
                     {!! Form::open(['action' => ['AnalyserController@showResult'] , 'method' => 'GET', 'enctype' =>
-                    'multipart/form-data']) !!}
+                    'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
                     <br>
                     <div class="form-group row">
                         <label for="number_system"
@@ -128,7 +128,11 @@
                             ?>
                         </table>
                         <div style="text-align:center">
-                            <input type="submit" name="submit" class="btn btn-primary" value="Show Result" />
+                            <button type="submit" class="btn btn-primary" id = "prevent-multiple-submit" />
+                                <i class="fas fa-spinner fa-spin" id='myspinner' style="display: none"></i>
+                                <i id= "submit-text"> Show Result </i>
+
+                            </button>
                         </div>
                     </div>
                     {!! Form::close() !!}
@@ -138,6 +142,13 @@
                     <script>
                         $(document).ready(function(){
 
+
+                            // https://www.youtube.com/watch?time_continue=187&v=gJRv2ahMzEg
+                            $('.form-prevent-multiple-submits').on('submit',function(){
+                                $('#prevent-multiple-submit').attr('disabled','true');
+                                $('#submit-text').html('Computing');
+                                $('#myspinner').show();
+                            });
                        // define a function see
                        // https://stackoverflow.com/questions/907634/is-this-how-you-define-a-function-in-jquery
                         var add_to_table=function(){
@@ -350,6 +361,7 @@
                         // update other input
                         $('#antenna_per_sector').children('option:eq(<?php if (isset($technology))echo  $antenna_per_sector-1; else echo "0";  ?>)').prop('selected',true);
                         $('#antenna_per_sector').change();
+                        $('#antenna_preferred').children('option:eq(<?php if (isset($antenna_preferred))echo  $antenna_preferred-1; else echo "0";  ?>)').prop('selected',true);
                         $('#max_height').val(<?php if (isset($max_height))echo  $max_height;?>);
                      }
 

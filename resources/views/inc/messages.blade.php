@@ -7,7 +7,14 @@
     {!! $but !!}
     <i class="fas fa-exclamation-circle"></i> {!! $error !!}
 </div>
-@endforeach @endisset @if(session('success'))
+@endforeach @endisset
+@isset($info)
+<div class="alert alert-info">
+    {!! $but !!}
+    <i class="far fa-hand-point-right"></i> {!! $info !!}
+</div>
+@endisset
+@if(session('success'))
 <div class="alert alert-success">
     {!! $but !!}
     <i class="far fa-check-circle"></i> {!! session('success') !!}
