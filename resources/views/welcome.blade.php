@@ -45,7 +45,7 @@
     <div class="row justify-content-center">
         {{--
         <div class="col-xs-12"> --}}
-        <div class="col-md-16">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
                     <h4 style="text-align:center">Enter Item Details</h4>
@@ -95,7 +95,7 @@
                         </div>
                     </div>
 
-                    <div class="table-repsonsive">
+                    <div class="table-repsonsive ">
                         <span id="error"></span>
                         <table class="table table-bordered" id="item_table">
                             <tr>
@@ -122,7 +122,7 @@
                                     $html .= '<td><select name="technology[]" id="technology" class="form-control dynamic" required="required"><option value="" disabled selected>Technology</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>';
                                     $html .= '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
                                     $html .= '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
-                                    $html .= '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
+                                    $html .= '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove float-right"><span class="fas fa-minus-circle"></span></button></td></tr>';
                                     echo $html;
                                 }
                             ?>

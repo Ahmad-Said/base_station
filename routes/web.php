@@ -20,6 +20,10 @@ Route::get('/references', 'PagesController@references');
 // Profile Controller
 Route::resource('profile', 'ProfileController');
 
+// Post Controller
+Route::resource('posts', 'PostsController');
+
+
 // Analyser Controller
 Route::get('/', 'AnalyserController@index');
 Route::get('/result', 'AnalyserController@showResult');

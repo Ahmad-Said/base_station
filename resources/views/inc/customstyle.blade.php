@@ -7,6 +7,9 @@
 
     body {
         margin: 0;
+        background-image:url("/images/gray-wallpaper.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
     header,

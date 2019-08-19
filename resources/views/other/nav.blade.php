@@ -1,13 +1,7 @@
 <li class="nav-item">
-    <a class="nav-link" href="/set"> Set of questions</a>
+    <a class="nav-link" href="/posts">Posts</a>
 </li>
-{{--
-<li class="nav-item">
-    <a class="nav-link" href="/fo"></a>
-</li> --}}
-<li class="nav-item">
-    <a class="nav-link" href="/project">Recent Project</a>
-</li>
+
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
     <div class="dropdown-menu" aria-labelledby="dropdown01">

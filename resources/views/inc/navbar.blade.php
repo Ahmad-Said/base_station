@@ -1,6 +1,23 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="padding-left:5em; padding-right:5em">
+<nav class="navbar navbar-expand-md navbar-dark  fixed-top" style="padding-left:1em; padding-right:5em; background-color: gray;">
+    @if(Auth::user() && Auth::user()->type=='admin')
+    <div id="content">
 
-    <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-danger" >
+                    <i class="fas fa-align-left"></i>
+                    <span>Menu</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    @else
+    &nbsp&nbsp
+    <img class="img-fluid img-thumbnail rounded-top" src="/images/rfsworld.png" width="45" height="40">
+    @endif
+    <a class="navbar-brand" href="/">&nbsp&nbspRFS WORLD</a>
+    {{-- <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a> --}}
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
         aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -13,6 +30,7 @@
     @include('other.nav') @else @if(Auth::user()->type=='admin')
     @include('admin.nav') @else @if(Auth::user()->type=='salesman')
     @include('salesman.nav') @endif @endif @endguest
+
         </ul>
 
         {{--
@@ -36,7 +54,7 @@
 
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" v-pre>
+                    aria-expanded="false" style="color:azure;" v-pre>
                       {{ Auth::user()->name }} <span class="caret"></span>
                   </a>
 
@@ -59,7 +77,7 @@
             </li>
             @endguest
             <li class="nav-item">
-                <a class="nav-link" href="/about"> About us</a>
+                <a class="nav-link" href="/about" style="color:aliceblue;"> About us</a>
             </li>
         </ul>
     </div>
