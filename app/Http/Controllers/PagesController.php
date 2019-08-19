@@ -6,6 +6,7 @@ use DB;
 use Auth;
 use App\User;
 use App\Antennas;
+use App\SettingWebLara;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -43,7 +44,30 @@ class PagesController extends Controller
      */
     public function about()
     {
-        return view('pages.about');
+        $help_setting = SettingWebLara::firstOrNew(["setting_name" => "help"]);
+        return view('pages.about')
+            ->with("help_setting", $help_setting);
+    }
+
+    /**
+     * About page
+     *
+     * @param Request $request body
+     *
+     * @return view - pages.about -> /about
+     */
+    public function storeAbout(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'body' => 'required'
+            ]
+        );
+        $help_setting = SettingWebLara::firstOrNew(["setting_name" => "help"]);
+        $help_setting->value = $request->input("body");
+        $help_setting->save();
+        return $this->about();
     }
 
     /**

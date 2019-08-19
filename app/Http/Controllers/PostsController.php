@@ -15,7 +15,7 @@ class PostsController extends Controller
     public function index()
     {
         //
-        $posts=Post::orderBy('created_at', 'desc')->paginate(10);
+        $posts = Post::orderBy('created_at', 'desc')->paginate(10);
         return view('posts.index')->with('posts', $posts);
     }
 
@@ -28,7 +28,6 @@ class PostsController extends Controller
     {
         //
         return view('posts.create');
-
     }
 
     /**
@@ -66,7 +65,7 @@ class PostsController extends Controller
         }
 
         // Create Post
-        $post= new Post;
+        $post = new Post;
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->cover_image = $fileNameToStore;
@@ -77,7 +76,8 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id the id of the post
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -90,7 +90,8 @@ class PostsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id the id of the post
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -98,14 +99,14 @@ class PostsController extends Controller
         //
         $post = Post::find($id);
         return view('posts.edit')->with('post', $post);
-
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request testing
+     * @param int                      $id      the id of the post
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -133,7 +134,7 @@ class PostsController extends Controller
     }
 
         // Create Post
-        $post= Post::find($id);
+        $post = Post::find($id);
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         if ( $request -> hasFile( 'cover_image' ) ) {
@@ -146,15 +147,15 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id the id of the post
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
-        $post=Post::find($id);
+        $post = Post::find($id);
         $post->delete();
         return redirect('/posts')->with('success', 'Post Removed');
-
     }
 }

@@ -20,8 +20,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet"> {{-- https://fontawesome.com/start --}}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-        crossorigin="anonymous"> {{-- glyphicons are no longueur supported so i use font awsome instead--}} {{--
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    {{-- glyphicons are no longueur supported so i use font awsome instead--}} {{--
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
         rel="stylesheet"> --}}
     @include('inc.customstyle') {{-- i used this style copeid from page not found button --}}
@@ -41,7 +42,10 @@
     @yield('bodysection')
     <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace( 'article-ckeditor' );
+        // https://laracasts.com/discuss/channels/javascript/issue-with-ckeditor-and-laravel?page=1
+        if($('#article-ckeditor').length ) {
+            var editor = CKEDITOR.replace( 'article-ckeditor' );
+        }
     </script>
 </body>
 

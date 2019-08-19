@@ -5,10 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <style>
-
+    <style>
         .wrapper {
-            display:flex;
+            display: flex;
             align-items: stretch;
         }
 
@@ -21,7 +20,9 @@
             max-width: 270px;
             min-height: 100vh;
             border-right: 1px solid #666666;
-            background: #dedad9 /*#7386D5*/;
+            background: #dedad9
+                /*#7386D5*/
+            ;
             color: #595959;
             transition: all 0.3s;
         }
@@ -39,7 +40,9 @@
         }
 
 
-        a, a:hover, a:focus {
+        a,
+        a:hover,
+        a:focus {
             color: inherit;
             text-decoration: none;
             transition: all 0.3s;
@@ -80,7 +83,8 @@
             background: #fff;
         }
 
-        #sidebar ul li.active > a, a[aria-expanded="true"] {
+        #sidebar ul li.active>a,
+        a[aria-expanded="true"] {
             color: #595959;
             background: #dedad9;
         }
@@ -97,45 +101,48 @@
 </head>
 
 <body>
-       <div class="wrapper">
+    <div class="wrapper">
         <!-- Sidebar -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="active">
             <div class="sidebar-header">
-                    <h2>
-                        <img class="img-fluid img-thumbnail rounded-top" src="/images/rfsworld.png" width="60" height="auto">  RFS World
-                        <hr>
-                    </h2>
+                <h2>
+                    <img class="img-fluid img-thumbnail rounded-top" src="/images/rfsworld.png" width="60"
+                        height="auto"> RFS World
+                    <hr>
+                </h2>
             </div>
             <ul class="list-inline components">
-                    <li class="nav-item">
-                            <a class="nav-link border-bottom border-top" style="border-color: gray;" href="/register">Register Salesman</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link border-bottom border-top" style="border-color: gray;" href="/register">Register
+                        Salesman</a>
+                </li>
                 <li>
                     <a class="nav-link" href="/posts">Posts</a>
                 </li>
                 <li>
-                        <a class="nav-link" href="/posts/create">Add Post</a>
-                    </li>
+                    <a class="nav-link" href="/posts/create">Add Post</a>
+                </li>
                 <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle  border-top">Users</a>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="true"
+                        class="dropdown-toggle  border-top">Users</a>
                     <ul class="collapse list-unstyled show" id="homeSubmenu">
                         <li class="nav-item">
-                            <a class="nav-link" >Doctors</a>
+                            <a class="nav-link">Doctors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" >Patients</a>
+                            <a class="nav-link">Patients</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" >Assistants</a>
+                            <a class="nav-link">Assistants</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" >Insurance Companies</a>
+                            <a class="nav-link">Insurance Companies</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link  border-bottom border-top" >Inbox</a>
+                    <a class="nav-link  border-bottom border-top">Inbox</a>
                 </li>
             </ul>
         </nav>

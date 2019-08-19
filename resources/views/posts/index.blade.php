@@ -25,5 +25,5 @@
     @else
         <p>No Posts Found</p>
 
-    @endif
+@endif
 @endsection
