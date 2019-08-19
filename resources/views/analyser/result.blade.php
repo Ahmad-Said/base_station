@@ -87,9 +87,9 @@
 
 
 
-<div class="card text-center table-responsive">
-    <div class="card-header">
-        Results
+<div class="card text-center table-responsive border-danger" style="border-width:2px;">
+    <div class="card-header" style="color:darkred; background-color:#d6d7d4">
+    <h4><b>Results</b></h4>
     </div>
     <div class="card-body">
         @if (count($AntennaSolution)> 0)
@@ -125,8 +125,8 @@
         <a class="btn btn-default btn-block toggle-pagination"><i class="fas fa-expand-arrows-alt"></i> Toggle
             Pagination</a>
         {!! $AntennaSolution->links() !!}
-        <br>........................................................................................
-
+        <br>
+        <br>
         {{-- @endif --}}
 
         <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
