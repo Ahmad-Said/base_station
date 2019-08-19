@@ -1,0 +1,5 @@
+Mobile detection:
+ https://stackoverflow.com/questions/23779088/laravel-detect-mobile-tablet-and-load-correct-views
+
+Responsive
+ https://stackoverflow.com/questions/25838135/how-to-make-responsive-bootstrap-3-pagination
