@@ -15,6 +15,7 @@
 Route::get('showfile/{file}', 'PagesController@showfile');
 Route::get('/test', 'PagesController@test');
 Route::get('/about', 'PagesController@about');
+Route::post('/about', 'PagesController@storeAbout');
 Route::get('/references', 'PagesController@references');
 
 // Profile Controller

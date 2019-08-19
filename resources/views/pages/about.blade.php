@@ -1,67 +1,88 @@
 @extends('layouts.app')
 @section('content')
-<div class="text-center">
+<h1>
+    Help
+</h1>
+<div>
     <div class="form-group">
-
-        <div class="card-header">
-            <h4>Name: </h4>
-            <h5> <label>Mohamad Naji</label></h5>
-            <h4>Student ID: </h4>
-            <h5> <label>92105</label></h5>
-        </div>
-
-        <div class="card-header">
-            <h4>Name: </h4>
-            <h5> <label>Ahmad Said</label></h5>
-            <h4>Student ID: </h4>
-            <h5> <label>88671</label></h5>
-
-        </div>
-        <div class="card-header">
-            <h4>Name: </h4>
-            <h5> <label>Ali Daher</label></h5>
-            <h4>Student ID: </h4>
-            <h5> <label>xxxxx</label></h5>
-
-        </div>
-        <div class="card-header">
-            <h4> login informatin:</h4>
-            <h5> <label>admin@rfsworld.com</label></h5>
-            <h4> <label>Password:</label></h5>
-            <h5> <label>admin@rfsworld.com</label></h5>
-
-        </div>
-
-        <div class="card-header">
-            <h4>Represented To: </h4>
-            <h5> <label>Dr. Rani Makki</label></h5>
-
-        </div>
         <br>
-        <div>
-            @if(Auth::guest())
-            <a href='/'>
-        @else
-        <a href={{ URL::previous() }}>
-        @endif
-            <button style="float: left;" class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
-                   Go Back
-            </button>
-        </a>
 
-            <a href="/references">
-         <button style="float: right;" class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
-                References
-         </button>
-     </a>
-            <div>
-                <div class='text-center'>
-                    <a href="/home">
-    <button style="float: center;" class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
-        Go Home
-    </button>
-</a>
+        @if(Auth::user() && Auth::user()->type=='admin')
 
+        {!! Form::open(['action'=>['PagesController@storeAbout'],'method' =>'POST']) !!}
+        <div class="form-group">
+            {{ Form::textarea('body',$help_setting->value,['id'=>'article-ckeditor','class'=>'form-control hidden','placeholder'=>'Body Text']) }}
+        </div>
 
-                </div>
+        <div class="text-center">
+
+            {{ Form::submit('Submit Changes',['class'=>'bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg']) }}
+
+        </div>
+        {!! Form::close() !!}
+    </div>
+    <script>
+        // live preview change on ckeditor
+            $(document).ready(function(){
+                editor.on( 'change', function( evt ) {
+                    // https://ckeditor.com/docs/ckeditor4/latest/guide/dev_savedata.html
+                // getData() returns CKEditor's HTML content.
+                      $('#help').html(evt.editor.getData());
+                      $('#help > table').addClass("table-bordered table table-striped");
+                 });
+
+             }
+            )
+    </script>
+    {{-- End admin section --}}
+    @endif
+    <script>
+        $(document).ready(function(){
+        $('#help > table').addClass("table-bordered table table-striped");
+    })
+    </script>
+
+    @if(Auth::user() && Auth::user()->type=='admin')
+
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text" id="help">
+            </p>
+        </div>
+    </div>
+    <br>
+    <p class="text-center"> Old Help </p>
+    @endif
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                {!! $help_setting->value !!}
+            </p>
+        </div>
+    </div>
+    <div>
+        @if(Auth::guest())
+        <a href='/'>
+            @else
+            <a href={{ URL::previous() }}>
+                @endif
+                <button style="float: left; color: blue"
+                    class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
+                    Go Back
+                </button>
+            </a>
+
+            @auth
+            <a href="/home">
+                @else
+                <a href="/">
+                    @endauth
+                    <button style="float: right; color: blue"
+                        class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
+                        Go Home
+                    </button>
+                </a>
+    </div>
+</div>
+</div>
 @endsection

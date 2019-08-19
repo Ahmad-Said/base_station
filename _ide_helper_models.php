@@ -118,7 +118,7 @@ namespace App{
  * @property int $query_form
  * @property string $response_ids
  * @property int $sum_ports
- * @property mixed $state_finish
+ * @property int $state_finish
  * @property int $combination_nb
  * @property int $antennas_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult newModelQuery()
@@ -136,12 +136,54 @@ namespace App{
 
 namespace App{
 /**
+ * App\Post
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $body
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereUpdatedAt($value)
+ */
+	class Post extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SettingWebLara
+ *
+ * @property int $id
+ * @property string $setting_name
+ * @property string $value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara whereSettingName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SettingWebLara whereValue($value)
+ */
+	class SettingWebLara extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\User
  *
  * @property int $id
  * @property string $name
  * @property string $type
- * @property mixed $is_activated
+ * @property int $is_activated
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
