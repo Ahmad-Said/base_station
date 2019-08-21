@@ -61,6 +61,7 @@
         </div>
     </div>
     <div>
+        <hr>
         @if(Auth::guest())
         <a href='/'>
             @else

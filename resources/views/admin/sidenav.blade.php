@@ -140,7 +140,9 @@
                         </li>
                     </ul>
                 </li>
-
+                <li class="nav-item">
+                        <a class="nav-link" href="/about" >Help</a>
+                    </li>
                 <li class="nav-item">
                     <a class="nav-link  border-bottom border-top">Inbox</a>
                 </li>

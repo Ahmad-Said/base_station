@@ -5,7 +5,7 @@
     <br>
     <br>
     <h1>{{ $post->title }}</h1>
-    @if($post->cover_image!=null)
+    @if($post->cover_image!="noimage.jpg")
     <img style="width:75%; height: 75%; border-radius: 2%; border-width: 5px;" src="/storage/cover_images/{{ $post->cover_image }}">
     @endif
     <div>
@@ -20,8 +20,8 @@
      &nbsp;|{{ Form::hidden ('_method','DELETE')}}
     {{ Form::submit('Delete',['class'=>'btn btn-danger']) }}
     {!! Form::close() !!}
-    <br>
-    <br>
-    <br>
     @endif
+    <br>
+    <br>
+    <br>
 @endsection

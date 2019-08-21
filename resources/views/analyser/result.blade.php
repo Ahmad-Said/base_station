@@ -87,7 +87,7 @@
 
 
 
-<div class="card text-center table-responsive border-danger" style="border-width:2px;">
+<div class="card text-center table-responsive border-dark" style="border-width:2px;">
     <div class="card-header" style="color:darkred; background-color:#d6d7d4">
     <h4><b>Results</b></h4>
     </div>
@@ -210,6 +210,7 @@
 <input type="hidden" name=antenna_per_sector value="<?php echo $antenna_per_sector; ?>">
 <input type="hidden" name=antenna_preferred value="<?php echo $antenna_preferred; ?>">
 <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
+<br>
 <div style="text-align:center">
     <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Edit Form" />
 </div>

@@ -7,7 +7,7 @@
     <a href="posts/{{ $post->id }}">
         <div class="card card-body bg-light">
             <div class="row">
-                @if($post->cover_image!=null)
+                @if($post->cover_image!="noimage.jpg")
             <div class="col-md-4 col-sm-4">
                     <img style="width:100%" src="/storage/cover_images/{{ $post->cover_image }}">
                 </div>
