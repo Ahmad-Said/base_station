@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <style>
-        .wrapper {
+        #sidebar .wrapper {
             display: flex;
             align-items: stretch;
         }
@@ -27,11 +27,11 @@
             transition: all 0.3s;
         }
 
-        a[data-toggle="collapse"] {
+        #sidebar a[data-toggle="collapse"] {
             position: relative;
         }
 
-        .dropdown-toggle::after {
+        #sidebar .dropdown-toggle::after {
             display: block;
             position: absolute;
             top: 50%;
@@ -40,7 +40,7 @@
         }
 
 
-        a,
+        #sidebar a,
         a:hover,
         a:focus {
             color: inherit;
@@ -89,7 +89,7 @@
             background: #dedad9;
         }
 
-        ul ul a {
+        #sidebar ul ul a {
             font-size: 1.1em !important;
             /* padding: 8px; */
             padding-left: 50px !important;
@@ -141,8 +141,8 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="/about" >Help</a>
-                    </li>
+                    <a class="nav-link" href="/about">Help</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link  border-bottom border-top">Inbox</a>
                 </li>

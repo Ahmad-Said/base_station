@@ -38,12 +38,13 @@
     @endif
     <script>
         $(document).ready(function(){
-        $('#help > table').addClass("table-bordered table table-striped");
+        $('table').addClass("table-bordered table table-striped");
     })
     </script>
 
     @if(Auth::user() && Auth::user()->type=='admin')
 
+    <h4>Live Preview</h4>
     <div class="card">
         <div class="card-body">
             <p class="card-text" id="help">
@@ -51,7 +52,7 @@
         </div>
     </div>
     <br>
-    <p class="text-center"> Old Help </p>
+    <h4 class="text-center"> Old Help </h4>
     @endif
     <div class="card">
         <div class="card-body">
