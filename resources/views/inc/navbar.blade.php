@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark  fixed-top" style="padding-left:1em; padding-right:5em; background-color: gray;">
+<nav class="navbar navbar-expand-md navbar-dark  fixed-top shadow-lg" style="padding-left:1em; padding-right:5em; background-color: gray;">
     @if(Auth::user() && Auth::user()->type=='admin')
     <div id="content">
 
@@ -77,7 +77,7 @@
             </li>
             @endguest
             <li class="nav-item">
-                <a class="nav-link" href="/about" style="color:aliceblue;"> About us</a>
+                <a class="nav-link" href="/about" style="color:aliceblue;"> Help</a>
             </li>
         </ul>
     </div>
