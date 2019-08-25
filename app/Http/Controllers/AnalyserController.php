@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use App\prices;
 use App\XgBands;
 use App\Antennas;
 use App\CachedResult;
@@ -16,7 +18,6 @@ use function Opis\Closure\serialize;
 use function Opis\Closure\unserialize;
 use PHPUnit\Framework\Constraint\IsFalse;
 use Illuminate\Pagination\LengthAwarePaginator;
-
 class AnalyserController extends Controller
 {
     /**
@@ -84,8 +85,12 @@ class AnalyserController extends Controller
             ]
         )
             ->select(
+                "xxx",
                 "antennaId",
                 "Total #RF ports",
+                "#ports (<1GHz)",
+                "#ports (1-3GHz)",
+                "#ports (>3GHz )",
                 "Height (mm)",
                 // later for display
                 "Link to product datasheet"
@@ -227,6 +232,34 @@ class AnalyserController extends Controller
         }
         // TODO debug messages
         // $msg .= DebuggerHelper::pingReport("result");
+
+        // // generating price
+        // $antennasIDtoPrice = prices::select(
+        //     "antennaId",
+        //     "price"
+        // )->get()
+        //     // making it as map key id to antenna
+        //     ->mapWithKeys(
+        //         function ($item) {
+        //             return [$item->antennaId => $item];
+        //         }
+        //     );
+        // if ( Auth::user()
+        //     && (Auth::user()->type=="admin" || Auth::user()->type == "salesman" ) ) {
+        //     foreach ( $AntennaSolution as $key => $setSolution ) {
+        //         foreach ( $setSolution as $key2 => $antennaItem ) {
+        //             if ( isset($antennasIDtoPrice[$antennaItem->antennaId]) ) {
+        //                 $AntennaSolution[$key][$key2]["price"] = $antennasIDtoPrice[$antennaItem->antennaId];
+        //             } else {
+        //                 $AntennaSolution[$key][$key2]["price"] = 0;
+        //             }
+        //         }
+        //     }
+        // }
+        // return $AntennaSolution;
+
+
+
         // paginating items for faster browsing
         // https://arjunphp.com/laravel-5-pagination-array/
         // good for custumization:
@@ -262,6 +295,8 @@ class AnalyserController extends Controller
 
         $msg .= " <br> Took about "
             . DebuggerHelper::pingTime("result") . " seconds.";
+
+
 
         // return $AntennaSolution->lastPage();
         return view("analyser\\result")
@@ -635,7 +670,7 @@ class AnalyserController extends Controller
         // sorting array to unify request
         foreach ($technology as $key => $value) {
             $systemG[] = [
-                (int)$technology[$key], (int)$port[$key], (int)$band[$key]
+                (int) $technology[$key], (int) $port[$key], (int) $band[$key]
             ];
         }
         usort(

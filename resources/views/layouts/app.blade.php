@@ -11,9 +11,9 @@
                     @endif
                     <main class="col">
                         <div class="container">
-                        <br><br><br>
-                        @include('inc.messages')
-                        @yield('content')
+                            <br><br><br>
+                            @include('inc.messages')
+                            @yield('content')
                         </div>
                     </main>
                     <br />

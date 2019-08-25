@@ -1,21 +1,19 @@
-<nav class="navbar navbar-expand-md navbar-dark  fixed-top shadow-lg" style="padding-left:1em; padding-right:5em; background-color: gray;">
+<nav class="navbar navbar-expand-sm navbar-light fixed-top border-bottom" style="padding-left:0em; padding-right:0em; background-color:#f7f7f7 ;">
     @if(Auth::user() && Auth::user()->type=='admin')
     <div id="content">
-
         <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container-fluid">
+            {{-- <div class="container-fluid"> --}}
                 <button type="button" id="sidebarCollapse" class="btn btn-danger" >
-                    <i class="fas fa-align-left"></i>
+                    {{-- <i class="fas fa-align-left"></i> --}}
                     <span>Menu</span>
                 </button>
-            </div>
+            {{-- </div> --}}
         </nav>
     </div>
     @else
-    &nbsp&nbsp
     <img class="img-fluid img-thumbnail rounded-top" src="/images/rfsworld.png" width="45" height="40">
     @endif
-    <a class="navbar-brand" href="/">&nbsp&nbspRFS WORLD</a>
+    {{-- <a class="navbar-brand" href="/">&nbsp&nbspRFS WORLD</a> --}}
     {{-- <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a> --}}
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
@@ -52,16 +50,14 @@
             @endif @else
 
 
-            <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" style="color:azure;" v-pre>
-                      {{ Auth::user()->name }} <span class="caret"></span>
+            <li class="nav-item dropdown divider">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle mr-4 px-3" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" v-pre>
+                    Welcome {{ Auth::user()->name }}
+                    <span class="caret"></span>
                   </a>
 
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/home">
-                        Home
-                      </a>
+                <div class="dropdown-menu dropdown-menu-right divider" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="/profile">
                         Profile
                       </a>

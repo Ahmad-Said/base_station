@@ -130,7 +130,7 @@
                         <div style="text-align:center">
                             <button type="submit" class="btn btn-primary" id = "prevent-multiple-submit" />
                                 <i class="fas fa-spinner fa-spin" id='myspinner' style="display: none"></i>
-                                <i id= "submit-text"> Show Result </i>
+                                <i id= "submit-text"> Show Results </i>
 
                             </button>
                         </div>

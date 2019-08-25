@@ -7,6 +7,7 @@ use App\prices;
 use App\Antennas;
 use Illuminate\Http\Request;
 
+
 class PricesController extends Controller
 {
     /**
@@ -22,26 +23,26 @@ class PricesController extends Controller
         $antennas = Antennas::select(
             "antennaId"
         )
-            ->get()
+            ->get();
+        $antennasIDtoPrice = prices::select(
+            "antennaId",
+            "price"
+        )->get()
             // making it as map key id to antenna
             ->mapWithKeys(
                 function ($item) {
-                    $antennaPrice = prices::where(
-                        [
-                            ['antennaId', "=", $item->antennaId]
-                        ]
-                    )->first();
-
-                    if ( $antennaPrice != null) {
-                        return [$item->antennaId => $antennaPrice->price];
-                    } else {
-                        return [$item->antennaId => 0];
-                    }
+                    return [$item->antennaId => $item];
                 }
             );
-
-        return view('prices.index')->with('antennas', $antennas);
-
+        $result = array();
+        foreach ($antennas as $key => $antenna) {
+            if (isset($antennasIDtoPrice[$antenna->antennaId])) {
+                $result[$antenna->antennaId] =  $antennasIDtoPrice[$antenna->antennaId]->price;
+            } else {
+                $result[$antenna->antennaId] = 0;
+            }
+        }
+        return view('prices.index')->with('antennas', $result);
     }
 
     /**
@@ -75,23 +76,22 @@ class PricesController extends Controller
                         ]
                     )->first();
 
-                    if ( $antennaPrice != null) {
+                    if ($antennaPrice != null) {
                         return [$item->antennaId => $antennaPrice->price];
                     } else {
                         return [$item->antennaId => 0];
                     }
                 }
             );
-            // return count($request->antennasId);
-        for ( $i=0; $i < count($request->antennasId); $i++ ) {
+        // return count($request->antennasId);
+        for ($i = 0; $i < count($request->antennasId); $i++) {
 
             // test if antennas from table exist in prices table
             // if ( $antennas[$request->antennasId[$i]] != null ) {
-                // test if price from request equal to price from prices tables
-            if ( !array_key_exists($request->antennasId[$i], $antennas) ) {
+            // test if price from request equal to price from prices tables
+            if (!array_key_exists($request->antennasId[$i], $antennas)) {
 
-                if ( $antennas[$request->antennasId[$i]] == $request->prices[$i] ) {
-
+                if ($antennas[$request->antennasId[$i]] == $request->prices[$i]) { 
                 } else {
                     // operation when prices not equal
                     // return $request->antennasId[$i];
@@ -100,13 +100,12 @@ class PricesController extends Controller
                             ['antennaId', "=", $request->antennasId[$i]]
                         ]
                     )->first();
-                    if ($priceE!=null ) {
-                        $antennas[$request->antennasId[$i]]=$request->prices[$i];
-                        $priceE->price=$request->prices[$i];
+                    if ($priceE != null) {
+                        $antennas[$request->antennasId[$i]] = $request->prices[$i];
+                        $priceE->price = $request->prices[$i];
                         $priceE->save();
                     } else {
                         return "not exist";
-
                     }
                 }
             } else {
@@ -115,10 +114,8 @@ class PricesController extends Controller
                 $priceE->antennasId = $request->antennasId[$i];
                 $priceE->price = $request->prices[$i];
                 $priceE->save();
-                $antennas[$request->antennasId[$i]]=$request->prices[$i];
-
+                $antennas[$request->antennasId[$i]] = $request->prices[$i];
             }
-
         }
 
         return view('prices.index')->with('antennas', $antennas);

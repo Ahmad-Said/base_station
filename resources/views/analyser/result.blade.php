@@ -55,7 +55,9 @@
         .pagination-responsive {
             display: inline-block !important
         }
+
     }
+
 </style>
 
 {{-- https://stackoverflow.com/questions/23779088/laravel-detect-mobile-tablet-and-load-correct-views --}}
@@ -72,6 +74,10 @@
 <script>
     $(document).ready(function () {
             $('#dtBasicExample').DataTable();
+            // {
+            // "scrollY": "1000px",
+            // "scrollCollapse": true,
+            // });
             $('.dataTables_length').addClass('bs-select');
 
             // show-pagination
@@ -80,6 +86,7 @@
                 $(this).toggleClass('active');
                 f.preventDefault()
             });
+
         });
 
 </script>
@@ -87,8 +94,8 @@
 
 
 
-<div class="card text-center table-responsive border-dark" style="border-width:2px;">
-    <div class="card-header" style="color:darkred; background-color:#d6d7d4">
+<div class="card text-center table-responsive" style="border-width:2px;">
+    <div class="card-header" style="color:#fc0703; background-color:#d6d7d4">
     <h4><b>Results</b></h4>
     </div>
     <div class="card-body">
@@ -130,14 +137,16 @@
         {{-- @endif --}}
 
         <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
-            cellspacing="0" width="100%">
+            cellspacing="0"  width="100%">
             <thead>
                 <tr>
-                    <th>NB</th>
+                    <th>Configuration #</th>
+                    <th>Total Price ( $ )</th>
+                    <th># Antennas Par Sector</th>
                     <th>Set Solution</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody >
                 {{-- <tr>
                     <td></td>
                     <td>
@@ -156,33 +165,45 @@
                 </tr> --}}
 
                 @foreach($AntennaSolution as $key => $setSolution)
-                <tr>
-                    <td>{{ $key+1 }}</td>
+                <tr >
+                    <td style="vertical-align: middle;">{{ $key+1 }}</td>
+                    <td></td>
+                    <td style="vertical-align: middle;">{{ count($setSolution) }}</td>
                     <td>
                         <table class="table table-light">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Antenna Id</th>
-                                    <th>Total Ports NB</th>
-                                    <th>Height</th>
-                                    <th>Link</th>
+                                    <th>Antenna Model Number</th>
+                                    <th>Quantity</th>
+                                    <th>Unite Price</th>
+                                    <th>Low Band</th>
+                                    <th>Mid Band</th>
+                                    <th>High Band</th>
+                                    <th>Height (mm)</th>
+                                    <th>Total Ports #</th>
+                                    <th>Link to data sheets</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @foreach ($setSolution as $antennaItem)
-                                <tr>
 
-                                    <td>{{ $antennaItem->antennaId }}</td>
-                                    <td>{{ $antennaItem->{"Total #RF ports"} }}</td>
-                                    {{-- <td>{{ $antennaItem->Bands }}
-                    </td> --}}
-                    <td>{{ $antennaItem->{"Height (mm)"} }}</td>
-                    <td><a href="{{ $antennaItem->{"Link to product datasheet"} }}">Here</a></td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                {{-- @foreach ($setSolution as $antennaItem) --}}
+                                @for ( $i=0 ; $i < count($setSolution) ; $i++ )
+                                <tr>
+                                    <td>{{ $setSolution[$i]->xxx }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ $setSolution[$i]->{"#ports (<1GHz)"} }}</td>
+                                    <td>{{ $setSolution[$i]->{"#ports (1-3GHz)"} }}</td>
+                                    <td>{{ $setSolution[$i]->{"#ports (>3GHz )"} }}</td>
+                                    <td>{{ $setSolution[$i]->{"Height (mm)"} }}</td>
+                                    <td>{{ $setSolution[$i]->{"Total #RF ports"} }}</td>
+                                    {{-- <td>{{ $antennaItem->Bands }} </td> --}}
+                                    <td><a href="{{ $setSolution[$i]->{"Link to product datasheet"} }}">Data sheet</a></td>
+                                </tr>
+                                @endfor
+                            </tbody>
+                        </table>
 
 
         </td>
@@ -191,7 +212,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <th>NB</th>
+                <th>Configuration #</th>
                 <th>Set</th>
             </tr>
         </tfoot>
@@ -212,7 +233,7 @@
 <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
 <br>
 <div style="text-align:center">
-    <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Edit Form" />
+    <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input" />
 </div>
 </div>
 {!! Form::close() !!}
@@ -231,6 +252,7 @@
                 e.preventDefault();
             }
         });
+
 
         if (window.history && window.history.pushState) {
 

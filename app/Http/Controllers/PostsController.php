@@ -143,9 +143,9 @@ class PostsController extends Controller
             $post = Post::find($id);
             $post->title = $request->input('title');
             $post->body = $request->input('body');
-            if ( $request -> hasFile('cover_image') ) {
-                $post->cover_image= $fileNameToStore;
-            }
+        if ( $request -> hasFile('cover_image') ) {
+            $post->cover_image= $fileNameToStore;
+        }
             $post->save();
             return redirect('/posts')->with('success', 'Post Updated');
     }

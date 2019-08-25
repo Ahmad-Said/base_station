@@ -4,7 +4,7 @@
 <style>
 
     .table tbody tr.warning {
-        background-color: #f77474 !important;
+        background-color: greenyellow !important;
         /* #f71111 */
     }
 
@@ -94,7 +94,7 @@
 
 
 <div class="card text-center table-responsive border-dark" style="border-width:2px;">
-    <div class="card-header" style="color:darkred; background-color:#d6d7d4">
+    <div class="card-header" style="color:#fc0703; background-color:#d6d7d4">
     <h4><b>Antennas Prices</b></h4>
     </div>
     <div class="card-body">
@@ -108,7 +108,7 @@
             <thead>
                 <tr>
                     <th>Antenna Id</th>
-                    <th>Price</th>
+                    <th>Price ( $ )</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -118,7 +118,7 @@
                     <td> {{ $id }}</td>
                     <td>
                         <input type="hidden" name='antennasId[]' value={{ $id }} >
-                        <input class="dynamic" type="number" name='prices[]' value={{ $price }} required="true">
+                        <input class="dynamic" type="number" name='prices[]' min="0" max="999999" value={{ $price }} required="true">
                     </td>
                     <td class="stat">Not Changed</td>
                 </tr>
@@ -162,7 +162,7 @@
             // console.log("this");
             $(this).closest('tr').find('.stat').html("Changed");
             // $(this).parent('tr').addClass('warning');
-            $(this).parents('tr').prev().next("tr").addClass("warning");
+            $(this).parents('tr').addClass("warning");
 
         })
 </script>
