@@ -95,48 +95,75 @@
 
 <div class="card text-center table-responsive border-dark" style="border-width:2px;">
     <div class="card-header" style="color:#fc0703; background-color:#d6d7d4">
-    <h4><b>Antennas Prices</b></h4>
+    <h4><b>Antennas Bands</b></h4>
     </div>
     <div class="card-body">
         <br>
         <br>
 
 
-        {!! Form::open(['action' => ['PricesController@store'] , 'method' => 'POST']) !!}
-        <table id="pricetable" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
-            cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Antenna Id</th>
-                    <th>Price ( $ )</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($antennas as $id => $price)
-                <tr class="gggg">
-                    <td> {{ $id }}</td>
+        @foreach($bands as $g => $band)
+        <div class="card-body">
+            <div class="card-header" style=" background-color:#d6d7d4">
+                    <h4><b>{{ $g }}G</b></h4>
+                </div>
+                <table id="pricetable" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
+                cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Bands</th>
+                        <th>Symbol</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($band as $xg => $ban)
+                    {!! Form::open(['action' => ['XgBandsController@update',$ban->id] , 'method' => 'PUT']) !!}
+                    <input type="hidden" name='id' value={{ $ban->id }} >
+                <tr >
                     <td>
-                        <input type="hidden" name='antennasId[]' value={{ $id }} >
-                        <input class="dynamic" type="number" name='prices[]' min="0" max="999999" value={{ $price }} required="true">
+                        {{ $ban->bands }}
                     </td>
-                    <td class="stat">Not Changed</td>
-                </tr>
-                @endforeach
+                    <td>
+                         <input type="text" name="symbol" value="{{ $ban->symbol }}" required="true">
+                    </td>
+                    <td class="stat">
+                        <input type="submit" id="Edit" name="Edit" class="btn btn-primary" value="Update" />
+                    </td>
+                    {!! Form::close() !!}
+                    {!! Form::open(['action' => ['XgBandsController@destroy',$ban->id] , 'method' => 'Delete']) !!}
+                    <td class="stat">
+                            <input type="submit" id="Delete" name="Delete" class="btn btn-danger" value="Delete" />
+                        </td>
+                        {!! Form::close() !!}
 
+                    </tr>
+
+                @endforeach
+                {!! Form::open(['action' => ['XgBandsController@store'] , 'method' => 'POST']) !!}
+                <tr>
+                        <input type="hidden" name="xg" value="{{ $g }}" required="true">
+
+                    <td>
+                        <input type="text" placeholder="Example: 900" name="band" value="" required="true">
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Example: GSM 900" name="symbol" value="" required="true">
+                    </td>
+                    <td colspan="2" class="stat">
+                        <input type="submit" id="Add" name="Add" class="btn btn-success w-25" value="Add" />
+                    </td>
+                </tr>
+                {!! Form::close() !!}
 
         </tbody>
-        <tfoot>
-            <tr>
-                <th>NB</th>
-                <th>Set</th>
-            </tr>
-        </tfoot>
         </table>
+        </div>
+@endforeach
         <div style="text-align:center">
                 <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Edit Form" />
             </div>
-        {!! Form::close() !!}
 
     </div>
 </div>
@@ -157,14 +184,14 @@
     //     }
         // )});
 
-        $(".dynamic").change(function(){
-            // alert("okkk");
-            // console.log("this");
-            $(this).closest('tr').find('.stat').html("Changed");
-            // $(this).parent('tr').addClass('warning');
-            $(this).parents('tr').addClass("warning");
+        // $(".dynamic").change(function(){
+        //     // alert("okkk");
+        //     // console.log("this");
+        //     $(this).closest('tr').find('.stat').html("Changed");
+        //     // $(this).parent('tr').addClass('warning');
+        //     $(this).parents('tr').addClass("warning");
 
-        })
+        // })
 </script>
 @endsection
 

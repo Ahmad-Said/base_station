@@ -24,8 +24,8 @@ Route::resource('profile', 'ProfileController');
 // Post Controller
 Route::resource('posts', 'PostsController');
 
-// Price Controller
-Route::resource('prices', 'PricesController');
+// Band Controller
+Route::resource('bands', 'XgBandsController');
 
 // Analyser Controller
 Route::get('/', 'AnalyserController@index');

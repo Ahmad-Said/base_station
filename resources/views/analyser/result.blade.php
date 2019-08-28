@@ -74,10 +74,6 @@
 <script>
     $(document).ready(function () {
             $('#dtBasicExample').DataTable();
-            // {
-            // "scrollY": "1000px",
-            // "scrollCollapse": true,
-            // });
             $('.dataTables_length').addClass('bs-select');
 
             // show-pagination
@@ -86,7 +82,6 @@
                 $(this).toggleClass('active');
                 f.preventDefault()
             });
-
         });
 
 </script>
@@ -141,81 +136,51 @@
             <thead>
                 <tr>
                     <th>Configuration #</th>
-                    <th>Total Price ( $ )</th>
                     <th># Antennas Par Sector</th>
-                    <th>Set Solution</th>
+                    <th>Antenna Model Number</th>
+                    <th>Total Ports #</th>
+                    <th>Low Band</th>
+                    <th>Mid Band</th>
+                    <th>High Band</th>
+                    <th>Height (mm)</th>
+                    <th>Unite Price</th>
+                    <th>Quantity</th>
+                    <th>Link to data sheets</th>
+                    <th>Total Price ( $ )</th>
                 </tr>
             </thead>
-            <tbody >
-                {{-- <tr>
-                    <td></td>
-                    <td>
-                        <table class="table table-light">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Antenna Id</th>
-                                    <th>Total Ports NB</th>
-                                    <th>Height</th>
-                                    <th>Link</th>
-                                </tr>
-                            </thead>
-                        </table>
-
-                    </td>
-                </tr> --}}
-
+            <tbody>
                 @foreach($AntennaSolution as $key => $setSolution)
-                <tr >
-                    <td style="vertical-align: middle;">{{ $key+1 }}</td>
-                    <td></td>
-                    <td style="vertical-align: middle;">{{ count($setSolution) }}</td>
-                    <td>
-                        <table class="table table-light">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Antenna Model Number</th>
-                                    <th>Quantity</th>
-                                    <th>Unite Price</th>
-                                    <th>Low Band</th>
-                                    <th>Mid Band</th>
-                                    <th>High Band</th>
-                                    <th>Height (mm)</th>
-                                    <th>Total Ports #</th>
-                                    <th>Link to data sheets</th>
-                                </tr>
-                            </thead>
+                    <tr >
+                        <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{ $key+1 }}</td>
+                        <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{  count($setSolution)}}</td>
+                        <td>{{ $setSolution[0]->xxx }}</td>
+                        <td>{{ $setSolution[0]->{"Total #RF ports"} }}</td>
+                        <td>{{ $setSolution[0]->{"#ports (<1GHz)"} }}</td>
+                        <td>{{ $setSolution[0]->{"#ports (1-3GHz)"} }}</td>
+                        <td>{{ $setSolution[0]->{"#ports (>3GHz )"} }}</td>
+                        <td>{{ $setSolution[0]->{"Height (mm)"} }}</td>
+                        <td></td>
+                        <td></td>
+                        <td><a href="{{ $setSolution[0]->{"Link to product datasheet"} }}">Data sheet</a></td>
+                        <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}></td >
+                    </tr>
 
-                            <tbody>
-
-                                {{-- @foreach ($setSolution as $antennaItem) --}}
-                                @for ( $i=0 ; $i < count($setSolution) ; $i++ )
-                                <tr>
-                                    <td>{{ $setSolution[$i]->xxx }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{ $setSolution[$i]->{"#ports (<1GHz)"} }}</td>
-                                    <td>{{ $setSolution[$i]->{"#ports (1-3GHz)"} }}</td>
-                                    <td>{{ $setSolution[$i]->{"#ports (>3GHz )"} }}</td>
-                                    <td>{{ $setSolution[$i]->{"Height (mm)"} }}</td>
-                                    <td>{{ $setSolution[$i]->{"Total #RF ports"} }}</td>
-                                    {{-- <td>{{ $antennaItem->Bands }} </td> --}}
-                                    <td><a href="{{ $setSolution[$i]->{"Link to product datasheet"} }}">Data sheet</a></td>
-                                </tr>
-                                @endfor
-                            </tbody>
-                        </table>
-
-
-        </td>
-
-        @endforeach
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Configuration #</th>
-                <th>Set</th>
-            </tr>
-        </tfoot>
+                    @for ( $i=1 ; $i < count($setSolution) ; $i++ )
+                        <tr>
+                            <td>{{ $setSolution[$i]->xxx }}</td>
+                            <td>{{ $setSolution[$i]->{"Total #RF ports"} }}</td>
+                            <td>{{ $setSolution[$i]->{"#ports (<1GHz)"} }}</td>
+                            <td>{{ $setSolution[$i]->{"#ports (1-3GHz)"} }}</td>
+                            <td>{{ $setSolution[$i]->{"#ports (>3GHz )"} }}</td>
+                            <td>{{ $setSolution[$i]->{"Height (mm)"} }}</td>
+                            <td>23</td>
+                            <td>45</td>
+                            <td><a href="{{ $setSolution[$i]->{"Link to product datasheet"} }}">Data sheet</a></td>
+                        </tr>
+                    @endfor
+                @endforeach
+            </tbody>
         </table>
         @else
         <p>Sorry, There is No solution at with given input</p>
@@ -252,7 +217,6 @@
                 e.preventDefault();
             }
         });
-
 
         if (window.history && window.history.pushState) {
 
