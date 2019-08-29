@@ -143,13 +143,14 @@
                     <th>Mid Band</th>
                     <th>High Band</th>
                     <th>Height (mm)</th>
-                    <th>Unite Price</th>
+                    <th>Unite Price ($)</th>
                     <th>Quantity</th>
                     <th>Link to data sheets</th>
-                    <th>Total Price ( $ )</th>
+                    <th>Total Price ($)</th>
                 </tr>
             </thead>
             <tbody>
+
                 @foreach($AntennaSolution as $key => $setSolution)
                     <tr >
                         <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{ $key+1 }}</td>
@@ -160,24 +161,30 @@
                         <td>{{ $setSolution[0]->{"#ports (1-3GHz)"} }}</td>
                         <td>{{ $setSolution[0]->{"#ports (>3GHz )"} }}</td>
                         <td>{{ $setSolution[0]->{"Height (mm)"} }}</td>
-                        <td></td>
+                        <td>{{ $setSolution[0]->{"MSP [USD]"} }}</td>
                         <td></td>
                         <td><a href="{{ $setSolution[0]->{"Link to product datasheet"} }}">Data sheet</a></td>
-                        <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}></td >
+                        <?php
+                            $jj=0;
+                            for ( $i=0 ; $i < count($setSolution) ; $i++ )
+                                $jj+=$setSolution[$i]->{"MSP [USD]"}
+
+                        ?>
+                        <td style="vertical-align: middle;" rowspan={{ count($setSolution) }}>{{ $jj }}</td >
                     </tr>
 
                     @for ( $i=1 ; $i < count($setSolution) ; $i++ )
-                        <tr>
+                    <tr>
                             <td>{{ $setSolution[$i]->xxx }}</td>
                             <td>{{ $setSolution[$i]->{"Total #RF ports"} }}</td>
                             <td>{{ $setSolution[$i]->{"#ports (<1GHz)"} }}</td>
                             <td>{{ $setSolution[$i]->{"#ports (1-3GHz)"} }}</td>
                             <td>{{ $setSolution[$i]->{"#ports (>3GHz )"} }}</td>
                             <td>{{ $setSolution[$i]->{"Height (mm)"} }}</td>
-                            <td>23</td>
-                            <td>45</td>
+                            <td>{{ $setSolution[$i]->{"MSP [USD]"} }}</td>
+                            <td></td>
                             <td><a href="{{ $setSolution[$i]->{"Link to product datasheet"} }}">Data sheet</a></td>
-                        </tr>
+                    </tr>
                     @endfor
                 @endforeach
             </tbody>

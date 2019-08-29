@@ -10,6 +10,8 @@ class Antennas extends Model
     //
     protected $table = 'antennas';
     protected $primaryKey = 'antennaId';
+    protected $connection = 'mysql2';
+
 
     // https://stackoverflow.com/questions/17232714/add-a-custom-attribute-to-a-laravel-eloquent-model-on-load
     protected $appends = array('Bands');

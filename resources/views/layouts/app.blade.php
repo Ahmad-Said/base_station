@@ -2,16 +2,16 @@
 @section('bodysection')
 <!-- Scripts -->
 <div id="app">
-    <br><br>
-    <div class="container-fluid">
+    {{-- <br><br> --}}
+    {{-- <div class="container-fluid"> --}}
+        @include('inc.navbar')
         <div class="row ">
-                @include('inc.navbar')
-                    @if(Auth::user()!=null && Auth::user()->type=='admin')
-                        @include('admin.sidenav')
-                    @endif
-                    <main class="col">
-                        <div class="container">
-                            <br><br><br>
+            @if(Auth::user()!=null && Auth::user()->type=='admin')
+                @include('admin.sidenav')
+            @endif
+            <main class="col">
+                    <div class="container">
+                            <br><br>
                             @include('inc.messages')
                             @yield('content')
                         </div>
@@ -19,7 +19,7 @@
                     <br />
                 </div>
 
-        </div>
+        {{-- </div> --}}
 </div>
 
 @endsection

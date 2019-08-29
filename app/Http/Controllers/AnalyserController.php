@@ -78,6 +78,7 @@ class AnalyserController extends Controller
         if (!isset($load_more)) {
             $load_more = false;
         }
+        // DB::connection('mysql2')->table('Antennas')->
         $allAntennasBandsMap = Antennas::where(
             [
                 ['Total #RF ports', "<=", array_sum($port) + 2],
@@ -87,6 +88,7 @@ class AnalyserController extends Controller
             ->select(
                 "xxx",
                 "antennaId",
+                "MSP [USD]",
                 "Total #RF ports",
                 "#ports (<1GHz)",
                 "#ports (1-3GHz)",
@@ -103,7 +105,7 @@ class AnalyserController extends Controller
                 }
             );
         // return $allAntennasBandsMap;
-        //    $test =  $allAntennasBandsMap[62]->Bands[0];
+        //    return  $allAntennasBandsMap[854]->bands;
         //    $test["totalPorts"]-=2;
         //  return    $allAntennasBandsMap[62]->Bands[0];
         // return var_dump($allAntennasBandsMap[62]->Bands);
@@ -388,6 +390,11 @@ class AnalyserController extends Controller
             // return $possibleCombination;
             // testing possible combination and adding to solution
             DebuggerHelper::startRecording("filtering combination");
+            // info('This is some useful information.');
+            // info($possibleCombination);
+            // error_log('Some message here.');
+
+
             foreach ($possibleCombination as $key => $value) {
                 $antennaSet = array();
                 foreach ($value as $key2 => $anID) {
@@ -616,7 +623,7 @@ class AnalyserController extends Controller
         $query .= '  Limit ' . $startFrom . "," . $LimitRow;
 
         DebuggerHelper::startRecording("query combination");
-        $allAntennas = DB::select($query, $queryBinding);
+        $allAntennas = DB::connection('mysql2')->select($query, $queryBinding);
         // if (count($allAntennas) >= $LimitRow) {
         //     $query = $temp . " ORDER by rand() Limit " . $LimitRow;
         //     $allAntennas = DB::select($query, $queryBinding);
@@ -629,6 +636,7 @@ class AnalyserController extends Controller
         );
         // return DebuggerHelper::pingReport() . " count is " . count($allAntennas);
         // return $query;
+        // return 750;
         // clearing output from useless data
         $possibleCombination = array();
         foreach ($allAntennas as $key => $value) {

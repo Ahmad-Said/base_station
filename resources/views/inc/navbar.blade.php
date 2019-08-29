@@ -1,41 +1,23 @@
-<nav class="navbar navbar-expand-sm navbar-light fixed-top border-bottom" style="padding-left:0em; padding-right:0em; background-color:#f7f7f7 ;">
+<nav class="navbar navbar-expand-sm navbar-light border-bottom" style="background-color:#f7f7f7 ;">
     @if(Auth::user() && Auth::user()->type=='admin')
     <div id="content">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            {{-- <div class="container-fluid"> --}}
+            <div class="container-fluid">
                 <button type="button" id="sidebarCollapse" class="btn btn-danger" >
-                    {{-- <i class="fas fa-align-left"></i> --}}
                     <span>Menu</span>
                 </button>
-            {{-- </div> --}}
-        </nav>
+            </div>
     </div>
     @else
     <img class="img-fluid img-thumbnail rounded-top" src="/images/rfsworld.png" width="45" height="40">
     @endif
-    {{-- <a class="navbar-brand" href="/">&nbsp&nbspRFS WORLD</a> --}}
-    {{-- <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a> --}}
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
-        aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        {{-- style="padding-left: 500px;" --}}
         <ul class="navbar-nav mr-auto">
             @guest
-    @include('other.nav') @else @if(Auth::user()->type=='admin')
-    @include('admin.nav') @else @if(Auth::user()->type=='salesman')
-    @include('salesman.nav') @endif @endif @endguest
-
+            @include('other.nav') @else @if(Auth::user()->type=='admin')
+            @include('admin.nav') @else @if(Auth::user()->type=='salesman')
+            @include('salesman.nav') @endif @endif @endguest
         </ul>
-
-        {{--
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form> --}}
 
         <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
@@ -73,7 +55,7 @@
             </li>
             @endguest
             <li class="nav-item">
-                <a class="nav-link" href="/about" style="color:aliceblue;"> Help</a>
+                <a class="nav-link" href="/about" style="color:black;"> Help</a>
             </li>
         </ul>
     </div>
