@@ -174,7 +174,7 @@
                     </tr>
 
                     @for ( $i=1 ; $i < count($setSolution) ; $i++ )
-                    <tr>
+                        <tr>
                             <td>{{ $setSolution[$i]->xxx }}</td>
                             <td>{{ $setSolution[$i]->{"Total #RF ports"} }}</td>
                             <td>{{ $setSolution[$i]->{"#ports (<1GHz)"} }}</td>
@@ -184,7 +184,7 @@
                             <td>{{ $setSolution[$i]->{"MSP [USD]"} }}</td>
                             <td></td>
                             <td><a href="{{ $setSolution[$i]->{"Link to product datasheet"} }}">Data sheet</a></td>
-                    </tr>
+                        </tr>
                     @endfor
                 @endforeach
             </tbody>

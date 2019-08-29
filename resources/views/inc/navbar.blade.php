@@ -1,11 +1,13 @@
-<nav class="navbar navbar-expand-sm navbar-light border-bottom" style="background-color:#f7f7f7 ;">
+<nav class="navbar navbar-expand-lg navbar-light border-bottom" style="background-color:#f7f7f7 ;">
     @if(Auth::user() && Auth::user()->type=='admin')
     <div id="content">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-danger" >
-                    <span>Menu</span>
-                </button>
-            </div>
+            {{-- <div class="container-fluid"> --}}
+                {{-- <button type="button" id="sidebarCollapse" class="btn btn-danger" > --}}
+                        <button onclick="openNav()" class="btn btn-danger openbtn">Menu</button>
+
+                    {{-- <span>Menu</span>
+                </button> --}}
+            {{-- </div> --}}
     </div>
     @else
     <img class="img-fluid img-thumbnail rounded-top" src="/images/rfsworld.png" width="45" height="40">
@@ -29,17 +31,20 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
             </li>
+            <li class="nav-item">
+                    <a class="nav-link" href="/about" style="color:black;">Help</a>
+                </li>
             @endif @else
 
-
-            <li class="nav-item dropdown divider">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle mr-4 px-3" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+            {{-- <div class="dropdown"> --}}
+            <li class="dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle " href="#" role="button"  data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false" v-pre>
                     Welcome {{ Auth::user()->name }}
                     <span class="caret"></span>
-                  </a>
+                </a>
 
-                <div class="dropdown-menu dropdown-menu-right divider" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="/profile">
                         Profile
                       </a>
@@ -53,10 +58,13 @@
                     </form>
                 </div>
             </li>
+            {{-- </div> --}}
+
             @endguest
-            <li class="nav-item">
-                <a class="nav-link" href="/about" style="color:black;"> Help</a>
-            </li>
+
         </ul>
     </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
 </nav>

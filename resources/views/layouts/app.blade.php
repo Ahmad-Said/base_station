@@ -1,13 +1,11 @@
 @extends('layouts.style')
 @section('bodysection')
 <!-- Scripts -->
-<div id="app">
-    {{-- <br><br> --}}
-    {{-- <div class="container-fluid"> --}}
+{{-- <div id="app">
         @include('inc.navbar')
         <div class="row ">
             @if(Auth::user()!=null && Auth::user()->type=='admin')
-                @include('admin.sidenav')
+            @include('admin.sidenav')
             @endif
             <main class="col">
                     <div class="container">
@@ -19,9 +17,19 @@
                     <br />
                 </div>
 
-        {{-- </div> --}}
-</div>
+</div> --}}
 
+
+@include('admin.sidebar')
+
+      <div id="main">
+        @include('inc.navbar')
+        <br><br>
+        <div class="container">
+        @include('inc.messages')
+        @yield('content')
+    </div>
+      </div>
 @endsection
 
 
