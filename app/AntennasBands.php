@@ -8,5 +8,6 @@ class AntennasBands extends Model
 {
     //
     protected $table = 'bands';
-    protected $primaryKey = 'bandId';
+    protected $primaryKey = 'id';
+    protected $connection = "mysql";
 }

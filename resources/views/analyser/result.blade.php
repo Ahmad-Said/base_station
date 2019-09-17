@@ -57,7 +57,6 @@
         }
 
     }
-
 </style>
 
 {{-- https://stackoverflow.com/questions/23779088/laravel-detect-mobile-tablet-and-load-correct-views --}}
@@ -91,7 +90,7 @@
 
 <div class="card text-center table-responsive" style="border-width:2px;">
     <div class="card-header" style="color:#fc0703; background-color:#d6d7d4">
-    <h4><b>Results</b></h4>
+        <h4><b>Results</b></h4>
     </div>
     <div class="card-body">
         @if (count($AntennaSolution)> 0)
@@ -102,8 +101,7 @@
             "{{ url()->current() . "?" }}"
             +"page="+$(this).val()+"&"
             +"{{http_build_query(Request::except("page")) }}"
-            '
-            >
+            '>
                 <?php
             for ($i=1; $i <= $AntennaSolution->lastPage(); $i++) {
                 echo "<option value=".$i;
@@ -132,7 +130,7 @@
         {{-- @endif --}}
 
         <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
-            cellspacing="0"  width="100%">
+            cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>Configuration #</th>
@@ -152,41 +150,40 @@
             <tbody>
 
                 @foreach($AntennaSolution as $key => $setSolution)
-                    <tr >
-                        <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{ $key+1 }}</td>
-                        <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{  count($setSolution)}}</td>
-                        <td>{{ $setSolution[0]->xxx }}</td>
-                        <td>{{ $setSolution[0]->{"Total #RF ports"} }}</td>
-                        <td>{{ $setSolution[0]->{"#ports (<1GHz)"} }}</td>
-                        <td>{{ $setSolution[0]->{"#ports (1-3GHz)"} }}</td>
-                        <td>{{ $setSolution[0]->{"#ports (>3GHz )"} }}</td>
-                        <td>{{ $setSolution[0]->{"Height (mm)"} }}</td>
-                        <td>{{ $setSolution[0]->{"MSP [USD]"} }}</td>
-                        <td></td>
-                        <td><a href="{{ $setSolution[0]->{"Link to product datasheet"} }}">Data sheet</a></td>
-                        <?php
+                <tr>
+                    <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{ $key+1 }}</td>
+                    <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{  count($setSolution)}}</td>
+                    <td>{{ $setSolution[0]->model_nb }}</td>
+                    <td>{{ $setSolution[0]->total_nb_ports }}</td>
+                    <td>{{ $setSolution[0]->ports_lt_1GH }}</td>
+                    <td>{{ $setSolution[0]->ports_btw_1_3GH }}</td>
+                    <td>{{ $setSolution[0]->ports_bt_3GH }}</td>
+                    <td>{{ $setSolution[0]->height_mm }}</td>
+                    <td>{{ $setSolution[0]->msp_usd }}</td>
+                    <td></td>
+                    <td><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
+                    <?php
                             $jj=0;
                             for ( $i=0 ; $i < count($setSolution) ; $i++ )
-                                $jj+=$setSolution[$i]->{"MSP [USD]"}
+                                $jj+=$setSolution[$i]->msp_usd
 
                         ?>
-                        <td style="vertical-align: middle;" rowspan={{ count($setSolution) }}>{{ $jj }}</td >
-                    </tr>
+                    <td style="vertical-align: middle;" rowspan={{ count($setSolution) }}>{{ $jj }}</td>
+                </tr>
 
-                    @for ( $i=1 ; $i < count($setSolution) ; $i++ )
-                        <tr>
-                            <td>{{ $setSolution[$i]->xxx }}</td>
-                            <td>{{ $setSolution[$i]->{"Total #RF ports"} }}</td>
-                            <td>{{ $setSolution[$i]->{"#ports (<1GHz)"} }}</td>
-                            <td>{{ $setSolution[$i]->{"#ports (1-3GHz)"} }}</td>
-                            <td>{{ $setSolution[$i]->{"#ports (>3GHz )"} }}</td>
-                            <td>{{ $setSolution[$i]->{"Height (mm)"} }}</td>
-                            <td>{{ $setSolution[$i]->{"MSP [USD]"} }}</td>
-                            <td></td>
-                            <td><a href="{{ $setSolution[$i]->{"Link to product datasheet"} }}">Data sheet</a></td>
-                        </tr>
+                @for ( $i=1 ; $i < count($setSolution) ; $i++ ) <tr>
+                    <td>{{ $setSolution[$i]->model_nb }}</td>
+                    <td>{{ $setSolution[$i]->total_nb_ports }}</td>
+                    <td>{{ $setSolution[$i]->ports_lt_1GH }}</td>
+                    <td>{{ $setSolution[$i]->ports_btw_1_3GH }}</td>
+                    <td>{{ $setSolution[$i]->ports_bt_3GH }}</td>
+                    <td>{{ $setSolution[$i]->height_mm }}</td>
+                    <td>{{ $setSolution[$i]->msp_usd }}</td>
+                    <td></td>
+                    <td><a href="{{ $setSolution[$i]->link_online }}">Data sheet</a></td>
+                    </tr>
                     @endfor
-                @endforeach
+                    @endforeach
             </tbody>
         </table>
         @else

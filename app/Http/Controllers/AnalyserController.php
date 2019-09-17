@@ -8,9 +8,12 @@ use App\XgBands;
 use App\Antennas;
 use App\CachedResult;
 use App\DebuggerHelper;
+use App\SettingWebLara;
 use function Psy\debug;
+use App\AntennasProvider;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
+use App\AntennasBandsProvider;
 use PhpParser\Node\Stmt\Return_;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -18,6 +21,7 @@ use function Opis\Closure\serialize;
 use function Opis\Closure\unserialize;
 use PHPUnit\Framework\Constraint\IsFalse;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 class AnalyserController extends Controller
 {
     /**
@@ -81,50 +85,55 @@ class AnalyserController extends Controller
         // DB::connection('mysql2')->table('Antennas')->
         $allAntennasBandsMap = Antennas::where(
             [
-                ['Total #RF ports', "<=", array_sum($port) + 2],
-                ['Height (mm)', "<=",  $max_height]
+                ['total_nb_ports', "<=", array_sum($port) + 2],
+                ['height_mm', "<=",  $max_height]
             ]
         )
             ->select(
-                "xxx",
-                "antennaId",
-                "MSP [USD]",
-                "Total #RF ports",
-                "#ports (<1GHz)",
-                "#ports (1-3GHz)",
-                "#ports (>3GHz )",
-                "Height (mm)",
+                "id",
+                "total_nb_ports",
+                "ports_lt_1GH",
+                "ports_btw_1_3GH",
+                "ports_bt_3GH",
+                "height_mm",
                 // later for display
-                "Link to product datasheet"
+                "model_nb",
+                "msp_usd",
+                "link_online"
             )
             ->get()
             // making it as map key id to antenna
             ->mapWithKeys(
                 function ($item) {
-                    return [$item->antennaId => $item];
+                    return [$item->id => $item];
                 }
             );
-        // return $allAntennasBandsMap;
         //    return  $allAntennasBandsMap[854]->bands;
         //    $test["totalPorts"]-=2;
         //  return    $allAntennasBandsMap[62]->Bands[0];
         // return var_dump($allAntennasBandsMap[62]->Bands);
         $generatedSerial = "";
+        $isCacheAllowed = SettingWebLara::isCacheAllowed();
+
         // check if cached and handle auto return value
-        $oldCachedResult = AnalyserController::cachedResult(
-            $technology,
-            $port,
-            $band,
-            $max_height,
-            $antenna_per_sector,
-            $antenna_preferred,
-            $generatedSerial
-        );
+        if ($isCacheAllowed) {
+            $oldCachedResult = AnalyserController::cachedResult(
+                $technology,
+                $port,
+                $band,
+                $max_height,
+                $antenna_per_sector,
+                $antenna_preferred,
+                $generatedSerial
+            );
+        }
+
         $AntennaSolution = array();
         $AntennaSolutionIDS = array();
         $msg = "";
         if (
-            !$load_more
+            $isCacheAllowed
+            && !$load_more
             && isset($oldCachedResult)
             && $oldCachedResult->antennas_count == Antennas::count()
         ) {
@@ -216,7 +225,9 @@ class AnalyserController extends Controller
                 $saveCachedResult->sum_ports = $totalNbPorts;
             }
             $saveCachedResult->antennas_count = Antennas::count();
-            $saveCachedResult->save();
+            if ($isCacheAllowed) {
+                $saveCachedResult->save();
+            }
         }
 
         $msg .= "---- " . count($AntennaSolution)
@@ -237,21 +248,21 @@ class AnalyserController extends Controller
 
         // // generating price
         // $antennasIDtoPrice = prices::select(
-        //     "antennaId",
+        //     "id",
         //     "price"
         // )->get()
         //     // making it as map key id to antenna
         //     ->mapWithKeys(
         //         function ($item) {
-        //             return [$item->antennaId => $item];
+        //             return [$item->id => $item];
         //         }
         //     );
         // if ( Auth::user()
         //     && (Auth::user()->type=="admin" || Auth::user()->type == "salesman" ) ) {
         //     foreach ( $AntennaSolution as $key => $setSolution ) {
         //         foreach ( $setSolution as $key2 => $antennaItem ) {
-        //             if ( isset($antennasIDtoPrice[$antennaItem->antennaId]) ) {
-        //                 $AntennaSolution[$key][$key2]["price"] = $antennasIDtoPrice[$antennaItem->antennaId];
+        //             if ( isset($antennasIDtoPrice[$antennaItem->id]) ) {
+        //                 $AntennaSolution[$key][$key2]["price"] = $antennasIDtoPrice[$antennaItem->id];
         //             } else {
         //                 $AntennaSolution[$key][$key2]["price"] = 0;
         //             }
@@ -422,7 +433,7 @@ class AnalyserController extends Controller
         foreach ($AntennaSolution as $key => $value) {
             $antennaSetIDS = array();
             foreach ($value as $key2 => $anAntenna) {
-                $antennaSetIDS[] = $anAntenna->antennaId;
+                $antennaSetIDS[] = $anAntenna->id;
             }
             $AntennaSolutionIDS[] = $antennaSetIDS;
         }
@@ -558,20 +569,20 @@ class AnalyserController extends Controller
         // php array don't get merged
         // $allAntennas = DB::select(
         //     'SELECT
-        //     a1.`antennaId` AS id_1,
-        //     a2.`antennaId` AS id_2
+        //     a1.`id` AS id_1,
+        //     a2.`id` AS id_2
         //     FROM `antennas` a1,
         //     `antennas` a2
-        //     WHERE a1.`Height (mm)` <= ?
-        //     AND a2.`Height (mm)` <= ?
-        //     AND a1.`antennaId` >= a2.`antennaId`
-        //     AND (a1.`Total #RF ports` + a2.`Total #RF ports`) = ?',
+        //     WHERE a1.`height_mm` <= ?
+        //     AND a2.`height_mm` <= ?
+        //     AND a1.`id` >= a2.`id`
+        //     AND (a1.`total_nb_ports` + a2.`total_nb_ports`) = ?',
         //     [$max_height, $max_height, $sumPorts]
         // );
         $query = 'SELECT';
         $queryBinding = array();
         for ($i = 1; $i <= $maxAntennaPerSet; $i++) {
-            $query .= ' a' . $i . '.`antennaId` AS i' . $i;
+            $query .= ' a' . $i . '.`id` AS i' . $i;
             if ($i != $maxAntennaPerSet) {
                 $query .= ',';
             }
@@ -588,7 +599,7 @@ class AnalyserController extends Controller
         // getting only antenna that have sum ports as needed
         $query .= ' (';
         for ($i = 1; $i <= $maxAntennaPerSet; $i++) {
-            $query .= 'a' . $i . '.`Total #RF ports`';
+            $query .= 'a' . $i . '.`total_nb_ports`';
             if ($i != $maxAntennaPerSet) {
                 $query .= ' +';
             }
@@ -600,7 +611,7 @@ class AnalyserController extends Controller
         if ($max_height != PHP_INT_MAX) {
             $query .= ' AND';
             for ($i = 1; $i <= $maxAntennaPerSet; $i++) {
-                $query .= ' a' . $i . '.`Height (mm)` <= ?';
+                $query .= ' a' . $i . '.`height_mm` <= ?';
                 $queryBinding[] = $max_height;
                 if ($i != $maxAntennaPerSet) {
                     $query .= ' AND';
@@ -612,8 +623,8 @@ class AnalyserController extends Controller
         if ($maxAntennaPerSet > 1) {
             $query .= ' AND';
             for ($i = 1; $i < $maxAntennaPerSet; $i++) {
-                $query .= ' a' . $i . '.`antennaId` >= a'
-                    . ($i + 1) . '.`antennaId`';
+                $query .= ' a' . $i . '.`id` >= a'
+                    . ($i + 1) . '.`id`';
                 if ($i != $maxAntennaPerSet - 1) {
                     $query .= ' AND';
                 }
@@ -623,7 +634,7 @@ class AnalyserController extends Controller
         $query .= '  Limit ' . $startFrom . "," . $LimitRow;
 
         DebuggerHelper::startRecording("query combination");
-        $allAntennas = DB::connection('mysql2')->select($query, $queryBinding);
+        $allAntennas = DB::select($query, $queryBinding);
         // if (count($allAntennas) >= $LimitRow) {
         //     $query = $temp . " ORDER by rand() Limit " . $LimitRow;
         //     $allAntennas = DB::select($query, $queryBinding);

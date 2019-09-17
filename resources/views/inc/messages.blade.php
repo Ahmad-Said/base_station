@@ -14,20 +14,22 @@
     <i class="far fa-hand-point-right"></i> {!! $info !!}
 </div>
 @endisset
-@if(session('success'))
+@isset($success)
 <div class="alert alert-success">
     {!! $but !!}
-    <i class="far fa-check-circle"></i> {!! session('success') !!}
+    <i class="far fa-check-circle"></i> {!! $success !!}
 </div>
-@endif @if(session('error'))
+@endif
+@isset($error)
 <div class="alert alert-danger">
     {!! $but !!}
-    <i class="fas fa-exclamation-circle"></i> {!! session('error') !!}
+    <i class="fas fa-exclamation-circle"></i> {!! $error !!}
 </div>
-@endif @if(session('warning'))
+@endif
+@isset($warning)
 <div class="alert alert-warning">
     {!! $but !!}
-    <i class="far fa-hand-paper"></i> {!! session('warning') !!}
+    <i class="far fa-hand-paper"></i> {!! $warning !!}
 </div>
 @endif
 <script>

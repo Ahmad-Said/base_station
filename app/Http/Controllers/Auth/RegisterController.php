@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -56,11 +56,8 @@ class RegisterController extends Controller
             $data,
             [
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'regex:/(.*)@rfsworld\.com/i', 'max:255', 'unique:usersWeb'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ],
-            [
-                'regex' => 'The Email must respect the following format: example@rfsworld.com'
             ]
         );
     }

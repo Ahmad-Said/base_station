@@ -32,6 +32,15 @@ Route::get('/', 'AnalyserController@index');
 Route::get('/result', 'AnalyserController@showResult');
 Route::get('/edit', 'AnalyserController@editForm');
 
+// SettingWebLara Controller
+Route::get('/setting', 'SettingWebLaraController@index')->name("settingWeb");
+Route::post('/setting', 'SettingWebLaraController@store')->name("settingWebStore");
+Route::put(
+    '/setting',
+    'SettingWebLaraController@triggerUpdateProvidedData'
+)->name("settingTriggerUpdate");
+Route::delete('/setting', 'SettingWebLaraController@clearCachedResult');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
