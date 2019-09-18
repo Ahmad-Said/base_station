@@ -95,14 +95,21 @@
     <div class="card-body">
         @if (count($AntennaSolution)> 0)
         <div class="float-left">
+            @if ($isCacheAllowed)
+
             Pages
+            @endif
             @if (count($AntennaSolution) >10)
+            @if ($isCacheAllowed)
+
             <select name="page_selection" id="page_selection" class="form-control-sm" onchange='location =
             "{{ url()->current() . "?" }}"
             +"page="+$(this).val()+"&"
             +"{{http_build_query(Request::except("page")) }}"
             '>
+                @endif
                 <?php
+                if($isCacheAllowed)
             for ($i=1; $i <= $AntennaSolution->lastPage(); $i++) {
                 echo "<option value=".$i;
                 if($i == $AntennaSolution->currentPage()){
@@ -111,10 +118,15 @@
                 echo ">".$i."</option>";
             }
             ?>
+                @if ($isCacheAllowed)
+
             </select>
             @endif
+            @endif
+            @if($isCacheAllowed)
             Showing set from {{ $AntennaSolution->currentPage()*100-100+1 }} to
             {{ $AntennaSolution->currentPage()*100-100+count($AntennaSolution) }}
+            @endif
         </div>
         <br>
         <br>
@@ -122,9 +134,12 @@
 
 
         {{-- @else --}}
+        @if ($isCacheAllowed)
+
         <a class="btn btn-default btn-block toggle-pagination"><i class="fas fa-expand-arrows-alt"></i> Toggle
             Pagination</a>
         {!! $AntennaSolution->links() !!}
+        @endif
         <br>
         <br>
         {{-- @endif --}}
@@ -151,8 +166,44 @@
 
                 @foreach($AntennaSolution as $key => $setSolution)
                 <tr>
-                    <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{ $key+1 }}</td>
-                    <td style="vertical-align: middle;" rowspan={{  count($setSolution)}}>{{  count($setSolution)}}</td>
+                    <?php
+                        $totalPrice = $setSolution[0]->msp_usd;
+                        $secondQuantity = 0;
+                        $totalRow= count($setSolution);
+                        $totalNbAntennas= count($setSolution);
+                            $firstQuantity = 1;
+                            if(count($setSolution) == 2 && $setSolution[0]->id == $setSolution[1]->id )
+                            {
+                                unset($setSolution[1]);
+                                $totalRow--;
+                                $totalPrice+= $setSolution[0]->msp_usd;
+                                $firstQuantity = 2;
+                            }
+                            if (count($setSolution) == 3)
+                            {
+                                if($setSolution[0]->id == $setSolution[1]->id)
+                                {
+                                    unset($setSolution[1]);
+                                    $totalRow--;
+                                    $totalPrice+= $setSolution[0]->msp_usd;
+                                    $firstQuantity++;
+                                }
+                                if($setSolution[0]->id == $setSolution[2]->id)
+                                {
+                                    unset($setSolution[2]);
+                                    $totalRow--;
+                                    $totalPrice+= $setSolution[0]->msp_usd;
+                                    $firstQuantity++;
+                                }
+                                if(isset($setSolution[1]) && isset($setSolution[2])
+                                    && $setSolution[1]->id == $setSolution[2]->id ){
+                                    unset($setSolution[2]);
+                                    $secondQuantity=2;
+                                }
+                            }
+                    ?>
+                    <td style="vertical-align: middle;" rowspan={{  $totalRow}}>{{ $key+1 }}</td>
+                    <td style="vertical-align: middle;" rowspan={{  $totalRow}}>{{  $totalNbAntennas}}</td>
                     <td>{{ $setSolution[0]->model_nb }}</td>
                     <td>{{ $setSolution[0]->total_nb_ports }}</td>
                     <td>{{ $setSolution[0]->ports_lt_1GH }}</td>
@@ -160,30 +211,40 @@
                     <td>{{ $setSolution[0]->ports_bt_3GH }}</td>
                     <td>{{ $setSolution[0]->height_mm }}</td>
                     <td>{{ $setSolution[0]->msp_usd }}</td>
-                    <td></td>
+
+                    <td>
+                        {{ $firstQuantity  }}
+                    </td>
+
                     <td><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
-                    <?php
-                            $jj=0;
-                            for ( $i=0 ; $i < count($setSolution) ; $i++ )
-                                $jj+=$setSolution[$i]->msp_usd
-
-                        ?>
-                    <td style="vertical-align: middle;" rowspan={{ count($setSolution) }}>{{ $jj }}</td>
+                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $totalPrice }} </td>
                 </tr>
+                <?php unset($setSolution[0])?>
 
-                @for ( $i=1 ; $i < count($setSolution) ; $i++ ) <tr>
-                    <td>{{ $setSolution[$i]->model_nb }}</td>
-                    <td>{{ $setSolution[$i]->total_nb_ports }}</td>
-                    <td>{{ $setSolution[$i]->ports_lt_1GH }}</td>
-                    <td>{{ $setSolution[$i]->ports_btw_1_3GH }}</td>
-                    <td>{{ $setSolution[$i]->ports_bt_3GH }}</td>
-                    <td>{{ $setSolution[$i]->height_mm }}</td>
-                    <td>{{ $setSolution[$i]->msp_usd }}</td>
-                    <td></td>
-                    <td><a href="{{ $setSolution[$i]->link_online }}">Data sheet</a></td>
-                    </tr>
-                    @endfor
-                    @endforeach
+                @foreach ($setSolution as $item)
+                <tr>
+                    <td>{{ $item->model_nb }}</td>
+                    <td>{{ $item->total_nb_ports }}</td>
+                    <td>{{ $item->ports_lt_1GH }}</td>
+                    <td>{{ $item->ports_btw_1_3GH }}</td>
+                    <td>{{ $item->ports_bt_3GH }}</td>
+                    <td>{{ $item->height_mm }}</td>
+                    <td>{{ $item->msp_usd }}</td>
+                    <td>
+                        <?php
+                            if($secondQuantity!= 0)
+                                echo 2;
+                            else {
+                                echo 1;
+                            }
+                        ?>
+
+                    </td>
+                    <td><a href="{{ $item->link_online }}">Data sheet</a></td>
+
+                </tr>
+                @endforeach
+                @endforeach
             </tbody>
         </table>
         @else
@@ -204,6 +265,8 @@
 <div style="text-align:center">
     <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input" />
 </div>
+<br>
+<br>
 </div>
 {!! Form::close() !!}
 
