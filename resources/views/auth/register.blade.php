@@ -29,12 +29,23 @@
 
                             <div class="col-md-6">
                                 <select id="type" name="type" class="form-control">
-                                            <option value="salesman" selected="selected" class="form-control">Salesman</option>
-                                          </select>
+                                    <option value="customer" selected="selected" class="form-control">Customer</option>
+                                    <option value="salesman" class="form-control">Salesman</option>
+                                </select>
                             </div>
                         </div>
                         @else
-                        <input name='type' id='type' type='hidden' value='salesman'> @endif
+                        <input name='type' id='type' type='hidden' value='newUser'> @endif
+
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('organization') }}</label>
+                            <div class="col-md-6">
+                                <input id="organization" name="organization" class="form-control" required>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('organization') }}</strong>
+                                    </span>
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>

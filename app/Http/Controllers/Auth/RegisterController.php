@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -39,10 +39,10 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
+    // public function __construct()
+    // {
+    //         $this->middleware('guest');
+    // }
 
     /**
      * Get a validator for an incoming registration request.
@@ -58,6 +58,7 @@ class RegisterController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'regex:/(.*)@rfsworld\.com/i', 'max:255', 'unique:usersWeb'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'organization' => ['required' , 'string'],
             ],
             [
                 'regex' => 'The Email must respect the following format: example@rfsworld.com'
@@ -76,6 +77,7 @@ class RegisterController extends Controller
         return User::create(
             [
                 'name' => $data['name'],
+                'organization' => $data['organization'],
                 'type' => $data['type'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),

@@ -34,8 +34,9 @@
     });
 </script>
 
-<div class="card text-center table-responsive">
-    <div class="card-header">Dashboard</div>
+
+<div class="card text-center table-responsive" style="width: 60rem;">
+    <div class="card-header">Users</div>
     <div class="card-body">
         @if(count($allusers) > 0)
         <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
@@ -45,6 +46,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>type</th>
+                    <th>Organization</th>
                     <th>Status</th>
                     <th>Control</th>
                 </tr>
@@ -59,21 +62,24 @@
                     <td>{{ $user->name }}</td>
                     <td><a href="mailto:{{ $user->email }}?Subject=Hello%20again" target="_top">{{ $user->email }}</a>
                     </td>
+                    <td>{{ $user->type }}</td>
+                    <td>{{ $user->organization }}</td>
                     <td>@if ($user->is_activated) Enabled @else Disabled @endif
                     </td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-info btn-sm waves-effect  btn-outline-info EditBtn"
+                            <button type="button" class="btn btn-info btn-sm waves-effect  btn-info EditBtn"
                                 data-toggle="modal" data-target="#EditDemo">
-                                <span class="fas fa-user-edit"></span>
+                                Edit
+                                {{-- <span class="fas fa-user-edit"></span> --}}
                             </button>
                             <a href="/profile/{{ $user->id }}/edit" role="button"
-                                class="btn btn-warning btn-sm waves-effect  btn-outline-warning">
-                                <span class="fas fa-user-slash"></span>
+                                class="btn btn-warning btn-sm waves-effect  btn-warning">
+                                {{-- <span class="fas fa-user-slash"></span> --}}Status
                             </a>
-                            <button type="button" class="btn btn-danger btn-sm waves-effect  btn-outline-danger delbtn"
+                            <button type="button" class="btn btn-danger btn-sm waves-effect  btn-danger delbtn"
                                 data-userid="{{ $user->id }}" data-toggle="modal" data-target="#ConfirmDelete">
-                                <span class="fas fa-user-edit"></span>
+                                {{-- <span class="fas fa-user-edit"></span> --}}Delete
                             </button>
                         </div>
 

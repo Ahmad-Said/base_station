@@ -101,9 +101,15 @@
                         &nbsp Configurator</a>
                 </li>
                 <li class="nav-item border-bottom border-top">
-                    <a class="list-group-item list-group-item-action border-0 bg-light" style="border-color: gray;" href="/register">
+                    <a class="list-group-item list-group-item-action border-0 bg-light" style="border-color: gray;" href="/home">
                         <i class="fas fas fa-users"></i>
                         &nbsp Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="list-group-item list-group-item-action border-0 bg-light" style="border-color: gray;" href="{{ route('register') }}">
+                        <i class="fas fas fas fa-user-plus"></i>
+                        &nbsp{{ __('Register') }}</a>
+
                 </li>
                 <li class="nav-item border-bottom border-top">
                     <a class="list-group-item list-group-item-action bg-light border-0" href="/posts">

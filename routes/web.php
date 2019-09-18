@@ -11,6 +11,9 @@
 |
 */
 
+// Route::get('/', 'Auth\LoginController@showLoginForm');
+
+
 // Pages controller
 Route::get('showfile/{file}', 'PagesController@showfile');
 Route::get('/test', 'PagesController@test');
