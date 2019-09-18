@@ -20,8 +20,6 @@ class CreateBandsTable extends Migration
             $table->string("color");
             $table->integer("antennas_id");
             $table->foreign('antennas_id')->references('id')->on('antennas');
-
-            $table->timestamps();
         });
     }
 

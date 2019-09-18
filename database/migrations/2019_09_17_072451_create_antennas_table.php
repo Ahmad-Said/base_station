@@ -23,7 +23,6 @@ class CreateAntennasTable extends Migration
             $table->integer("height_mm");
             $table->string("link_online");
             $table->float("msp_usd");
-            $table->timestamps();
         });
     }
 

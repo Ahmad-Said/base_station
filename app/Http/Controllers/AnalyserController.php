@@ -207,7 +207,7 @@ class AnalyserController extends Controller
                 }
             }
             $saveCachedResult->query_form = $generatedSerial;
-            if ($load_more) {
+            if ($load_more && $isCacheAllowed) {
                 $tempIDS = array();
                 $saveCachedResult->unserializeAndLoad(
                     $tempIDS,
@@ -271,39 +271,41 @@ class AnalyserController extends Controller
         // }
         // return $AntennaSolution;
 
+        if ($isCacheAllowed) {
 
 
-        // paginating items for faster browsing
-        // https://arjunphp.com/laravel-5-pagination-array/
-        // good for custumization:
-        // https://laracasts.com/discuss/channels/laravel/custom-pagination-number-of-pages-before-dots
-        // Get current page form url e.x. &page=1
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        // return $currentPage;
-        // Create a new Laravel collection from the array data
-        $itemCollection = collect($AntennaSolution);
+            // paginating items for faster browsing
+            // https://arjunphp.com/laravel-5-pagination-array/
+            // good for custumization:
+            // https://laracasts.com/discuss/channels/laravel/custom-pagination-number-of-pages-before-dots
+            // Get current page form url e.x. &page=1
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            // return $currentPage;
+            // Create a new Laravel collection from the array data
+            $itemCollection = collect($AntennaSolution);
 
-        // Define how many items we want to be visible in each page
-        $perPage = 100;
+            // Define how many items we want to be visible in each page
+            $perPage = 100;
 
-        // Slice the collection to get the items to display in current page
-        $currentPageItems = $itemCollection->slice(
-            ($currentPage * $perPage) - $perPage,
-            $perPage
-        )->all();
+            // Slice the collection to get the items to display in current page
+            $currentPageItems = $itemCollection->slice(
+                ($currentPage * $perPage) - $perPage,
+                $perPage
+            )->all();
 
-        // Create our paginator and pass it to the view
-        $paginatedItems = new LengthAwarePaginator(
-            $currentPageItems,
-            count($itemCollection),
-            $perPage
-        );
+            // Create our paginator and pass it to the view
+            $paginatedItems = new LengthAwarePaginator(
+                $currentPageItems,
+                count($itemCollection),
+                $perPage
+            );
 
-        // set url path for generted links
-        $paginatedItems->setPath($request->fullUrl());
+            // set url path for generted links
+            $paginatedItems->setPath($request->fullUrl());
 
-        // $paginatedItems->onEachSide(PHP_INT_MAX);
-        $AntennaSolution = $paginatedItems;
+            // $paginatedItems->onEachSide(PHP_INT_MAX);
+            $AntennaSolution = $paginatedItems;
+        }
         // return view('pages.test', ['items' => $paginatedItems]);
 
         $msg .= " <br> Took about "
@@ -322,6 +324,7 @@ class AnalyserController extends Controller
             ->with("band", $band)
             ->with("port", $port)
             ->with("info", $msg)
+            ->with("isCacheAllowed", $isCacheAllowed)
             ->with("isLoadMore", !$saveCachedResult->state_finish);
     }
 
