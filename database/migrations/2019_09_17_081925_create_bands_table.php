@@ -18,7 +18,7 @@ class CreateBandsTable extends Migration
             $table->integer("min");
             $table->integer("max");
             $table->string("color");
-            $table->integer("antennas_id");
+            $table->bigInteger("antennas_id");
             $table->foreign('antennas_id')->references('id')->on('antennas');
         });
     }
