@@ -9,8 +9,20 @@ class Antennas extends Model
 {
     //
     protected $table = 'antennas';
-    protected $primaryKey = 'antennaId';
-    protected $connection = 'mysql2';
+    protected $primaryKey = 'id';
+    protected $connection = "mysql";
+    /**
+     * Properties:
+     * "id"
+     * "model_nb"
+     * "total_nb_ports"
+     * "ports_lt_1GH"
+     * "ports_btw_1_3GH"
+     * "ports_bt_3GH"
+     * "height_mm"
+     * "link_online"
+     * "msp_usd"
+     */
 
 
     // https://stackoverflow.com/questions/17232714/add-a-custom-attribute-to-a-laravel-eloquent-model-on-load
@@ -91,7 +103,7 @@ class Antennas extends Model
      */
     public function portsNb()
     {
-        return $this->{'Total #RF ports'};
+        return $this->total_nb_ports;
     }
 
     /**
@@ -109,9 +121,9 @@ class Antennas extends Model
         // FROM `bands` WHERE 1 GROUP BY `min`,`max`,`antennaId`
         // each row of bands table represent the information of 2 ports
         // in corresponding antenna
-        return $this->hasMany('App\AntennasBands', 'antennaId')
+        return $this->hasMany('App\AntennasBands', 'antennas_id')
             ->select('min', 'max', DB::raw('count(*)*2 as totalPorts'))
-            ->groupBy('min', 'max', 'antennaId')
+            ->groupBy('min', 'max', 'id')
             ->get();
     }
 }

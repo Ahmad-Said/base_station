@@ -14,78 +14,32 @@ namespace App{
 /**
  * App\Antennas
  *
- * @property int $antennaId
- * @property string|null $xxx
- * @property int|null $Total #RF ports
- * @property string|null $Gain (dBi) (<1GHz)
- * @property string|null $Gain (dBi) (1-3GHz)
- * @property string|null $Gain (dBi) (>3GHz)
- * @property int|null $Product Family
- * @property int|null $Type
- * @property string|null $Number of Calibration ports
- * @property int|null $#ports (<1GHz)
- * @property int|null $#ports (1-3GHz)
- * @property int|null $#ports (>3GHz )
- * @property string|null $Internal Diplexing
- * @property string|null $Antenna size category [m]
- * @property string|null $Typical HBW @3dB [deg]
- * @property string|null $Tilt
- * @property string|null $Polarization
- * @property string|null $#columns (<1GHz)
- * @property string|null $#columns (1-3GHz)
- * @property string|null $#columns (>3GHz)
- * @property string|null $Tilt range [deg]
- * @property string|null $RET Position
- * @property string|null $RET family
- * @property int|null $Height (mm)
- * @property string|null $Width (mm)
- * @property string|null $Depth (mm)
- * @property string|null $Antenna Weight [Kg]
- * @property string|null $Connectors type
- * @property string|null $Short description
- * @property string|null $Packing dimentions (HxWxD)[mm]
- * @property string|null $Shipping weight [Kg]
- * @property string|null $Country of Origin
- * @property string|null $Link to product datasheet
- * @property string|null $comments
+ * @property int $id
+ * @property string $model_nb
+ * @property int $total_nb_ports
+ * @property int $ports_lt_1GH
+ * @property int $ports_btw_1_3GH
+ * @property int $ports_bt_3GH
+ * @property int $height_mm
+ * @property string $link_online
+ * @property float $msp_usd
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property array $bands
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas where#columns(13GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas where#columns(<1GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas where#columns(>3GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas where#ports(13GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas where#ports(<1GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas where#ports(>3GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereAntennaId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereAntennaSizeCategory[m]($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereAntennaWeight[Kg]($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereComments($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereConnectorsType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereCountryOfOrigin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereDepth(mm)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereGain(dBi)(13GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereGain(dBi)(<1GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereGain(dBi)(>3GHz)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereHeight(mm)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereInternalDiplexing($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereLinkToProductDatasheet($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereNumberOfCalibrationPorts($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas wherePackingDimentions(HxWxD)[mm]($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas wherePolarization($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereProductFamily($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereRETFamily($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereRETPosition($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereShippingWeight[Kg]($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereShortDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereTilt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereTiltRange[deg]($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereTotal#RFPorts($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereTypicalHBW@3dB[deg]($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereWidth(mm)($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereXxx($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereHeightMm($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereLinkOnline($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereModelNb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereMspUsd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas wherePortsBt3GH($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas wherePortsBtw13GH($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas wherePortsLt1GH($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereTotalNbPorts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereUpdatedAt($value)
  */
 	class Antennas extends \Eloquent {}
 }
@@ -94,21 +48,179 @@ namespace App{
 /**
  * App\AntennasBands
  *
+ * @property int $id
+ * @property int $min
+ * @property int $max
+ * @property string $color
+ * @property int $antennas_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereAntennasId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereMin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereUpdatedAt($value)
+ */
+	class AntennasBands extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\AntennasBandsProvider
+ *
  * @property int $bandId
  * @property int|null $min
  * @property int|null $max
  * @property string|null $color
  * @property int|null $antennaId
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereAntennaId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereBandId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereColor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereMax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereMin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider whereAntennaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider whereBandId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider whereColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider whereMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBandsProvider whereMin($value)
  */
-	class AntennasBands extends \Eloquent {}
+	class AntennasBandsProvider extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\AntennasProvider
+ *
+ * @property int $antennaId
+ * @property string|null $xxx
+ * @property string|null $Total #RF ports
+ * @property string|null $#ports (<1GHz)
+ * @property string|null $#ports (1-3GHz)
+ * @property string|null $#ports (>3GHz )
+ * @property string|null $Number of Calibration ports
+ * @property int|null $Product Family
+ * @property int|null $Antenna Type
+ * @property string|null $Short description
+ * @property string|null $Gain (<1GHz) [dBi]
+ * @property string|null $Gain (1-3GHz) [dBi]
+ * @property string|null $Gain (>3GHz) [dBi]
+ * @property string|null $Typical HBW @3dB [deg]
+ * @property string|null $Polarization
+ * @property string|null $Internal Diplexing
+ * @property string|null $Antenna size category [m]
+ * @property string|null $Connectors type
+ * @property string|null $Electrical Tilt
+ * @property string|null $Tilt range [deg]
+ * @property string|null $RET Position
+ * @property string|null $RET family
+ * @property string|null $Number of Columns (<1GHz)
+ * @property string|null $Number of Columns (1-3GHz)
+ * @property string|null $Number of Columns (>3GHz)
+ * @property string|null $Height (mm)
+ * @property string|null $Antenna Width (mm)
+ * @property string|null $Antenna Depth (mm)
+ * @property string|null $Antenna Weight [Kg]
+ * @property string|null $Packing dimensions (HxWxD) [mm]
+ * @property string|null $Shipping weight [Kg]
+ * @property string|null $Country of Origin
+ * @property string|null $Link to product datasheet
+ * @property string|null $Comments
+ * @property string|null $Product Status
+ * @property string|null $Model Name (model number+specifics)
+ * @property string|null $SAP Number
+ * @property string|null $DR0 date
+ * @property string|null $DR1 date
+ * @property string|null $DR2 date
+ * @property string|null $DR3 date
+ * @property string|null $DR4 date
+ * @property string|null $DR5 date
+ * @property string|null $DR6 date
+ * @property float|null $Standard Cost [RMB]
+ * @property float|null $Standard Cost [USD]
+ * @property float|null $Standard Cost [EUR]
+ * @property float|null $MSP [RMB]
+ * @property float|null $MSP [USD]
+ * @property float|null $MSP [EUR]
+ * @property float|null $SVM [%]
+ * @property string|null $Key Changes
+ * @property string|null $Date of last update
+ * @property string|null $ODM or in-house
+ * @property string|null $Internal comments
+ * @property string|null $PLM Owner
+ * @property string|null $Product Segment
+ * @property string|null $Visible to PLM
+ * @property string|null $Visible to B&P
+ * @property string|null $Visible to Sales
+ * @property string|null $Visible to Customer
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider where#ports(13GHz)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider where#ports(<1GHz)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider where#ports(>3GHz)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereAntennaDepth(mm)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereAntennaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereAntennaSizeCategory[m]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereAntennaType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereAntennaWeight[Kg]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereAntennaWidth(mm)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereConnectorsType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereCountryOfOrigin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDR0Date($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDR1Date($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDR2Date($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDR3Date($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDR4Date($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDR5Date($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDR6Date($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereDateOfLastUpdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereElectricalTilt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereGain(13GHz)[dBi]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereGain(<1GHz)[dBi]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereGain(>3GHz)[dBi]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereHeight(mm)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereInternalComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereInternalDiplexing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereKeyChanges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereLinkToProductDatasheet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereMSP[EUR]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereMSP[RMB]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereMSP[USD]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereModelName(modelNumber+specifics)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereNumberOfCalibrationPorts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereNumberOfColumns(13GHz)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereNumberOfColumns(<1GHz)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereNumberOfColumns(>3GHz)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereODMOrInHouse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider wherePLMOwner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider wherePackingDimensions(HxWxD)[mm]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider wherePolarization($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereProductFamily($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereProductSegment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereProductStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereRETFamily($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereRETPosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereSAPNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereSVM[%]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereShippingWeight[Kg]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereShortDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereStandardCost[EUR]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereStandardCost[RMB]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereStandardCost[USD]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereTiltRange[deg]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereTotal#RFPorts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereTypicalHBW@3dB[deg]($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereVisibleToB&P($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereVisibleToCustomer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereVisibleToPLM($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereVisibleToSales($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereXxx($value)
+ */
+	class AntennasProvider extends \Eloquent {}
 }
 
 namespace App{
@@ -143,10 +255,12 @@ namespace App{
  * @property string $body
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $cover_image
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereCoverImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereTitle($value)
