@@ -40,6 +40,14 @@
         var stgf5=generategf(gf5);
 
 </script>
+<?php
+$optionsSelect ="";
+for ($i=2; $i <=5 ; $i++) {
+    if(count($bands[$i])>0)
+         $optionsSelect.="<option value=\"$i\">".$i."G</option>";
+}
+
+?>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -119,7 +127,7 @@
                                 if (!isset($technology)) {
                                     $html = '';
                                     $html .= '<tr>';
-                                    $html .= '<td><select name="technology[]" id="technology" class="form-control dynamic" required="required"><option value="" disabled selected>Technology</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>';
+                                    $html .= '<td><select name="technology[]" id="technology" class="form-control dynamic" required="required"><option value="" disabled selected>Technology</option>'.$optionsSelect.'</select></td>';
                                     $html .= '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
                                     $html .= '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
                                     $html .= '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove float-right"><span class="fas fa-minus-circle"></span></button></td></tr>';
@@ -128,9 +136,9 @@
                             ?>
                         </table>
                         <div style="text-align:center">
-                            <button type="submit" class="btn btn-primary" id = "prevent-multiple-submit" />
-                                <i class="fas fa-spinner fa-spin" id='myspinner' style="display: none"></i>
-                                <i id= "submit-text"> Show Results </i>
+                            <button type="submit" class="btn btn-primary" id="prevent-multiple-submit" />
+                            <i class="fas fa-spinner fa-spin" id='myspinner' style="display: none"></i>
+                            <i id="submit-text"> Show Results </i>
 
                             </button>
                         </div>
