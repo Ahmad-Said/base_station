@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class SettingWebLara extends Model
@@ -32,6 +33,14 @@ class SettingWebLara extends Model
                     return [$item->setting_name => $item];
                 }
             );
+        $cacheResultTableInfo = DB::select(
+            "SHOW TABLE STATUS WHERE Name = 'cached_results'"
+        )[0];
+        /**
+         * Rows -> number of rows
+         * Data_length -> total length of table in bytes
+         */
+        $allSetting["cacheResultTableInfo"] = $cacheResultTableInfo;
         return $allSetting;
     }
 
@@ -42,6 +51,9 @@ class SettingWebLara extends Model
 
     // just check timestamps updated at
     const LAST_ANTENNA_DATA_PROVIDED = "LAST_ANTENNA_DATA_PROVIDED";
+
+    // Used in analyser controller
+    const LIMIT_ROW_PER_QUERY = "LIMIT_ROW_PER_QUERY";
 
     // contain html of help page
     const HELP = "help";
@@ -86,6 +98,35 @@ class SettingWebLara extends Model
         )
             ->first();
         $temp->value = 1;
+        $temp->save();
+        return $temp;
+    }
+
+    /**
+     * Get LIMIT_ROW_PER_QUERY Setting
+     *
+     * @return App\SettingWebLara LIMIT_ROW_PER_QUERY
+     */
+    public static function getLimitRowPerQuery()
+    {
+        $temp = SettingWebLara::whereSettingName(
+            SettingWebLara::LIMIT_ROW_PER_QUERY
+        )
+            ->first();
+        return (int) $temp->value;
+    }
+    /**
+     * Touch LAST_ANTENNA_DATA_PROVIDED Setting to current date
+     *
+     * @param int $limit new limit to set
+     *
+     * @return App\SettingWebLara LAST_ANTENNA_DATA_PROVIDED
+     *                            useful for timestamp ->update_at
+     */
+    public static function setLimitRowPerQuery($limit = 50000)
+    {
+        $temp = SettingWebLara::whereSettingName("LIMIT_ROW_PER_QUERY")->get()[0];
+        $temp->value = $limit;
         $temp->save();
         return $temp;
     }

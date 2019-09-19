@@ -167,16 +167,18 @@
                 @foreach($AntennaSolution as $key => $setSolution)
                 <tr>
                     <?php
-                        $totalPrice = $setSolution[0]->msp_usd;
+                        $totalPrice = 0;
                         $secondQuantity = 0;
                         $totalRow= count($setSolution);
                         $totalNbAntennas= count($setSolution);
+                        foreach ($setSolution as $key => $value) {
+                            $totalPrice+= $value->msp_usd;
+                        }
                             $firstQuantity = 1;
                             if(count($setSolution) == 2 && $setSolution[0]->id == $setSolution[1]->id )
                             {
                                 unset($setSolution[1]);
                                 $totalRow--;
-                                $totalPrice+= $setSolution[0]->msp_usd;
                                 $firstQuantity = 2;
                             }
                             if (count($setSolution) == 3)
@@ -185,20 +187,19 @@
                                 {
                                     unset($setSolution[1]);
                                     $totalRow--;
-                                    $totalPrice+= $setSolution[0]->msp_usd;
                                     $firstQuantity++;
                                 }
                                 if($setSolution[0]->id == $setSolution[2]->id)
                                 {
                                     unset($setSolution[2]);
                                     $totalRow--;
-                                    $totalPrice+= $setSolution[0]->msp_usd;
                                     $firstQuantity++;
                                 }
                                 if(isset($setSolution[1]) && isset($setSolution[2])
                                     && $setSolution[1]->id == $setSolution[2]->id ){
                                     unset($setSolution[2]);
                                     $secondQuantity=2;
+                                    $totalRow--;
                                 }
                             }
                     ?>

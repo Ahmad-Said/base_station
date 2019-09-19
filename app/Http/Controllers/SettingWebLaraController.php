@@ -50,6 +50,7 @@ class SettingWebLaraController extends Controller
     public function store(Request $request)
     {
         $isCACHE_RESULT = $request->input("CACHE_RESULT");
+        $newLIMIT_ROW_PER_QUERY = $request->input("LIMIT_ROW_PER_QUERY");
         $temp = SettingWebLara::whereSettingName("CACHE_RESULT")->first();
         if (isset($isCACHE_RESULT)) {
             $temp->value = "true";
@@ -57,6 +58,8 @@ class SettingWebLaraController extends Controller
             $temp->value = "false";
         }
         $temp->save();
+        SettingWebLara::setLimitRowPerQuery($newLIMIT_ROW_PER_QUERY);
+
         $allSetting = SettingWebLara::getAllSettings();
         return view('pages.settingWeb')
             ->with("allSetting", $allSetting)

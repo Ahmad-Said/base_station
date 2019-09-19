@@ -23,6 +23,10 @@ class SettingWebLaraSeeder extends Seeder
                 "created_at" =>  \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()
             ),
             array(
+                'setting_name' => 'LIMIT_ROW_PER_QUERY', 'value' => '50000',
+                "created_at" =>  \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()
+            ),
+            array(
                 'setting_name' => 'LAST_ANTENNA_DATA_PROVIDED', 'value' => '0',
                 "created_at" =>  \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()
             )

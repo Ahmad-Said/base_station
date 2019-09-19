@@ -372,7 +372,8 @@ class AnalyserController extends Controller
         $max_height += 10;
         $AntennaSolution = array();
         $AntennaMaxOrder = array();
-        $LimitRow = 50000;
+        // default was 50000
+        $LimitRow = SettingWebLara::getLimitRowPerQuery();
         // sort array based on ports
         // so when testing combinations starting with biggest ports
         // is better for
