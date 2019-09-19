@@ -34,4 +34,18 @@ class AntennasBandsProvider extends Model
         }
         AntennasBands::insert(AntennasBandsProvider::all($stringSelect)->toArray());
     }
+
+    /**
+     * Antennas Provider
+     *
+     * Copy all antennas data with bands to default database
+     *  with class associated as Antennas and AntennasBands
+     * Column needed index -> property  type
+     *
+     * @return void
+     */
+    public static function provideDataToAntennasAndBands()
+    {
+        AntennasProvider::provideDataToAntennasAndBands();
+    }
 }

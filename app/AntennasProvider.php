@@ -143,4 +143,24 @@ class AntennasProvider extends Model
         $allAntennasProvided = AntennasProvider::all($stringSelect);
         Antennas::insert($allAntennasProvided->toArray());
     }
+
+    /**
+     * Antennas Provider
+     *
+     * Copy all antennas data with bands to default database
+     *  with class associated as Antennas and AntennasBands
+     * Column needed index -> property  type
+     *
+     * @return void
+     */
+    public static function provideDataToAntennasAndBands()
+    {
+        AntennasProvider::provideDataToAntennas();
+        AntennasBandsProvider::provideDataToAntennasBands();
+        $temp = SettingWebLara::whereSettingName(
+            SettingWebLara::LAST_ANTENNA_DATA_PROVIDED
+        )->first();
+        $temp->value = !$temp->value;
+        $temp->save();
+    }
 }
