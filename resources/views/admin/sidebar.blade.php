@@ -175,3 +175,11 @@
     document.getElementById("main").style.marginLeft = "0";
     }
 </script>
+@if ($agent->isMobile() && !$agent->isTablet())
+<script>
+    $(document).ready(function () {
+        closeNav();
+});
+</script>
+
+@endif
