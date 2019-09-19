@@ -29,7 +29,7 @@ class XgBandsController extends Controller
     {
         //
         $bands = XgBands::getBands();
-        return view('xgBands\index')->with("bands", $bands);
+        return view('xgBands.index')->with("bands", $bands);
     }
 
     /**
@@ -51,10 +51,10 @@ class XgBandsController extends Controller
     public function store(Request $request)
     {
         //
-        $band= new XgBands();
-        $band->xg=$request->input("xg");
-        $band->symbol=$request->input("symbol");
-        $band->bands=$request->input("band");
+        $band = new XgBands();
+        $band->xg = $request->input("xg");
+        $band->symbol = $request->input("symbol");
+        $band->bands = $request->input("band");
         // $band->bands=555;
         // $band->symbol=test555;
         $band->save();
@@ -98,9 +98,6 @@ class XgBandsController extends Controller
         // $band->bands = $request->input("band");
         $band->update();
         return redirect('/bands')->with('success', 'Band Updated');
-
-
-
     }
 
     /**
@@ -112,9 +109,8 @@ class XgBandsController extends Controller
     public function destroy($id)
     {
         //
-        $ban= XgBands::find($id);
+        $ban = XgBands::find($id);
         $ban->delete();
         return redirect('/bands')->with('success', 'Band Deleted');
-
     }
 }
