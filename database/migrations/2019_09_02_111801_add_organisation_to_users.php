@@ -13,9 +13,9 @@ class AddOrganisationToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('usersweb', function ($table) {
+        Schema::table('users', function ($table) {
             //
-            Schema::table('usersweb', function($table){
+            Schema::table('users', function ($table) {
                 $table->string('organization', 100)->default('RFSworld');
             });
         });
