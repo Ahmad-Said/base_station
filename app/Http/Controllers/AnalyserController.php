@@ -88,6 +88,28 @@ class AnalyserController extends Controller
         if (!isset($antenna_preferred)) {
             $antenna_preferred = 1;
         }
+
+        $doGenerateLink = $request->input("generateLinkOnly");
+        if (isset($doGenerateLink)) {
+            if ($max_height == PHP_INT_MAX) {
+                $max_height = "";
+            }
+            $success = "Link copied to clipboard use <b>CTRL + V</b> <br>
+            &nbsp &nbsp to share it anywhere you like. <br> <a href = "
+                . url()->full() . "><span class='fas fa-link'></span> Test Link</a>";
+            // This return view with predefined column and stuff
+            return view('welcome')
+                ->with("bands", XgBands::getBands())
+                ->with("antenna_per_sector", $antenna_per_sector)
+                ->with("antenna_preferred", $antenna_preferred)
+                ->with("max_height", $max_height)
+                ->with("technology", $technology)
+                ->with("band", $band)
+                ->with("port", $port)
+                ->with("copyLinkToClip", true)
+                ->with("success", $success);
+        }
+
         // $request->session()->forget("load");
         // return var_dump($request->session()->get("load"));
         if (!isset($load_more)) {

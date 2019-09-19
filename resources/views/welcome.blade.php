@@ -49,19 +49,42 @@ for ($i=2; $i <=5 ; $i++) {
 
 ?>
 
+{{-- https://stackoverflow.com/questions/15176098/cant-span-form-over-multiple-divs --}}
+{!! Form::open(['action' => ['AnalyserController@showResult'] , 'method' => 'GET', 'enctype' =>
+'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
 <div class="container">
     <div class="row justify-content-center">
         {{--
-        <div class="col-xs-12"> --}}
+<div class="col-xs-12"> --}}
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <h4 style="text-align:center">Enter Item Details</h4>
+                    <h4 style="text-align:center">
+                        Enter Item Details
+                        <button type="submit" class="" id="generate-link-submit" name="generateLinkOnly" value="exist">
+                            <span class="fas fa-link"></span>
+                            <i class="fas fa-spinner fa-spin" id='myspinner2' style="display: none"></i>
+                            <i id="submit-text-generate-link"> </i>
+                        </button>
+                        @isset($copyLinkToClip)
+                        <input id="urlofcurentpage" type="text" class="" value={{ url()->full() }}>
+                        <script>
+                            /* Get the text field */
+                                var copyText = document.getElementById("urlofcurentpage");
+
+                                /* Select the text field */
+                                copyText.select();
+                                copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+                                /* Copy the text inside the text field */
+                                document.execCommand("copy");
+                                copyText.classList.add("hidden");
+                        </script>
+                        @endif
+                    </h4>
                 </div>
                 <div class="card-body">
 
-                    {!! Form::open(['action' => ['AnalyserController@showResult'] , 'method' => 'GET', 'enctype' =>
-                    'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
                     <br>
                     <div class="form-group row">
                         <label for="number_system"
@@ -136,14 +159,13 @@ for ($i=2; $i <=5 ; $i++) {
                             ?>
                         </table>
                         <div style="text-align:center">
-                            <button type="submit" class="btn btn-primary" id="prevent-multiple-submit" />
+                            <button type="submit" class="btn btn-primary" id="show-result-submit" />
                             <i class="fas fa-spinner fa-spin" id='myspinner' style="display: none"></i>
                             <i id="submit-text"> Show Results </i>
 
                             </button>
                         </div>
                     </div>
-                    {!! Form::close() !!}
 
                     <br>
 
@@ -153,9 +175,15 @@ for ($i=2; $i <=5 ; $i++) {
 
                             // https://www.youtube.com/watch?time_continue=187&v=gJRv2ahMzEg
                             $('.form-prevent-multiple-submits').on('submit',function(){
-                                $('#prevent-multiple-submit').attr('disabled','true');
+                                $('#show-result-submit').attr('disabled','true');
+                            });
+                            $('#show-result-submit').on('click',function(){
                                 $('#submit-text').html('Computing');
                                 $('#myspinner').show();
+                            });
+                            $('#generate-link-submit').on('click',function(){
+                                $('#submit-text-generate-link').html('Generating Link');
+                                $('#myspinner2').show();
                             });
                        // define a function see
                        // https://stackoverflow.com/questions/907634/is-this-how-you-define-a-function-in-jquery
@@ -400,4 +428,6 @@ for ($i=2; $i <=5 ; $i++) {
         </div>
     </div>
 </div>
+{!! Form::close() !!}
+
 @endsection
