@@ -38,6 +38,18 @@ class PagesController extends Controller
     }
 
     /**
+     * Show references pages
+     *
+     * @return view - pages.references -> /references
+     */
+    public function antennasList()
+    {
+        $allAntennas = Antennas::all();
+        return view('pages.antennasList')
+            ->with("allAntennas", $allAntennas);
+    }
+
+    /**
      * About page
      *
      * @return view - pages.about -> /about

@@ -20,6 +20,7 @@ Route::get('/test', 'PagesController@test');
 Route::get('/about', 'PagesController@about');
 Route::post('/about', 'PagesController@storeAbout');
 Route::get('/references', 'PagesController@references');
+Route::get('/antennasList', 'PagesController@antennasList');
 
 // Profile Controller
 Route::resource('profile', 'ProfileController');
@@ -38,8 +39,8 @@ Route::get('/edit', 'AnalyserController@editForm');
 // SettingWebLara Controller
 Route::get('/setting', 'SettingWebLaraController@index')->name("settingWeb");
 Route::post('/setting', 'SettingWebLaraController@store')->name("settingWebStore");
-Route::put(
-    '/setting',
+Route::get(
+    '/provideAntennasData',
     'SettingWebLaraController@triggerUpdateProvidedData'
 )->name("settingTriggerUpdate");
 Route::delete('/setting', 'SettingWebLaraController@clearCachedResult');
