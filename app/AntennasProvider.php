@@ -156,19 +156,18 @@ class AntennasProvider extends Model
      *  with class associated as Antennas and AntennasBands
      * Column needed index -> property  type
      *
+     * @param bool $doTouchUpdated touch last updated setting and return it
+     *
      * @return App\SettingWebLara CACHE_RESULT useful for timestamp ->update_at
      */
-    public static function provideDataToAntennasAndBands()
+    public static function provideDataToAntennasAndBands($doTouchUpdated = true)
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         AntennasBandsProvider::provideDataToAntennasBands();
         AntennasProvider::provideDataToAntennas();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        $temp = SettingWebLara::whereSettingName(
-            SettingWebLara::LAST_ANTENNA_DATA_PROVIDED
-        )->first();
-        $temp->value = !$temp->value;
-        $temp->save();
-        return $temp;
+        if ($doTouchUpdated) {
+            return SettingWebLara::touchUpdatedAtProvider();
+        }
     }
 }

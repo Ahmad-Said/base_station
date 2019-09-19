@@ -21,6 +21,14 @@ php7.3 artisan key:generate
 rm public/storage
 php7.3 artisan storage:link
 
+defining new task weekly to check laravel jobs:
+crontab -e
+then add those lines at bottom:
+#Laravel Update database
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+
+save the file and you should see: crontab: installing new crontab
+
 
 
 

@@ -62,7 +62,7 @@ class SettingWebLara extends Model
      *
      * @param bool $bool status of CacheAllowed
      *
-     * @return bool
+     * @return App\SettingWebLara CACHE_RESULT
      */
     public static function setCacheAllowed(bool $bool = false)
     {
@@ -70,5 +70,23 @@ class SettingWebLara extends Model
             ->first();
         $temp->value = $bool;
         $temp->save();
+        return $temp;
+    }
+
+    /**
+     * Touch LAST_ANTENNA_DATA_PROVIDED Setting to current date
+     *
+     * @return App\SettingWebLara LAST_ANTENNA_DATA_PROVIDED
+     *                            useful for timestamp ->update_at
+     */
+    public static function touchUpdatedAtProvider()
+    {
+        $temp = SettingWebLara::whereSettingName(
+            SettingWebLara::LAST_ANTENNA_DATA_PROVIDED
+        )
+            ->first();
+        $temp->value = 1;
+        $temp->save();
+        return $temp;
     }
 }

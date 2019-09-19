@@ -16,6 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(XgBandsTableSeeder::class);
         $this->call(SettingWebLaraSeeder::class);
-        $this->call(AntennasProvider::provideDataToAntennasAndBands());
+        $this->call(AntennasProvider::provideDataToAntennasAndBands(false));
     }
 }
