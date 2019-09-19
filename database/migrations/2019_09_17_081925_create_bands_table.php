@@ -18,7 +18,10 @@ class CreateBandsTable extends Migration
             $table->integer("min");
             $table->integer("max");
             $table->string("color");
-            $table->bigInteger("antennas_id");
+            $table->unsignedBigInteger("antennas_id");
+        });
+        Schema::table('bands', function ($table) {
+            // https://stackoverflow.com/questions/22615926/migration-cannot-add-foreign-key-constraint-in-laravel
             $table->foreign('antennas_id')->references('id')->on('antennas');
         });
     }
