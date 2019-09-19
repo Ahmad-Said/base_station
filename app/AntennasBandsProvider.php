@@ -21,7 +21,9 @@ class AntennasBandsProvider extends Model
      */
     public static function provideDataToAntennasBands()
     {
-        AntennasBands::truncate();
+        // AntennasBands::truncate();
+        // https://stackoverflow.com/questions/31192207/laravel-5-1-migration-and-seeding-cannot-truncate-a-table-referenced-in-a-foreig
+        AntennasBands::query()->delete();
         $neededColumn = [
             "bandId" => "id",
             "min" => "min",
