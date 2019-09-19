@@ -123,7 +123,9 @@
                     <input type="hidden" name='id' value={{ $ban->id }} >
                 <tr >
                     <td>
-                        {{ $ban->bands }}
+                        {{-- {{ $ban->bands }} --}}
+                        <input type="text" name="band" value="{{ $ban->bands }}" required="true">
+
                     </td>
                     <td>
                          <input type="text" name="symbol" value="{{ $ban->symbol }}" required="true">

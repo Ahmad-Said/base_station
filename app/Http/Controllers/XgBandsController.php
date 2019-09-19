@@ -95,7 +95,7 @@ class XgBandsController extends Controller
         //
         $band = XgBands::find($id);
         $band->symbol = $request->input("symbol");
-        // $band->bands = $request->input("band");
+        $band->bands = $request->input("band");
         $band->update();
         return redirect('/bands')->with('success', 'Band Updated');
     }

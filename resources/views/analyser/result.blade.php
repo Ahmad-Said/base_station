@@ -163,7 +163,7 @@
                 </tr>
             </thead>
             <tbody>
-
+                <?php $c=1 ?>
                 @foreach($AntennaSolution as $key => $setSolution)
                 <tr>
                     <?php
@@ -203,8 +203,8 @@
                                 }
                             }
                     ?>
-                    <td style="vertical-align: middle;" rowspan={{  $totalRow}}>{{ $key+1 }}</td>
-                    <td style="vertical-align: middle;" rowspan={{  $totalRow}}>{{  $totalNbAntennas}}</td>
+                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $c++ }}</td>
+                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
                     <td>{{ $setSolution[0]->model_nb }}</td>
                     <td>{{ $setSolution[0]->total_nb_ports }}</td>
                     <td>{{ $setSolution[0]->ports_lt_1GH }}</td>
