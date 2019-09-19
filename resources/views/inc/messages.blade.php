@@ -28,7 +28,6 @@
 <div class="alert alert-success">
     {!! $but !!}
     <i class="far fa-check-circle"></i> {!! $success !!}
-    {!! session(success) !!}
 </div>
 @endif
 @endif

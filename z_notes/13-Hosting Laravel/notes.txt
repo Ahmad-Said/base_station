@@ -13,6 +13,7 @@ cd /usr/bin && ls    (will see what you can use)
 
 php7.3 artisan .... whatever you want
 
+git reset --hard (discard changes after last pull)
 git pull   (update server after pushing an update)
 
 command should be run on setup:
