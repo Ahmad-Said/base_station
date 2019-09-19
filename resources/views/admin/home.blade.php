@@ -37,6 +37,7 @@
 
 <div class="card text-center table-responsive" style="width: 60rem;">
     <div class="card-header">Users</div>
+    <a href="/register" class="btn btn-primary"> Add New User</a>
     <div class="card-body">
         @if(count($allusers) > 0)
         <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"

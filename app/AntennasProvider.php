@@ -119,6 +119,8 @@ class AntennasProvider extends Model
      * 33 -> link_online     text
      * 49 -> msp_usd         float
      *
+     * @deprecated use provideDataToAntennasAndBands() instead
+     *
      * @return void
      */
     public static function provideDataToAntennas()
@@ -141,6 +143,9 @@ class AntennasProvider extends Model
             $stringSelect[] = $ColumnNamesSrc[$key] . " as " . $value;
         }
         $allAntennasProvided = AntennasProvider::all($stringSelect);
+        foreach ($allAntennasProvided as $key => &$value) {
+            $value["height_mm"] = (int) $value["height_mm"];
+        }
         Antennas::insert($allAntennasProvided->toArray());
     }
 
@@ -151,16 +156,19 @@ class AntennasProvider extends Model
      *  with class associated as Antennas and AntennasBands
      * Column needed index -> property  type
      *
-     * @return void
+     * @return App\SettingWebLara CACHE_RESULT useful for timestamp ->update_at
      */
     public static function provideDataToAntennasAndBands()
     {
-        AntennasProvider::provideDataToAntennas();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         AntennasBandsProvider::provideDataToAntennasBands();
+        AntennasProvider::provideDataToAntennas();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $temp = SettingWebLara::whereSettingName(
             SettingWebLara::LAST_ANTENNA_DATA_PROVIDED
         )->first();
         $temp->value = !$temp->value;
         $temp->save();
+        return $temp;
     }
 }

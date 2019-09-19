@@ -71,7 +71,7 @@ class SettingWebLaraController extends Controller
      */
     public function triggerUpdateProvidedData(Request $request)
     {
-        AntennasProvider::provideDataToAntennasAndBands();
+        $temp = AntennasProvider::provideDataToAntennasAndBands();
         $allSetting = SettingWebLara::getAllSettings();
         return view('pages.settingWeb')
             ->with("allSetting", $allSetting)

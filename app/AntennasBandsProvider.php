@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class AntennasBandsProvider extends Model
@@ -17,13 +18,14 @@ class AntennasBandsProvider extends Model
      *
      * Copy all bands data to default database with class associated as Bands
      *
+     * @deprecated use provideDataToAntennasAndBands() instead
+     *
      * @return void
      */
     public static function provideDataToAntennasBands()
     {
-        // AntennasBands::truncate();
         // https://stackoverflow.com/questions/31192207/laravel-5-1-migration-and-seeding-cannot-truncate-a-table-referenced-in-a-foreig
-        AntennasBands::query()->delete();
+        AntennasBands::truncate();
         $neededColumn = [
             "bandId" => "id",
             "min" => "min",

@@ -14,24 +14,61 @@
     <i class="far fa-hand-point-right"></i> {!! $info !!}
 </div>
 @endisset
+
+
+
+
+@if(session('success'))
+<div class="alert alert-success">
+    {!! $but !!}
+    <i class="far fa-check-circle"></i> {!!session('success')!!}
+</div>
+@else
 @isset($success)
 <div class="alert alert-success">
     {!! $but !!}
     <i class="far fa-check-circle"></i> {!! $success !!}
+    {!! session(success) !!}
 </div>
 @endif
+@endif
+
+
+
+
+@if(session('error'))
+<div class="alert alert-danger">
+    {!! $but !!}
+    <i class="fas fa-exclamation-circle"></i> {!!session('error')!!}
+</div>
+
+@else
+
 @isset($error)
 <div class="alert alert-danger">
     {!! $but !!}
     <i class="fas fa-exclamation-circle"></i> {!! $error !!}
 </div>
 @endif
+@endif
+
+
+
+
+@if(session('warning'))
+<div class="alert alert-warning">
+    {!! $but !!}
+    <i class="far fa-hand-paper"></i> {!!session('warning')!!}
+</div>
+@else
 @isset($warning)
 <div class="alert alert-warning">
     {!! $but !!}
     <i class="far fa-hand-paper"></i> {!! $warning !!}
 </div>
 @endif
+@endif
+
 <script>
     $(document).on('click', '.removediv', function(){
                                  $(this).closest('div').remove();

@@ -314,7 +314,7 @@ class AnalyserController extends Controller
 
 
         // return $AntennaSolution->lastPage();
-        return view("analyser\\result")
+        return view("analyser.result")
             ->with("AntennaSolution", $AntennaSolution)
             // to make able to return the old view
             ->with("antenna_per_sector", $antenna_per_sector)

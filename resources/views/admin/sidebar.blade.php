@@ -119,7 +119,7 @@
         </li>
         <li class="nav-item border-bottom border-top">
             <a class="list-group-item list-group-item-action border-0 bg-light" style="border-color: gray;"
-                href="/register">
+                href="/home">
                 <i class="fas fas fa-users"></i>
                 &nbsp Users</a>
         </li>

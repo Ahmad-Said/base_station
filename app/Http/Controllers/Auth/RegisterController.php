@@ -56,12 +56,9 @@ class RegisterController extends Controller
             $data,
             [
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:usersWeb'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
-                'organization' => ['required' , 'string'],
-            ],
-            [
-                'regex' => 'The Email must respect the following format: example@rfsworld.com'
+                'organization' => ['required', 'string'],
             ]
         );
     }

@@ -1,0 +1,48 @@
+install any sftp client (use filezilla or i used https://winscp.net/)
+enter host server and client credentials
+upload your host for the first time
+your domain name (or sub domain if multiple web on server) should point to
+/public folder.
+set up database on server...
+change .env file to match credentials.
+
+download putty to access ssh (it's a secure shell that will run on server)
+normally server use bash and ubuntu .. so get used to bash command and navigation..
+most used command:
+cd /usr/bin && ls    (will see what you can use)
+
+php7.3 artisan .... whatever you want
+
+git pull   (update server after pushing an update)
+
+command should be run on setup:
+php7.3 artisan key:generate
+rm public/storage
+php7.3 artisan storage:link
+
+
+
+
+Troubleshoot:
+- if you get:
+        Internal Server Error
+
+        The server encountered an internal error or misconfiguration and was unable to complete your request.
+
+        Please contact the server administrator, and inform them of the time the error occurred, and anything you might have done that may have caused the error.
+
+        More information about this error may be available in the server error log.
+
+        Additionally, a 500 Internal Server Error error was encountered while trying to use an ErrorDocument to handle the request.
+  ---> then check these links:
+        -https://stackoverflow.com/questions/29586436/routes-not-working-after-deploying-laravel-5-project-into-hosting
+        -https://stackoverflow.com/questions/31543175/getting-a-500-internal-server-error-on-laravel-5-ubuntu-14-04
+
+
+
+- if you get some sort of server error from laravel command line or web interface
+    that you don't get on your local machine especially with mysql commands (it may relate of using different version)
+  ---> then to try solution write it on your local machine and upload it using sftp client to test it
+    --> if it work then commit that change and push it.
+    (that way commit keep clean and only commit and pull from server if there is a real update not minor fix separated
+        at last sure will be a push/pull)
