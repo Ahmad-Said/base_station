@@ -24,6 +24,17 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class AnalyserController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * The welcome page
      *

@@ -15,8 +15,8 @@ class UsersTableSeeder extends Seeder
         App\User::create(
             [
                 'name'     => 'admin',
-                'email'    => 'admin@rfsworld.com',
-                'password' => Hash::make('admin@rfsworld.com'),
+                'email'    => 'admin@admin.com',
+                'password' => Hash::make('admin@admin.com'),
                 'type'     => 'admin',
                 'is_activated' => '1'
             ]

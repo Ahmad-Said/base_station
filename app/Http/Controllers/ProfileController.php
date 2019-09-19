@@ -10,6 +10,17 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class ProfileController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Show profile page of authenticated user
      * with input to update fields

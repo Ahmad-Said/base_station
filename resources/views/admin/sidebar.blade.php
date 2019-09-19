@@ -106,7 +106,7 @@
 <div id="mySidebar" class="sidebar border-right">
     {{-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> --}}
     <div class="sidebar-heading">
-        <img src="images/logo3.png" style="width: 40px;border-radius: 5px;height: 40px;background-color: #ca0106;">
+        <img src="/images/logo3.png" style="width: 40px;border-radius: 5px;height: 40px;background-color: #ca0106;">
         <span style="color:black;">
             &nbsp;&nbsp;BSA Configurator
         </span>
