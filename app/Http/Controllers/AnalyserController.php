@@ -963,6 +963,17 @@ class AnalyserController extends Controller
         $port = $colSystemG->pluck(1)->toArray();
         $band = $colSystemG->pluck(2)->toArray();
         $techToAntenna = $colSystemG->pluck(3)->toArray();
+
+        $bandSymbols = array();
+        $allXgBand = XgBands::getBands();
+        foreach ($technology as $key => $tech) {
+            foreach ($allXgBand[$tech] as $itemXg) {
+                if ($itemXg->bands == $band[$key]) {
+                    $bandSymbols[] = $itemXg->symbol;
+                }
+            }
+        }
+
         // This return view with predefined column and stuff
         return view('analyser.analyseConfig')
             ->with("confNb", $confNb)
@@ -972,6 +983,7 @@ class AnalyserController extends Controller
             ->with("technology", $technology)
             ->with("techToAntenna", $techToAntenna)
             ->with("band", $band)
+            ->with("bandSymbols", $bandSymbols)
             ->with("port", $port)
             ->with("antennaLabels", $antennaLabels)
             ->with("AntennaSet", $AntennaSet);

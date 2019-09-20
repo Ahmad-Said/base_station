@@ -112,7 +112,7 @@
                     <td>{{ $techToAntenna[$key]["label"] }}</td>
                     <td>{{ $technology[$key] }}G</td>
                     <td>{{ $port[$key] }}</td>
-                    <td>{{ $band[$key] }}</td>
+                    <td>{{ $bandSymbols[$key] }}</td>
                 </tr>
 
                 @endforeach

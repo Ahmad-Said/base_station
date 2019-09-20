@@ -8,6 +8,13 @@ class XgBands extends Model
 {
     //
     public $timestamps = false;
+    /**
+     * Properties:
+     * "id"
+     * "xg"
+     * "bands"
+     * "symbol"
+     */
 
     /**
      * Return all bands and their shortcuts
