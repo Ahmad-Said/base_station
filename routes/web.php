@@ -35,6 +35,11 @@ Route::resource('bands', 'XgBandsController');
 Route::get('/', 'AnalyserController@index');
 Route::get('/result', 'AnalyserController@showResult');
 Route::get('/edit', 'AnalyserController@editForm');
+Route::get(
+    '/AnalyseConfig/{confNb}/{antennasSetIds}/{technology}/{port}/{band}'
+        . '/{antenna_per_sector}/{antenna_preferred}/{max_height}',
+    'AnalyserController@AnalyseConfig'
+);
 
 // SettingWebLara Controller
 Route::get('/setting', 'SettingWebLaraController@index')->name("settingWeb");

@@ -205,7 +205,7 @@ for ($i=2; $i <=5 ; $i++) {
                             }
                             var html = '';
                             html += '<tr>';
-                                html += '<td><select name="technology[]" id="technology" class="form-control dynamic" required=required><option value="" disabled selected>Technology</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>';
+                                html += '<td><select name="technology[]" id="technology" class="form-control dynamic" required=required><option value="" disabled selected>Technology</option><?php echo $optionsSelect;?></select></td>';
                                 html += '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
                                 html += '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
                                 html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
