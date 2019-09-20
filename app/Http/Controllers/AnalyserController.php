@@ -316,9 +316,11 @@ class AnalyserController extends Controller
         // return $AntennaSolution;
 
         // computing total ports of antenna solution
-        $totalNbPorts = $AntennaSolution[0][0]->total_nb_ports;
-        if ($totalNbPorts > $totalTechNbPorts) {
-            $msg .= "<br>Added 2 Free ports to get a solution !";
+        if (count($AntennaSolution) > 0) {
+            $totalNbPorts = $AntennaSolution[0][0]->total_nb_ports;
+            if ($totalNbPorts > $totalTechNbPorts) {
+                $msg .= "<br>Added 2 Free ports to get a solution !";
+            }
         }
 
         if ($isCacheAllowed) {

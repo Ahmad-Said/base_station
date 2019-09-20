@@ -1,3 +1,6 @@
+@extends('layouts.app')
+@section('content')
+
 <script>
     $(document).ready(function () {
         $('#dtBasicExample').DataTable();
@@ -34,75 +37,87 @@
     });
 </script>
 
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card text-center table-responsive" style="width: 60rem;">
+            <div class="card">
+                <div class="card-header">Users</div>
+                <div class="card-body">
+                    <a href="/register" class="btn btn-primary"> Add New User</a>
 
-<div class="card text-center table-responsive" style="width: 60rem;">
-    <div class="card-header">Users</div>
-    <a href="/register" class="btn btn-primary"> Add New User</a>
-    <div class="card-body">
-        @if(count($allusers) > 0)
-        <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
-            cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>type</th>
-                    <th>Organization</th>
-                    <th>Status</th>
-                    <th>Control</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($allusers as $user) @if($user->is_activated)
-                <tr>
-                    @else {{-- check https://getbootstrap.com/docs/4.0/content/tables/#contextual-classes --}}
-                <tr class="table-warning" class="data-row">
+                    @if(count($allUsers) > 0)
+                    <table id="dtBasicExample"
+                        class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>type</th>
+                                <th>Organization</th>
+                                <th>Status</th>
+                                <th>Control</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($allUsers as $user) @if($user->is_activated)
+                            <tr>
+                                @else
+                                {{-- check https://getbootstrap.com/docs/4.0/content/tables/#contextual-classes --}}
+                            <tr class="table-warning" class="data-row">
+                                @endif
+                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td><a href="mailto:{{ $user->email }}?Subject=Hello%20again"
+                                        target="_top">{{ $user->email }}</a>
+                                </td>
+                                <td>{{ $user->type }}</td>
+                                <td>{{ $user->organization }}</td>
+                                <td>@if ($user->is_activated) Enabled @else Disabled @endif
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-info btn-sm waves-effect  btn-info EditBtn"
+                                            data-toggle="modal" data-target="#EditDemo">
+                                            Edit
+                                            {{-- <span class="fas fa-user-edit"></span> --}}
+                                        </button>
+                                        <a href="/profile/{{ $user->id }}/edit" role="button"
+                                            class="btn btn-warning btn-sm waves-effect  btn-warning">
+                                            {{-- <span class="fas fa-user-slash"></span> --}}Status
+                                        </a>
+                                        <button type="button"
+                                            class="btn btn-danger btn-sm waves-effect  btn-danger delbtn"
+                                            data-userid="{{ $user->id }}" data-toggle="modal"
+                                            data-target="#ConfirmDelete">
+                                            {{-- <span class="fas fa-user-edit"></span> --}}Delete
+                                        </button>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Control</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    @else
+                    <p>There is not registred users yet.</p>
                     @endif
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td><a href="mailto:{{ $user->email }}?Subject=Hello%20again" target="_top">{{ $user->email }}</a>
-                    </td>
-                    <td>{{ $user->type }}</td>
-                    <td>{{ $user->organization }}</td>
-                    <td>@if ($user->is_activated) Enabled @else Disabled @endif
-                    </td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-info btn-sm waves-effect  btn-info EditBtn"
-                                data-toggle="modal" data-target="#EditDemo">
-                                Edit
-                                {{-- <span class="fas fa-user-edit"></span> --}}
-                            </button>
-                            <a href="/profile/{{ $user->id }}/edit" role="button"
-                                class="btn btn-warning btn-sm waves-effect  btn-warning">
-                                {{-- <span class="fas fa-user-slash"></span> --}}Status
-                            </a>
-                            <button type="button" class="btn btn-danger btn-sm waves-effect  btn-danger delbtn"
-                                data-userid="{{ $user->id }}" data-toggle="modal" data-target="#ConfirmDelete">
-                                {{-- <span class="fas fa-user-edit"></span> --}}Delete
-                            </button>
-                        </div>
-
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Control</th>
-                </tr>
-            </tfoot>
-        </table>
-        @else
-        <p>There is not registred users yet.</p>
-        @endif
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <!-- Attachment Modal for Edit -->
 <div class="modal fade" id="EditDemo" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" aria-hidden="true">
@@ -194,3 +209,4 @@
     </form>
 </div>
 <!-- /Modal: modalConfirmDelete -->
+@endsection

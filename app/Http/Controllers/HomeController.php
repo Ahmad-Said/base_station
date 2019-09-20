@@ -30,7 +30,7 @@ class HomeController extends Controller
             $users = User::orderby('id')
                 ->where('id', '!=', Auth::user()->id)->get();
 
-            return view('home')->with('allusers', $users);
+            return view('admin.home')->with('allUsers', $users);
         } else {
             return redirect('/');
         }
