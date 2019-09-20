@@ -174,17 +174,24 @@ for ($i=2; $i <=5 ; $i++) {
 
 
                             // https://www.youtube.com/watch?time_continue=187&v=gJRv2ahMzEg
+                            // https://stackoverflow.com/questions/5721724/jquery-how-to-get-which-button-was-clicked-upon-form-submission
                             $('.form-prevent-multiple-submits').on('submit',function(){
                                 $('#show-result-submit').attr('disabled','true');
+                                var button = $("button[type=submit][clicked=true]");
+                                if(button.attr('id') == 'show-result-submit'){
+                                        $('#submit-text').html('Computing');
+                                        $('#myspinner').show();
+                                }else{
+                                    $('#submit-text-generate-link').html('Generating Link');
+                                    $('#myspinner2').show();
+                                };
                             });
-                            $('#show-result-submit').on('click',function(){
-                                $('#submit-text').html('Computing');
-                                $('#myspinner').show();
+                            $("#generate-link-submit ,#show-result-submit").click(function() {
+                                $('button[type="submit"]', $(this).parents("form")).removeAttr("clicked");
+                                $(this).attr("clicked", "true");
                             });
-                            $('#generate-link-submit').on('click',function(){
-                                $('#submit-text-generate-link').html('Generating Link');
-                                $('#myspinner2').show();
-                            });
+
+
                        // define a function see
                        // https://stackoverflow.com/questions/907634/is-this-how-you-define-a-function-in-jquery
                         var add_to_table=function(){
