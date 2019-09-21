@@ -367,6 +367,15 @@ class AnalyserController extends Controller
 
         // return DebuggerHelper::getReport("result");
         // return $AntennaSolution->lastPage();
+        $AnalyseConfig_link = AnalyserController::analyseConfigUrlGenerator(
+            $technology,
+            $port,
+            $band,
+            $antenna_per_sector,
+            $antenna_preferred,
+            $max_height,
+            $AnalyseConfig_link_Example
+        );
         return view("analyser.result")
             ->with("AntennaSolution", $AntennaSolution)
             // to make able to return the old view
@@ -377,6 +386,8 @@ class AnalyserController extends Controller
             ->with("band", $band)
             ->with("port", $port)
             ->with("info", $msg)
+            ->with("AnalyseConfig_link", $AnalyseConfig_link)
+            ->with("AnalyseConfig_link_Example", $AnalyseConfig_link_Example)
             ->with("isCacheAllowed", $isCacheAllowed)
             ->with("isLoadMore", !$saveCachedResult->state_finish);
     }
@@ -843,7 +854,7 @@ class AnalyserController extends Controller
         $band,
         $antenna_per_sector,
         $antenna_preferred,
-        $max_height
+        $max_height = null
     ) {
         // about passing array as string value in get method
         // https://www.pontikis.net/tip/?id=11
@@ -886,7 +897,7 @@ class AnalyserController extends Controller
             $totalNbPorts
         );
         // just to prettily look
-        if ($max_height == PHP_INT_MAX) {
+        if (!isset($max_height) || $max_height == PHP_INT_MAX) {
             $max_height = "";
         }
 
@@ -979,15 +990,7 @@ class AnalyserController extends Controller
         $band = $colSystemG->pluck(2)->toArray();
         $techToAntenna = $colSystemG->pluck(3)->toArray();
 
-        $bandSymbols = array();
-        $allXgBand = XgBands::getBands();
-        foreach ($technology as $key => $tech) {
-            foreach ($allXgBand[$tech] as $itemXg) {
-                if ($itemXg->bands == $band[$key]) {
-                    $bandSymbols[] = $itemXg->symbol;
-                }
-            }
-        }
+        $bandSymbols = XgBands::getSymbols($technology, $band);
 
         // This return view with predefined column and stuff
         return view('analyser.analyseConfig')
@@ -1042,6 +1045,109 @@ class AnalyserController extends Controller
         $newUrl = preg_replace($pattern, $replacement, $previousUrl, 1);
         return redirect($newUrl);
     }
+
+    /**
+     * Receive Full url of analyser config and fill corresponding variables
+     *
+     * @param string $url                in the form as web.php route of
+     *                                   AnalyserController@AnalyseConfig
+     * @param string $technology         all technology imploded with '_'
+     * @param string $port               all ports imploded with '_'
+     * @param string $band               all bands imploded with '_'
+     * @param string $bandSymbols        all tech-band symbols generated
+     * @param int    $confNb             The configuration number
+     * @param string $antennasSetIds     all technology imploded with '_'
+     * @param int    $antenna_per_sector allowed nb of antenna in solution set
+     * @param int    $antenna_preferred  priority to this nb and down
+     * @param int    $max_height         The maximum accepted height antennas
+     *                                   (with error of 10)
+     *
+     * @return array Parsed array of
+     */
+    public static function analyseConfigUrlParser(
+        string $url,
+        &$technology = null,
+        &$port = null,
+        &$band = null,
+        &$bandSymbols = null,
+        &$confNb = null,
+        &$antennasSetIds = null,
+        &$antenna_per_sector = null,
+        &$antenna_preferred = null,
+        &$max_height = null
+    ) {
+        /**
+         * \d stand for digit [0-9]
+         * (pattern)    surrounding pattern with
+         *             parenthesis will return it in result array index
+         * (<name>pattern) return pattern in array associative with key name
+         * Quantifier
+         * \?           question mark without \ stand for optional existence
+         * *            '*' Asterisk  stand for 0..any occurrence
+         */
+        $ac = "(-?\d_?)*"; // array concatenated with _ integer pattern
+        $pattern = "#.*/Conf=(?<confNb>$ac)"
+            . "/Ids=(?<antennasSetIds>$ac)"
+            . "/Tech=(?<technology>$ac)"
+            . "/Pr=(?<port>$ac)"
+            . "/Bd=(?<band>$ac)"
+            . "/Sec=(?<antenna_per_sector>$ac)"
+            . "/Pfd=(?<antenna_preferred>$ac)"
+            . "/Het/?((?<max_height>$ac))?#";
+        preg_match($pattern, $url, $result);
+        // return $previousUrl;
+        $confNb = $result["confNb"];
+        $antennasSetIds = explode("_", $result["antennasSetIds"]);
+        $technology = explode("_", $result["technology"]);
+        $port = explode("_", $result["port"]);
+        $band = explode("_", $result["band"]);
+        $antenna_per_sector = $result["antenna_per_sector"];
+        $antenna_preferred = $result["antenna_preferred"];
+        $max_height = $result["max_height"];
+        $bandSymbols = XgBands::getSymbols($technology, $band);
+        return $result;
+    }
+
+    /**
+     * Url Generator
+     *
+     * Generate partial url of analyser config beginning from 'Tech/...'
+     *  from given variables in the form
+     *              as web.php route ofAnalyserController@AnalyseConfig
+     *
+     * @param array  $technology         all technology[]
+     * @param array  $port               all ports[]
+     * @param array  $band               all bands[]
+     * @param int    $antenna_per_sector allowed nb of antenna in solution set
+     * @param int    $antenna_preferred  priority to this nb and down
+     * @param int    $max_height         The maximum accepted height antennas
+     *                                   (with error of 10)
+     * @param string $fullUrlTemplate    Full url template independent of id and conf
+     *
+     * @return array Parsed array of
+     */
+    public static function analyseConfigUrlGenerator(
+        $technology,
+        $port,
+        $band,
+        $antenna_per_sector,
+        $antenna_preferred,
+        $max_height,
+        &$fullUrlTemplate = ""
+    ) {
+        $AnalyseConfig_link =   "Tech=" . implode("_", $technology)
+            . "/Pr=" . implode("_", $port)
+            . "/Bd=" . implode("_", $band)
+            . "/Sec=" . $antenna_per_sector
+            . "/Pfd=" . $antenna_preferred
+            . "/Het";
+        if ($max_height != PHP_INT_MAX) {
+            $AnalyseConfig_link .= "/" . $max_height;
+        }
+        $fullUrlTemplate = "/AnalyseConfig/Conf=0/Ids=-1/" . $AnalyseConfig_link;
+        return $AnalyseConfig_link;
+    }
+
 
     /**
      * Return radom part color

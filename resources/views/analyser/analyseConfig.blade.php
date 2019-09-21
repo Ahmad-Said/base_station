@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('content')
 
+@include('antennas.showModal_inc',['offset_table' => 1])
+
 <div class="card text-center">
     <div class="card-header">
         Analyse Configuration
@@ -70,7 +72,13 @@
                     @foreach($AntennaSet as $key => $AntennaItem)
                     <tr bgcolor={{ $AntennaItem->color }} style="color: {{ $AntennaItem->invColor }}">
                         <td>{{ $AntennaItem->label }}</td>
-                        <td>{{ $AntennaItem->model_nb }}</td>
+                        <td>{{ $AntennaItem->model_nb }}
+
+                            <button type="button" class="show-info" data-toggle="modal" data-target="#show_info_modal">
+                                <i class="far fa-question-circle" style="color: {{ $AntennaItem->invColor }}"></i>
+                            </button>
+                            <input type="hidden" id="bands_info" value={{ (json_encode($AntennaItem->Bands)) }}>
+                        </td>
                         <td>{{ $AntennaItem->total_nb_ports }}</td>
                         <td>{{ $AntennaItem->ports_lt_1GH }}</td>
                         <td>{{ $AntennaItem->ports_btw_1_3GH }}</td>

@@ -40,8 +40,9 @@ Route::get('/', 'AnalyserController@index');
 Route::get('/result', 'AnalyserController@showResult');
 Route::get('/edit', 'AnalyserController@editForm');
 Route::get(
-    '/AnalyseConfig/Conf={confNb}/Ids={antennasSetIds}/Tech={technology}/Pr={port}/Bd={band}'
-        . '/Sec={antenna_per_sector}/Pfd={antenna_preferred}/Het={max_height}',
+    '/AnalyseConfig/Conf={confNb}/Ids={antennasSetIds}'
+        . '/Tech={technology}/Pr={port}/Bd={band}'
+        . '/Sec={antenna_per_sector}/Pfd={antenna_preferred}/Het/{max_height?}',
     'AnalyserController@AnalyseConfig'
 );
 Route::get(

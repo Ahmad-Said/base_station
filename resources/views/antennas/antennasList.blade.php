@@ -35,6 +35,8 @@
 
 </script>
 
+@include('antennas.showModal_inc',['offset_table' => 0])
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="card text-center table-responsive" style="width: 60rem;">
@@ -60,7 +62,14 @@
                         <tbody>
                             @foreach($allAntennas as $item)
                             <tr>
-                                <td>{{ $item->model_nb }}</td>
+                                <td>
+                                    {{ $item->model_nb }}
+                                    <button type="button" class="show-info" data-toggle="modal"
+                                        data-target="#show_info_modal">
+                                        <i class="far fa-question-circle"></i>
+                                    </button>
+                                    <input type="hidden" id="bands_info" value={{ (json_encode($item->Bands)) }}>
+                                </td>
                                 <td>
                                     {{ $item->total_nb_ports }}
                                 </td>

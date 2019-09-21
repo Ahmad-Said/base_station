@@ -25,6 +25,7 @@ class CreateCachedResultsTable extends Migration
             $table->integer("combination_nb")->default(0);
             // if changed do require a new cache
             $table->integer("antennas_count");
+            $table->timestamps();
         });
     }
 

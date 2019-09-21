@@ -12,6 +12,15 @@ class AntennasBandsProvider extends Model
     protected $primaryKey = 'bandId';
     protected $connection = 'mysql2';
 
+    /**
+     * Properties:
+     * "id"  useless
+     * "min"
+     * "max"
+     * "color"
+     * "totalPorts"
+     * "antennas_id"
+     */
 
     /**
      * Bands Provider
@@ -33,10 +42,12 @@ class AntennasBandsProvider extends Model
             "color" => "color",
             "antennaId" => "antennas_id",
         ];
-        foreach ($neededColumn as $key => $value) {
-            $stringSelect[] = $key . " as " . $value;
-        }
-        AntennasBands::insert(AntennasBandsProvider::all($stringSelect)->toArray());
+        AntennasBands::insert(
+            AntennasBandsProvider::selectRaw(
+                "bandId as id, min, max, color,
+                 antennaId as antennas_id,  COUNT(*)*2 as totalPorts"
+            )->groupBy("min", "max", "antennaId")->get()->toArray()
+        );
     }
 
     /**

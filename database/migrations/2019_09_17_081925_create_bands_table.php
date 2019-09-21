@@ -18,6 +18,7 @@ class CreateBandsTable extends Migration
             $table->integer("min");
             $table->integer("max");
             $table->string("color");
+            $table->string("totalPorts");
             $table->unsignedBigInteger("antennas_id");
         });
         Schema::table('bands', function ($table) {

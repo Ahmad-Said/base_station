@@ -48,3 +48,8 @@ php artisan route:list | grep 'prof'
 
 or install extension laravel artisan
 
+about old project notes are found in following url:
+https://github.com/Ahmad-Said/agile
+or just download notes:
+https://github.com/Ahmad-Said/agile/blob/master/storage/files/misc/Useful_Notes_AIO.rar
+

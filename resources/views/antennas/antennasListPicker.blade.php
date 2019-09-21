@@ -53,6 +53,10 @@
             }
     });
 
+    $("#trigger-modify").on('click',function(){
+        $("#backBtn").click();
+    });
+
 
 
     // Setup - add a text input to each footer cell
@@ -81,6 +85,21 @@
 } );
 
 </script>
+@include('antennas.showModal_inc',['offset_table' => 1])
+
+{!! Form::open(['action' => ['AnalyserController@editForm'] , 'method' => 'GET', 'enctype' =>
+'multipart/form-data']) !!}
+<input type="hidden" name=technology value="<?php print base64_encode(serialize($technology)) ?>">
+<input type="hidden" name=band value="<?php print base64_encode(serialize($band)) ?>">
+<input type="hidden" name=port value="<?php print base64_encode(serialize($port)) ?>">
+<input type="hidden" name=antenna_per_sector value="<?php echo $antenna_per_sector; ?>">
+<input type="hidden" name=antenna_preferred value="<?php echo $antenna_preferred; ?>">
+<input type="hidden" name=max_height value="<?php echo $max_height; ?>">
+<br>
+<div style="text-align:center">
+    <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input" hidden />
+</div>
+{!! Form::close() !!}
 
 {!! Form::open(['action' => ['AnalyserController@analyseConfigHelper'] , 'method' => 'GET', 'enctype' =>
 'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
@@ -94,6 +113,34 @@
                 <div class="card-header">Check Antennas</div>
                 <div class="card-body">
                     @if(count($allAntennas) > 0)
+                    <h4 class="text-left">
+                        Technologies
+                        <i id="trigger-modify" class="btn btn-info btn-sm">
+                            <i class="fas fa-cog"></i>
+                            Modifie Input
+                        </i>
+                    </h4>
+                    <table id="Tech" class="table table-hover table-responsive-lg table-info table-bordered table-sm"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Technology</th>
+                                <th>Port</th>
+                                <th>Frequency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($technology as $key => $Techitem)
+
+                            <tr>
+                                <td>{{ $technology[$key] }}G</td>
+                                <td>{{ $port[$key] }}</td>
+                                <td>{{ $bandSymbols[$key] }}</td>
+                            </tr>
+
+                            @endforeach
+                        </tbody>
+                    </table>
                     <h3 class="text-left">Selected Antennas</h3>
                     <table id="MySelection"
                         class="table table-hover table-responsive-lg table-primary table-bordered table-sm"
@@ -151,7 +198,13 @@
                                     <span id="next_checkbox"></span>
                                 </td>
                                 @endif
-                                <td>{{ $item->model_nb }}</td>
+                                <td>{{ $item->model_nb }}
+                                    <button type="button" class="show-info" data-toggle="modal"
+                                        data-target="#show_info_modal">
+                                        <i class="far fa-question-circle"></i>
+                                    </button>
+                                    <input type="hidden" id="bands_info" value={{ (json_encode($item->Bands)) }}>
+                                </td>
                                 <td>
                                     {{ $item->total_nb_ports }}
                                 </td>

@@ -33,4 +33,26 @@ class XgBands extends Model
         ];
         return $bands;
     }
+
+    /**
+     * Return all bands and their shortcuts
+     *
+     * @param array $technology technology array
+     * @param array $band       band array
+     *
+     * @return array An associative array of bands ex: index 2 => 2g bands
+     */
+    public static function getSymbols(array $technology, array $band)
+    {
+        $bandSymbols = array();
+        $allXgBand = XgBands::getBands();
+        foreach ($technology as $key => $tech) {
+            foreach ($allXgBand[$tech] as $itemXg) {
+                if ($itemXg->bands == $band[$key]) {
+                    $bandSymbols[] = $itemXg->symbol;
+                }
+            }
+        }
+        return $bandSymbols;
+    }
 }

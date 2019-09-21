@@ -117,13 +117,18 @@ class Antennas extends Model
     {
         // https://laravel.com/docs/5.8/eloquent-relationships#one-to-many
         // https://stackoverflow.com/questions/34571957/laravel-hasmany-method-not-working
+
         // group by equivalent using mysql: SELECT *,count(*) as total
         // FROM `bands` WHERE 1 GROUP BY `min`,`max`,`antennaId`
         // each row of bands table represent the information of 2 ports
         // in corresponding antenna
-        return $this->hasMany('App\AntennasBands', 'antennas_id')
-            ->select('min', 'max', DB::raw('count(*)*2 as totalPorts'))
-            ->groupBy('min', 'max', 'id')
-            ->get();
+        // old approach if copied the same table is copied, but now we can
+        // have our own table well defined having totalPorts already in it
+        // return $this->hasMany('App\AntennasBands', 'antennas_id')
+        //     ->select('min', 'max', DB::raw('count(*)*2 as totalPorts'))
+        //     ->groupBy('min', 'max', 'id')
+        //     ->get();
+
+        return $this->hasMany('App\AntennasBands', 'antennas_id')->get();
     }
 }

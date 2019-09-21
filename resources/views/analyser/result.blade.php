@@ -70,6 +70,33 @@
 </script>
 @endif
 
+
+<script>
+    // https://stackoverflow.com/questions/17594413/javascript-or-jquery-browser-back-button-click-detector
+        // this to make on back button browser clicked to make it like edit recent form
+        jQuery(document).ready(function($) {
+
+            $(document).on('click', '.load-link',function(e){
+                if($(this).hasClass("one-time")){
+                    $(this).removeClass("one-time");
+                    $(this).html('Loading <i class="fas fa-cog fa-spin"></i> <i class="fas fa-truck-loading"></i>');
+                }else{
+                    // https://stackoverflow.com/questions/970388/jquery-disable-a-link
+                    e.preventDefault();
+                }
+            });
+
+            if (window.history && window.history.pushState) {
+
+            window.history.pushState('forward', null, '');
+
+            $(window).on('popstate', function() {
+                $('#backBtn').click();
+            });
+            }
+    });
+</script>
+
 <script>
     $(document).ready(function () {
             $('#dtBasicExample').DataTable();
@@ -84,18 +111,6 @@
         });
 
 </script>
-<?php
-$AnalyseConfig_link =   "Tech=".implode("_",$technology)
-                       ."/Pr=".implode("_",$port)
-                       ."/Bd=".implode("_",$band)
-                       ."/Sec=".$antenna_per_sector
-                       ."/Pfd=".$antenna_preferred
-                       ."/Het=".$max_height;
-$AnalyseConfig_link_Example = "/AnalyseConfig/Conf=0/Ids=-1/".$AnalyseConfig_link;
-?>
-
-
-
 
 <div class="card text-center table-responsive" style="border-width:2px;">
     <div class="card-header" style="color:#fc0703; background-color:#d6d7d4">
@@ -118,14 +133,15 @@ $AnalyseConfig_link_Example = "/AnalyseConfig/Conf=0/Ids=-1/".$AnalyseConfig_lin
             '>
                 @endif
                 <?php
-                if($isCacheAllowed)
-            for ($i=1; $i <= $AntennaSolution->lastPage(); $i++) {
-                echo "<option value=".$i;
-                if($i == $AntennaSolution->currentPage()){
-                    echo " selected";
+                if($isCacheAllowed){
+                    for ($i=1; $i <= $AntennaSolution->lastPage(); $i++) {
+                        echo "<option value=".$i;
+                        if($i == $AntennaSolution->currentPage()){
+                            echo " selected";
+                        }
+                        echo ">".$i."</option>";
+                    }
                 }
-                echo ">".$i."</option>";
-            }
             ?>
                 @if ($isCacheAllowed)
 
@@ -149,9 +165,43 @@ $AnalyseConfig_link_Example = "/AnalyseConfig/Conf=0/Ids=-1/".$AnalyseConfig_lin
             Pagination</a>
         {!! $AntennaSolution->links() !!}
         @endif
+
+
+        @endif
+
+        <div class="float-left">
+            {!! Form::open(['action' => ['AnalyserController@editForm'] , 'method' => 'GET', 'enctype' =>
+            'multipart/form-data']) !!}
+            <input type="hidden" name=technology value="<?php print base64_encode(serialize($technology)) ?>">
+            <input type="hidden" name=band value="<?php print base64_encode(serialize($band)) ?>">
+            <input type="hidden" name=port value="<?php print base64_encode(serialize($port)) ?>">
+            <input type="hidden" name=antenna_per_sector value="<?php echo $antenna_per_sector; ?>">
+            <input type="hidden" name=antenna_preferred value="<?php echo $antenna_preferred; ?>">
+            <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
+            <button type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input">
+                <i class="fas fa-backward"></i>
+                Modifie Input
+                <i class="fas fa-cog"></i>
+            </button>
+            {!! Form::close() !!}
+        </div>
+        <div class="float-right">
+            {!! Form::open(['action' => ['AntennasController@pickAntennas'], 'method' => 'GET', 'enctype' =>
+            'multipart/form-data']) !!}
+            <input type="hidden" name=antennasSetIds value="">
+            <input type="hidden" name="url_full_get" value={{ $AnalyseConfig_link_Example }}>
+            <button type="submit" class="btn btn-primary" value="Test against Custom Antennas">
+                <i class="far fa-angry"></i>
+                Test against Custom Antennas
+                <i class="fas fa-forward"></i>
+            </button>
+            {!! Form::close() !!}
+        </div>
         <br>
         <br>
-        {{-- @endif --}}
+        @if (count($AntennaSolution) >10)
+
+
 
         <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
             cellspacing="0" width="100%">
@@ -274,55 +324,4 @@ $AnalyseConfig_link_Example = "/AnalyseConfig/Conf=0/Ids=-1/".$AnalyseConfig_lin
     </div>
 </div>
 
-{!! Form::open(['action' => ['AntennasController@pickAntennas'], 'method' => 'GET', 'enctype' =>
-'multipart/form-data']) !!}
-<input type="hidden" name=antennasSetIds value="">
-<input type="hidden" name="url_full_get" value={{ $AnalyseConfig_link_Example }}>
-<div style="text-align:center">
-    <input type="submit" class="btn btn-primary" value="Test against Custom Antennas" />
-</div>
-{!! Form::close() !!}
-
-{!! Form::open(['action' => ['AnalyserController@editForm'] , 'method' => 'GET', 'enctype' =>
-'multipart/form-data']) !!}
-<input type="hidden" name=technology value="<?php print base64_encode(serialize($technology)) ?>">
-<input type="hidden" name=band value="<?php print base64_encode(serialize($band)) ?>">
-<input type="hidden" name=port value="<?php print base64_encode(serialize($port)) ?>">
-<input type="hidden" name=antenna_per_sector value="<?php echo $antenna_per_sector; ?>">
-<input type="hidden" name=antenna_preferred value="<?php echo $antenna_preferred; ?>">
-<input type="hidden" name=max_height value="<?php echo $max_height; ?>">
-<br>
-<div style="text-align:center">
-    <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input" />
-</div>
-<br>
-<br>
-</div>
-{!! Form::close() !!}
-
-<script>
-    // https://stackoverflow.com/questions/17594413/javascript-or-jquery-browser-back-button-click-detector
-    // this to make on back button browser clicked to make it like edit recent form
-    jQuery(document).ready(function($) {
-
-        $(document).on('click', '.load-link',function(e){
-            if($(this).hasClass("one-time")){
-                $(this).removeClass("one-time");
-                $(this).html('Loading <i class="fas fa-cog fa-spin"></i> <i class="fas fa-truck-loading"></i>');
-            }else{
-                // https://stackoverflow.com/questions/970388/jquery-disable-a-link
-                e.preventDefault();
-            }
-        });
-
-        if (window.history && window.history.pushState) {
-
-        window.history.pushState('forward', null, '');
-
-        $(window).on('popstate', function() {
-            $('#backBtn').click();
-        });
-        }
-});
-</script>
 @endsection
