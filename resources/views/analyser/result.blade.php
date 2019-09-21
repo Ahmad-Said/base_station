@@ -84,6 +84,15 @@
         });
 
 </script>
+<?php
+$AnalyseConfig_link =   "Tech=".implode("_",$technology)
+                       ."/Pr=".implode("_",$port)
+                       ."/Bd=".implode("_",$band)
+                       ."/Sec=".$antenna_per_sector
+                       ."/Pfd=".$antenna_preferred
+                       ."/Het=".$max_height;
+$AnalyseConfig_link_Example = "/AnalyseConfig/Conf=0/Ids=-1/".$AnalyseConfig_link;
+?>
 
 
 
@@ -149,7 +158,7 @@
             <thead>
                 <tr>
                     <th>Configuration #</th>
-                    <th># Antennas Par Sector</th>
+                    <th># Antennas Per Sector</th>
                     <th>Antenna Model Number</th>
                     <th>Total Ports #</th>
                     <th>Low Band</th>
@@ -175,9 +184,12 @@
                         $secondQuantity = 0;
                         $totalRow= count($setSolution);
                         $totalNbAntennas= count($setSolution);
+                        $idConcat = "";
                         foreach ($setSolution as $key => $value) {
                             $totalPrice+= $value->msp_usd;
+                            $idConcat.= $value->id."_";
                         }
+                        $idConcat= substr($idConcat, 0, -1);
                             $firstQuantity = 1;
                             if(count($setSolution) == 2 && $setSolution[0]->id == $setSolution[1]->id )
                             {
@@ -207,7 +219,15 @@
                                 }
                             }
                     ?>
-                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $c++ }}</td>
+                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $c++ }}
+                        <a name="AnalyseConfig"
+                            href="/AnalyseConfig/Conf={{ $c-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
+                            target="_blank">
+                            <i class="far fa-question-circle"></i>
+                        </a>
+
+
+                    </td>
                     <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
                     <td>{{ $setSolution[0]->model_nb }}</td>
                     <td>{{ $setSolution[0]->total_nb_ports }}</td>
@@ -261,6 +281,15 @@
         @endif
     </div>
 </div>
+
+{!! Form::open(['action' => ['AntennasController@pickAntennas'], 'method' => 'GET', 'enctype' =>
+'multipart/form-data']) !!}
+<input type="hidden" name=antennasSetIds value="">
+<input type="hidden" name="url_full_get" value={{ $AnalyseConfig_link_Example }}>
+<div style="text-align:center">
+    <input type="submit" class="btn btn-primary" value="Test against Custom Antennas" />
+</div>
+{!! Form::close() !!}
 
 {!! Form::open(['action' => ['AnalyserController@editForm'] , 'method' => 'GET', 'enctype' =>
 'multipart/form-data']) !!}

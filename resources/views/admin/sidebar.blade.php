@@ -118,6 +118,11 @@
                 &nbsp Configurator</a>
         </li>
         <li class="nav-item border-bottom border-top">
+            <a class="list-group-item list-group-item-action border-0 bg-light" href="/antennasList">
+                <i class="fab fab fa-buysellads"></i>
+                &nbsp Antennas List</a>
+        </li>
+        <li class="nav-item border-bottom border-top">
             <a class="list-group-item list-group-item-action border-0 bg-light" style="border-color: gray;"
                 href="/home">
                 <i class="fas fas fa-users"></i>

@@ -27,6 +27,11 @@ Route::resource('profile', 'ProfileController');
 // Post Controller
 Route::resource('posts', 'PostsController');
 
+// Antennas Controller
+Route::resource('antennas', 'AntennasController');
+Route::get('/antennasList', 'AntennasController@index');
+Route::get('/antennasList/pick', 'AntennasController@pickAntennas');
+
 // Band Controller
 Route::resource('bands', 'XgBandsController');
 
@@ -34,12 +39,21 @@ Route::resource('bands', 'XgBandsController');
 Route::get('/', 'AnalyserController@index');
 Route::get('/result', 'AnalyserController@showResult');
 Route::get('/edit', 'AnalyserController@editForm');
+Route::get(
+    '/AnalyseConfig/Conf={confNb}/Ids={antennasSetIds}/Tech={technology}/Pr={port}/Bd={band}'
+        . '/Sec={antenna_per_sector}/Pfd={antenna_preferred}/Het={max_height}',
+    'AnalyserController@AnalyseConfig'
+);
+Route::get(
+    '/AnalyseConfig/Pick/',
+    'AnalyserController@analyseConfigHelper'
+);
 
 // SettingWebLara Controller
 Route::get('/setting', 'SettingWebLaraController@index')->name("settingWeb");
 Route::post('/setting', 'SettingWebLaraController@store')->name("settingWebStore");
-Route::put(
-    '/setting',
+Route::get(
+    '/provideAntennasData',
     'SettingWebLaraController@triggerUpdateProvidedData'
 )->name("settingTriggerUpdate");
 Route::delete('/setting', 'SettingWebLaraController@clearCachedResult');

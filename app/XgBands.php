@@ -8,6 +8,13 @@ class XgBands extends Model
 {
     //
     public $timestamps = false;
+    /**
+     * Properties:
+     * "id"
+     * "xg"
+     * "bands"
+     * "symbol"
+     */
 
     /**
      * Return all bands and their shortcuts
@@ -16,11 +23,14 @@ class XgBands extends Model
      */
     public static function getBands()
     {
+        $band0 = XgBands::where('xg', 0)->get();
         $band2 = XgBands::where('xg', 2)->get();
         $band3 = XgBands::where('xg', 3)->get();
         $band4 = XgBands::where('xg', 4)->get();
         $band5 = XgBands::where('xg', 5)->get();
-        $bands = ["2" => $band2, "3" => $band3, "4" => $band4, "5" => $band5];
+        $bands = [
+            "0" => $band0, "2" => $band2, "3" => $band3, "4" => $band4, "5" => $band5
+        ];
         return $bands;
     }
 }

@@ -45,7 +45,8 @@ class XgBandsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request xg | symbol | band
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -55,8 +56,7 @@ class XgBandsController extends Controller
         $band->xg = $request->input("xg");
         $band->symbol = $request->input("symbol");
         $band->bands = $request->input("band");
-        // $band->bands=555;
-        // $band->symbol=test555;
+
         $band->save();
         return redirect('/bands')->with('success', 'Band Added');
     }
@@ -64,7 +64,8 @@ class XgBandsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id The id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -75,7 +76,8 @@ class XgBandsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id The id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -86,16 +88,25 @@ class XgBandsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request xg | symbol | band
+     * @param int                      $id      The id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         //
+        $newBand = $request->input("band");
+        $newSymbol = $request->input("symbol");
+
         $band = XgBands::find($id);
-        $band->symbol = $request->input("symbol");
-        $band->bands = $request->input("band");
+        $oldBand = $band->bands;
+
+        $band->bands = $newBand;
+
+        $newSymbol = preg_replace("#$oldBand#", "$newBand", $newSymbol);
+
+        $band->symbol = $newSymbol;
         $band->update();
         return redirect('/bands')->with('success', 'Band Updated');
     }
@@ -103,7 +114,8 @@ class XgBandsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id The id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -189,17 +189,16 @@
 
         <td>
 
-            {!! Form::open(['action'=>['SettingWebLaraController@triggerUpdateProvidedData'],'method' =>'PUT']) !!}
-
             Last data updated
         </td>
         <td>
             {{ $allSetting["LAST_ANTENNA_DATA_PROVIDED"]->updated_at }}
         </td>
         <td>
-            {{ Form::submit('Trigger update',['class'=>'bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg']) }}
-
-            {!! Form::close() !!}
+            <a href="/provideAntennasData"
+                class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
+                Trigger update
+            </a>
         </td>
     </tr>
 

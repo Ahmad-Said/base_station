@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use function Opis\Closure\serialize;
 use function Opis\Closure\unserialize;
+use Illuminate\Support\Facades\Redirect;
 use PHPUnit\Framework\Constraint\IsFalse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -88,6 +89,35 @@ class AnalyserController extends Controller
         if (!isset($antenna_preferred)) {
             $antenna_preferred = 1;
         }
+
+        $doGenerateLink = $request->input("generateLinkOnly");
+        if (isset($doGenerateLink)) {
+            if ($max_height == PHP_INT_MAX) {
+                $max_height = "";
+            }
+            $success = "Link generated";
+            $agent = new Agent();
+            if (!$agent->isMobile()) {
+                $success .= " and copied to clipboard. Use <b>CTRL + V</b> <br>
+                &nbsp &nbsp to share it anywhere you like.";
+            } else {
+                $success .= " successfully.";
+            }
+            $success .= "<br> <a href = "
+                . url()->full() . "><span class='fas fa-link'></span> Test Link</a>";
+            // This return view with predefined column and stuff
+            return view('welcome')
+                ->with("bands", XgBands::getBands())
+                ->with("antenna_per_sector", $antenna_per_sector)
+                ->with("antenna_preferred", $antenna_preferred)
+                ->with("max_height", $max_height)
+                ->with("technology", $technology)
+                ->with("band", $band)
+                ->with("port", $port)
+                ->with("copyLinkToClip", true)
+                ->with("success", $success);
+        }
+
         // $request->session()->forget("load");
         // return var_dump($request->session()->get("load"));
         if (!isset($load_more)) {
@@ -141,6 +171,8 @@ class AnalyserController extends Controller
 
         $AntennaSolution = array();
         $AntennaSolutionIDS = array();
+        $totalTechNbPorts = array_sum($port);
+        $totalNbPorts = $totalTechNbPorts;
         $msg = "";
         if (
             $isCacheAllowed
@@ -176,12 +208,12 @@ class AnalyserController extends Controller
                 $saveCachedResult = $oldCachedResult;
             }
             $msg = "";
-
+            $beginRowFrom = $saveCachedResult->combination_nb;
             // trying to compute solution such all ports in all antennas
-            // are filled with no waste
-            $totalNbPorts = array_sum($port);
+            // are filled with no waste i.e. $totalNbPorts = $totalTechNbPorts;
             $AntennaSolution = AnalyserController::_solutionCalculator(
                 $totalNbPorts,
+                $totalTechNbPorts,
                 $port,
                 $band,
                 $max_height,
@@ -199,9 +231,13 @@ class AnalyserController extends Controller
                 count($AntennaSolution) == 0
                 && $saveCachedResult->sum_ports != $totalNbPorts
             ) {
+                // trying to add 2 free ports
                 $totalNbPorts += 2;
+                // resetting combination number to same as previous begin
+                $saveCachedResult->combination_nb = $beginRowFrom;
                 $AntennaSolution = AnalyserController::_solutionCalculator(
                     $totalNbPorts,
+                    $totalTechNbPorts,
                     $port,
                     $band,
                     $max_height,
@@ -211,9 +247,7 @@ class AnalyserController extends Controller
                     $AntennaSolutionIDS,
                     $allAntennasBandsMap
                 );
-                if (count($AntennaSolution) > 0) {
-                    $msg .= "Added 2 Free ports to get a solution !";
-                } else {
+                if (count($AntennaSolution) == 0) {
                     $msg .= " Also tried to add 2 Free ports with no chance !";
                 }
             }
@@ -282,6 +316,14 @@ class AnalyserController extends Controller
         // }
         // return $AntennaSolution;
 
+        // computing total ports of antenna solution
+        if (count($AntennaSolution) > 0) {
+            $totalNbPorts = $AntennaSolution[0][0]->total_nb_ports;
+            if ($totalNbPorts > $totalTechNbPorts) {
+                $msg .= "<br>Added 2 Free ports to get a solution !";
+            }
+        }
+
         if ($isCacheAllowed) {
 
 
@@ -323,7 +365,7 @@ class AnalyserController extends Controller
             . DebuggerHelper::pingTime("result") . " seconds.";
 
 
-
+        // return DebuggerHelper::getReport("result");
         // return $AntennaSolution->lastPage();
         return view("analyser.result")
             ->with("AntennaSolution", $AntennaSolution)
@@ -346,6 +388,7 @@ class AnalyserController extends Controller
      * in solution set, it return (multi-dimensional array) of antennas
      *
      * @param int          $totalNbPorts        The sum of ports in accepted solution
+     * @param int          $totalTechNbPorts    The sum of ports of all technologies
      * @param array        $port                Input Form: all ports
      * @param array        $band                Input Form: all bands
      * @param int          $max_height          The maximum accepted height antennas
@@ -360,6 +403,7 @@ class AnalyserController extends Controller
      */
     private static function _solutionCalculator(
         $totalNbPorts,
+        $totalTechNbPorts,
         $port,
         $band,
         $max_height,
@@ -430,7 +474,7 @@ class AnalyserController extends Controller
                     $antennaSet,
                     $port,
                     $band,
-                    $totalNbPorts
+                    $totalTechNbPorts
                 )) {
                     $AntennaSolution[] = $antennaSet;
                 }
@@ -660,6 +704,10 @@ class AnalyserController extends Controller
             DebuggerHelper::pingReport("query combination"),
             "result"
         );
+        DebuggerHelper::addMsg(
+            "query is " . $query . "  and binding parameter are " . implode(",", $queryBinding),
+            "result"
+        );
         // return DebuggerHelper::pingReport() . " count is " . count($allAntennas);
         // return $query;
         // return 750;
@@ -748,6 +796,7 @@ class AnalyserController extends Controller
     {
         // about passing array as string value in get method
         // https://www.pontikis.net/tip/?id=11
+        // return $request->all();
         $technology = unserialize(base64_decode($request->input("technology")));
         $port = unserialize(base64_decode($request->input("port")));
         $band = unserialize(base64_decode($request->input("band")));
@@ -767,5 +816,287 @@ class AnalyserController extends Controller
             ->with("technology", $technology)
             ->with("band", $band)
             ->with("port", $port);
+    }
+
+    /**
+     * Receive form information and id of antennas to analyse and generate chart
+     *
+     * @param Request $request            Empty
+     * @param int     $confNb             The configuration number
+     * @param string  $antennasSetIds     all technology imploded with '_'
+     * @param string  $technology         all technology imploded with '_'
+     * @param string  $port               all ports imploded with '_'
+     * @param string  $band               all bands imploded with '_'
+     * @param int     $antenna_per_sector allowed nb of antenna in solution set
+     * @param int     $antenna_preferred  priority to this nb and down
+     * @param int     $max_height         The maximum accepted height antennas
+     *                                    (with error of 10)
+     *
+     * @return View The result view
+     */
+    public function analyseConfig(
+        Request $request,
+        $confNb,
+        $antennasSetIds,
+        $technology,
+        $port,
+        $band,
+        $antenna_per_sector,
+        $antenna_preferred,
+        $max_height
+    ) {
+        // about passing array as string value in get method
+        // https://www.pontikis.net/tip/?id=11
+        // return $request->all();
+        $antennasSetIds = explode("_", $antennasSetIds);
+        $technology = explode("_", $technology);
+        $port =  explode("_", $port);
+        $band = explode("_", $band);
+        $AntennaSet = array();
+        $totalNbPorts = array_sum($port);
+        $i = 0;
+        $colors = array("FDEDEC", "F5B7B1", "DC3545");
+        $j = 1;
+        if (count($antennasSetIds) == 0) {
+            return redirect()->back()
+                ->with("error", "Must Check at least one antennas.");
+        }
+        if (count($antennasSetIds) > 0 && $antennasSetIds[0] == -1) {
+            return redirect()->back()
+                ->with("error", "Something went wrong, refresh and try again");
+        }
+        foreach ($antennasSetIds as $key => $id) {
+            $curLabel = "A" . $j++;
+            $AntennaSet[$curLabel] = Antennas::find($id);
+            $AntennaSet[$curLabel]["label"] = $curLabel;
+            if (count($antennasSetIds) > 3) {
+                $curColor = AnalyserController::_randomColor();
+            } else {
+                $curColor = $colors[$i++];
+            }
+            $invertColor = AnalyserController::_colorInverse($curColor);
+            $AntennaSet[$curLabel]["color"] = '#' . $curColor;
+            $AntennaSet[$curLabel]["invColor"] = '#' . $invertColor;
+        }
+        // return $AntennaSet;
+        $isValidSet = AnalyserController::_isValidSetAntenna(
+            $AntennaSet,
+            $port,
+            $band,
+            $totalNbPorts
+        );
+        // just to prettily look
+        if ($max_height == PHP_INT_MAX) {
+            $max_height = "";
+        }
+
+        // Do distribute technology on antennas while
+        // conserving where each technology belong
+
+        // allBands will contain all band with additional variable parentAntennaID
+        // pointing to which antenna it belong
+        $allBands = array();
+        // antennaLabels associative array from id to label for display
+        $antennaLabels = array();
+        $antennaLabelsColors = array();
+        $techToAntenna = array();
+
+        foreach ($AntennaSet as $key => $antenna) {
+            foreach ($antenna->Bands as $key2 => $bandItem) {
+                $bandItem["parentAntennaLabel"] = $antenna->label;
+                $bandItem["parentAntennaID"] = $antenna->id;
+                $allBands[] = $bandItem;
+            }
+        }
+        // return $AntennaSet;
+        // return $allBands;
+        usort(
+            $allBands,
+            function ($a, $b) {
+                return $b['totalPorts'] <=> $a['totalPorts'];
+            }
+        );
+        // return $allBands;
+        foreach ($port as $key => $valuePort) {
+            $found = false;
+            // foreach ($allBands as $key2  => $value) {
+            // foreach ($allBands as $key3 => $bandItem) {
+            for ($i = 0; $i < count($allBands); $i++) {
+                // code...
+                $bandItem = &$allBands[$i];
+
+                if (
+                    $band[$key] >= $bandItem['min']
+                    && $band[$key] <= $bandItem['max']
+                    && $bandItem['totalPorts'] >= $valuePort
+                ) {
+                    $bandItem['totalPorts'] -= $valuePort;
+                    $totalNbPorts -= $valuePort;
+
+                    $techToAntenna[$key]["id"] = $bandItem["parentAntennaID"];
+                    $techToAntenna[$key]["label"] = $bandItem["parentAntennaLabel"];
+                    $techToAntenna[$key]["color"]
+                        = $AntennaSet[$techToAntenna[$key]["label"]]["color"];
+
+                    $techToAntenna[$key]["invColor"]
+                        = $AntennaSet[$techToAntenna[$key]["label"]]["invColor"];
+                    if ($bandItem['totalPorts'] == 0) {
+                        unset($allBands[$i]);
+                    }
+                    $found = true;
+                    break;
+                } else {
+                    $techToAntenna[$key]["id"] = -1;
+                    $techToAntenna[$key]["label"] = "No space available";
+                    $techToAntenna[$key]["color"]
+                        = "ccffcc";
+                    $techToAntenna[$key]["invColor"]
+                        = "ffffff";
+                }
+            }
+        }
+        $unusedWastePorts = 0;
+        foreach ($allBands as $key => $value) {
+            $unusedWastePorts += $value["totalPorts"];
+        }
+        // Sorting technologies based on antennas they belong
+        // sorting array to unify request
+        foreach ($technology as $key => $value) {
+            $systemG[] = [
+                (int) $technology[$key],
+                (int) $port[$key], (int) $band[$key], $techToAntenna[$key]
+            ];
+        }
+        usort(
+            $systemG,
+            function ($a, $b) {
+                return $a[3]["label"] <=> $b[3]["label"];
+            }
+        );
+        $colSystemG = collect($systemG);
+        $technology = $colSystemG->pluck(0)->toArray();
+        $port = $colSystemG->pluck(1)->toArray();
+        $band = $colSystemG->pluck(2)->toArray();
+        $techToAntenna = $colSystemG->pluck(3)->toArray();
+
+        $bandSymbols = array();
+        $allXgBand = XgBands::getBands();
+        foreach ($technology as $key => $tech) {
+            foreach ($allXgBand[$tech] as $itemXg) {
+                if ($itemXg->bands == $band[$key]) {
+                    $bandSymbols[] = $itemXg->symbol;
+                }
+            }
+        }
+
+        // This return view with predefined column and stuff
+        return view('analyser.analyseConfig')
+            ->with("confNb", $confNb)
+            ->with("antenna_per_sector", $antenna_per_sector)
+            ->with("antenna_preferred", $antenna_preferred)
+            ->with("max_height", $max_height)
+            ->with("technology", $technology)
+            ->with("techToAntenna", $techToAntenna)
+            ->with("band", $band)
+            ->with("bandSymbols", $bandSymbols)
+            ->with("port", $port)
+            ->with("unusedWastePorts", $unusedWastePorts)
+            ->with("antennaLabels", $antennaLabels)
+            ->with("AntennaSet", $AntennaSet);
+    }
+
+    /**
+     * Receive Full url of analyser config with new set of antennas ids
+     *
+     * @param Request $request antennasSetIds[] | quantity[]
+     *                         | previousUrl | previousSetIDS
+     *
+     * @return Redirect redirect url to analyseConfig
+     */
+    public function analyseConfigHelper(Request $request)
+    {
+        $antennasSetIds = $request->input("antennasSetIds");
+        $quantity = $request->input("quantity");
+        $previousUrl = $request->input("previousUrl");
+        $previousSetIDS = $request->input("previousSetIDS");
+        if (
+            !isset($antennasSetIds) || !isset($quantity)
+            || count($quantity) != count($antennasSetIds)
+        ) {
+            return redirect()->back()
+                ->with(
+                    "error",
+                    "Something went wrong," .
+                        " At least one antenna Must be selected."
+                );
+        }
+        $newAntennasSetIds = array();
+        foreach ($antennasSetIds as $key => $value) {
+            for ($i = 0; $i < $quantity[$key]; $i++) {
+                $newAntennasSetIds[] = $value;
+            }
+        }
+
+        $pattern = "#Ids=(-?[[:digit:]]*_?)*#";
+        $replacement = "Ids=" . implode("_", $newAntennasSetIds);
+        $newUrl = preg_replace($pattern, $replacement, $previousUrl, 1);
+        return redirect($newUrl);
+    }
+
+    /**
+     * Return radom part color
+     *
+     * Https://stackoverflow.com/questions/5614530/generating-a-random-hex-color-code-with-php
+     *
+     * @return string HexPart color
+     */
+    private static function _randomColorPart()
+    {
+        return str_pad(dechex(mt_rand(0, 255)), 2, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Return radom part color
+     *
+     * @return string Hex color
+     */
+    private static function _randomColor()
+    {
+        return AnalyserController::_randomColorPart()
+            . AnalyserController::_randomColorPart()
+            . AnalyserController::_randomColorPart();
+    }
+
+    /**
+     * Return the inverted color
+     *
+     * Https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023
+     *
+     * @param string $color Hex color
+     *
+     * @return string Hex color
+     */
+    private static function _colorInverse($color)
+    {
+        $color = str_replace('#', '', $color);
+        if (strlen($color) != 6) {
+            return '000000';
+        }
+        $rgb = '';
+        $rgbDec = array();
+        for ($x = 0; $x < 3; $x++) {
+            $rgbDec[] = hexdec(substr($color, (2 * $x), 2));
+            $c = 255 - hexdec(substr($color, (2 * $x), 2));
+            $c = ($c < 0) ? 0 : dechex($c);
+            $rgb .= (strlen($c) < 2) ? '0' . $c : $c;
+        }
+        $red = $rgbDec[0];
+        $green = $rgbDec[1];
+        $blue = $rgbDec[2];
+        if (($red * 0.299 + $green * 0.587 + $blue * 0.114) > 186) {
+            return '000000';
+        } else {
+            return 'ffffff';
+        }
     }
 }

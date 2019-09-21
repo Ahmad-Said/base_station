@@ -40,20 +40,51 @@
         var stgf5=generategf(gf5);
 
 </script>
+<?php
+$optionsSelect ="";
+for ($i=2; $i <=5 ; $i++) {
+    if(count($bands[$i])>0)
+         $optionsSelect.="<option value=\"$i\">".$i."G</option>";
+}
 
+?>
+
+{{-- https://stackoverflow.com/questions/15176098/cant-span-form-over-multiple-divs --}}
+{!! Form::open(['action' => ['AnalyserController@showResult'] , 'method' => 'GET', 'enctype' =>
+'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
 <div class="container">
     <div class="row justify-content-center">
         {{--
-        <div class="col-xs-12"> --}}
+<div class="col-xs-12"> --}}
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <h4 style="text-align:center">Enter Item Details</h4>
+                    <h4 style="text-align:center">
+                        Enter Item Details
+                        <button type="submit" class="" id="generate-link-submit" name="generateLinkOnly" value="exist">
+                            <span class="fas fa-link"></span>
+                            <i class="fas fa-spinner fa-spin" id='myspinner2' style="display: none"></i>
+                            <i id="submit-text-generate-link"> </i>
+                        </button>
+                        @isset($copyLinkToClip)
+                        <input id="urlofcurentpage" type="text" class="" value={{ url()->full() }}>
+                        <script>
+                            /* Get the text field */
+                                var copyText = document.getElementById("urlofcurentpage");
+
+                                /* Select the text field */
+                                copyText.select();
+                                copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+                                /* Copy the text inside the text field */
+                                document.execCommand("copy");
+                                copyText.classList.add("hidden");
+                        </script>
+                        @endif
+                    </h4>
                 </div>
                 <div class="card-body">
 
-                    {!! Form::open(['action' => ['AnalyserController@showResult'] , 'method' => 'GET', 'enctype' =>
-                    'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
                     <br>
                     <div class="form-group row">
                         <label for="number_system"
@@ -119,7 +150,7 @@
                                 if (!isset($technology)) {
                                     $html = '';
                                     $html .= '<tr>';
-                                    $html .= '<td><select name="technology[]" id="technology" class="form-control dynamic" required="required"><option value="" disabled selected>Technology</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>';
+                                    $html .= '<td><select name="technology[]" id="technology" class="form-control dynamic" required="required"><option value="" disabled selected>Technology</option>'.$optionsSelect.'</select></td>';
                                     $html .= '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
                                     $html .= '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
                                     $html .= '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove float-right"><span class="fas fa-minus-circle"></span></button></td></tr>';
@@ -128,14 +159,13 @@
                             ?>
                         </table>
                         <div style="text-align:center">
-                            <button type="submit" class="btn btn-primary" id = "prevent-multiple-submit" />
-                                <i class="fas fa-spinner fa-spin" id='myspinner' style="display: none"></i>
-                                <i id= "submit-text"> Show Results </i>
+                            <button type="submit" class="btn btn-primary" id="show-result-submit" />
+                            <i class="fas fa-spinner fa-spin" id='myspinner' style="display: none"></i>
+                            <i id="submit-text"> Show Results </i>
 
                             </button>
                         </div>
                     </div>
-                    {!! Form::close() !!}
 
                     <br>
 
@@ -144,11 +174,24 @@
 
 
                             // https://www.youtube.com/watch?time_continue=187&v=gJRv2ahMzEg
+                            // https://stackoverflow.com/questions/5721724/jquery-how-to-get-which-button-was-clicked-upon-form-submission
                             $('.form-prevent-multiple-submits').on('submit',function(){
-                                $('#prevent-multiple-submit').attr('disabled','true');
-                                $('#submit-text').html('Computing');
-                                $('#myspinner').show();
+                                $('#show-result-submit').attr('disabled','true');
+                                var button = $("button[type=submit][clicked=true]");
+                                if(button.attr('id') == 'show-result-submit'){
+                                        $('#submit-text').html('Computing');
+                                        $('#myspinner').show();
+                                }else{
+                                    $('#submit-text-generate-link').html('Generating Link');
+                                    $('#myspinner2').show();
+                                };
                             });
+                            $("#generate-link-submit ,#show-result-submit").click(function() {
+                                $('button[type="submit"]', $(this).parents("form")).removeAttr("clicked");
+                                $(this).attr("clicked", "true");
+                            });
+
+
                        // define a function see
                        // https://stackoverflow.com/questions/907634/is-this-how-you-define-a-function-in-jquery
                         var add_to_table=function(){
@@ -162,7 +205,7 @@
                             }
                             var html = '';
                             html += '<tr>';
-                                html += '<td><select name="technology[]" id="technology" class="form-control dynamic" required=required><option value="" disabled selected>Technology</option><option value="2">2G</option><option value="3">3G</option><option value="4">4G</option><option value="5">5G</option></select></td>';
+                                html += '<td><select name="technology[]" id="technology" class="form-control dynamic" required=required><option value="" disabled selected>Technology</option><?php echo $optionsSelect;?></select></td>';
                                 html += '<td><select name="port[]" id="port" class="form-control ports" disabled><option value="" disabled selected>Port Number</option></select></td>';
                                 html += '<td><select name="band[]" id="band" class="form-control bands" disabled><option value="" disabled selected>Frequency</option></select></td>';
                                 html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fas fa-minus-circle"></span></button></td></tr>';
@@ -392,4 +435,6 @@
         </div>
     </div>
 </div>
+{!! Form::close() !!}
+
 @endsection
