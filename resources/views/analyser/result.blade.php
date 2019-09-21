@@ -85,12 +85,13 @@
 
 </script>
 <?php
-$AnalyseConfig_link =   implode("_",$technology)
-                       ."/".implode("_",$port)
-                       ."/".implode("_",$band)
-                       ."/".$antenna_per_sector
-                       ."/".$antenna_preferred
-                       ."/".$max_height;
+$AnalyseConfig_link =   "Tech=".implode("_",$technology)
+                       ."/Pr=".implode("_",$port)
+                       ."/Bd=".implode("_",$band)
+                       ."/Sec=".$antenna_per_sector
+                       ."/Pfd=".$antenna_preferred
+                       ."/Het=".$max_height;
+$AnalyseConfig_link_Example = "/AnalyseConfig/Conf=0/Ids=-1/".$AnalyseConfig_link;
 ?>
 
 
@@ -216,7 +217,8 @@ $AnalyseConfig_link =   implode("_",$technology)
                     ?>
                     <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $c++ }}
                         <a name="AnalyseConfig"
-                            href="/AnalyseConfig/{{ $c-1 }}/{{ $idConcat }}/{{ $AnalyseConfig_link }}" target="_blank">
+                            href="/AnalyseConfig/Conf={{ $c-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
+                            target="_blank">
                             <i class="far fa-question-circle"></i>
                         </a>
 
@@ -271,6 +273,15 @@ $AnalyseConfig_link =   implode("_",$technology)
         @endif
     </div>
 </div>
+
+{!! Form::open(['action' => ['AntennasController@pickAntennas'], 'method' => 'GET', 'enctype' =>
+'multipart/form-data']) !!}
+<input type="hidden" name=antennasSetIds value="">
+<input type="hidden" name="url_full_get" value={{ $AnalyseConfig_link_Example }}>
+<div style="text-align:center">
+    <input type="submit" class="btn btn-primary" value="Test against Custom Antennas" />
+</div>
+{!! Form::close() !!}
 
 {!! Form::open(['action' => ['AnalyserController@editForm'] , 'method' => 'GET', 'enctype' =>
 'multipart/form-data']) !!}

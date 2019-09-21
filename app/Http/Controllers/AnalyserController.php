@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use function Opis\Closure\serialize;
 use function Opis\Closure\unserialize;
+use Illuminate\Support\Facades\Redirect;
 use PHPUnit\Framework\Constraint\IsFalse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -856,6 +857,14 @@ class AnalyserController extends Controller
         $i = 0;
         $colors = array("FDEDEC", "F5B7B1", "DC3545");
         $j = 1;
+        if (count($antennasSetIds) == 0) {
+            return redirect()->back()
+                ->with("error", "Must Check at least one antennas.");
+        }
+        if (count($antennasSetIds) > 0 && $antennasSetIds[0] == -1) {
+            return redirect()->back()
+                ->with("error", "Something went wrong, refresh and try again");
+        }
         foreach ($antennasSetIds as $key => $id) {
             $curLabel = "A" . $j++;
             $AntennaSet[$curLabel] = Antennas::find($id);
@@ -931,7 +940,9 @@ class AnalyserController extends Controller
 
                     $techToAntenna[$key]["invColor"]
                         = $AntennaSet[$techToAntenna[$key]["label"]]["invColor"];
-                    unset($bandItem);
+                    if ($bandItem['totalPorts'] == 0) {
+                        unset($allBands[$i]);
+                    }
                     $found = true;
                     break;
                 } else {
@@ -943,6 +954,10 @@ class AnalyserController extends Controller
                         = "ffffff";
                 }
             }
+        }
+        $unusedWastePorts = 0;
+        foreach ($allBands as $key => $value) {
+            $unusedWastePorts += $value["totalPorts"];
         }
         // Sorting technologies based on antennas they belong
         // sorting array to unify request
@@ -985,8 +1000,47 @@ class AnalyserController extends Controller
             ->with("band", $band)
             ->with("bandSymbols", $bandSymbols)
             ->with("port", $port)
+            ->with("unusedWastePorts", $unusedWastePorts)
             ->with("antennaLabels", $antennaLabels)
             ->with("AntennaSet", $AntennaSet);
+    }
+
+    /**
+     * Receive Full url of analyser config with new set of antennas ids
+     *
+     * @param Request $request antennasSetIds[] | quantity[]
+     *                         | previousUrl | previousSetIDS
+     *
+     * @return Redirect redirect url to analyseConfig
+     */
+    public function analyseConfigHelper(Request $request)
+    {
+        $antennasSetIds = $request->input("antennasSetIds");
+        $quantity = $request->input("quantity");
+        $previousUrl = $request->input("previousUrl");
+        $previousSetIDS = $request->input("previousSetIDS");
+        if (
+            !isset($antennasSetIds) || !isset($quantity)
+            || count($quantity) != count($antennasSetIds)
+        ) {
+            return redirect()->back()
+                ->with(
+                    "error",
+                    "Something went wrong," .
+                        " At least one antenna Must be selected."
+                );
+        }
+        $newAntennasSetIds = array();
+        foreach ($antennasSetIds as $key => $value) {
+            for ($i = 0; $i < $quantity[$key]; $i++) {
+                $newAntennasSetIds[] = $value;
+            }
+        }
+
+        $pattern = "#Ids=(-?[[:digit:]]*_?)*#";
+        $replacement = "Ids=" . implode("_", $newAntennasSetIds);
+        $newUrl = preg_replace($pattern, $replacement, $previousUrl, 1);
+        return redirect($newUrl);
     }
 
     /**

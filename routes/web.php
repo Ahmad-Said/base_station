@@ -20,13 +20,17 @@ Route::get('/test', 'PagesController@test');
 Route::get('/about', 'PagesController@about');
 Route::post('/about', 'PagesController@storeAbout');
 Route::get('/references', 'PagesController@references');
-Route::get('/antennasList', 'PagesController@antennasList');
 
 // Profile Controller
 Route::resource('profile', 'ProfileController');
 
 // Post Controller
 Route::resource('posts', 'PostsController');
+
+// Antennas Controller
+Route::resource('antennas', 'AntennasController');
+Route::get('/antennasList', 'AntennasController@index');
+Route::get('/antennasList/pick', 'AntennasController@pickAntennas');
 
 // Band Controller
 Route::resource('bands', 'XgBandsController');
@@ -36,9 +40,13 @@ Route::get('/', 'AnalyserController@index');
 Route::get('/result', 'AnalyserController@showResult');
 Route::get('/edit', 'AnalyserController@editForm');
 Route::get(
-    '/AnalyseConfig/{confNb}/{antennasSetIds}/{technology}/{port}/{band}'
-        . '/{antenna_per_sector}/{antenna_preferred}/{max_height}',
+    '/AnalyseConfig/Conf={confNb}/Ids={antennasSetIds}/Tech={technology}/Pr={port}/Bd={band}'
+        . '/Sec={antenna_per_sector}/Pfd={antenna_preferred}/Het={max_height}',
     'AnalyserController@AnalyseConfig'
+);
+Route::get(
+    '/AnalyseConfig/Pick/',
+    'AnalyserController@analyseConfigHelper'
 );
 
 // SettingWebLara Controller
