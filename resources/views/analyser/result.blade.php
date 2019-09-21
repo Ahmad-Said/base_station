@@ -156,12 +156,12 @@
                     <th>Mid Band</th>
                     <th>High Band</th>
                     <th>Height (mm)</th>
-                    @if(Auth::user()->type=='admin')
+                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
                     <th>Unite Price ($)</th>
                     @endif
                     <th>Quantity</th>
                     <th>Link to data sheets</th>
-                    @if(Auth::user()->type=='admin')
+                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
                     <th>Total Price ($)</th>
                     @endif
                 </tr>
@@ -215,7 +215,7 @@
                     <td>{{ $setSolution[0]->ports_btw_1_3GH }}</td>
                     <td>{{ $setSolution[0]->ports_bt_3GH }}</td>
                     <td>{{ $setSolution[0]->height_mm }}</td>
-                    @if(Auth::user()->type=='admin')
+                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
                     <td>{{ $setSolution[0]->msp_usd }}</td>
                         @endif
                     <td>
@@ -237,7 +237,7 @@
                     <td>{{ $item->ports_btw_1_3GH }}</td>
                     <td>{{ $item->ports_bt_3GH }}</td>
                     <td>{{ $item->height_mm }}</td>
-                    @if(Auth::user()->type=='admin')
+                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
                     <td>{{ $item->msp_usd }}</td>@endif
                     <td>
                         <?php
