@@ -208,7 +208,7 @@ class AnalyserController extends Controller
                 $saveCachedResult = $oldCachedResult;
             }
             $msg = "";
-
+            $beginRowFrom = $saveCachedResult->combination_nb;
             // trying to compute solution such all ports in all antennas
             // are filled with no waste i.e. $totalNbPorts = $totalTechNbPorts;
             $AntennaSolution = AnalyserController::_solutionCalculator(
@@ -233,8 +233,8 @@ class AnalyserController extends Controller
             ) {
                 // trying to add 2 free ports
                 $totalNbPorts += 2;
-                // resetting combination number
-                $saveCachedResult->combination_nb = 0;
+                // resetting combination number to same as previous begin
+                $saveCachedResult->combination_nb = $beginRowFrom;
                 $AntennaSolution = AnalyserController::_solutionCalculator(
                     $totalNbPorts,
                     $totalTechNbPorts,
