@@ -156,10 +156,14 @@
                     <th>Mid Band</th>
                     <th>High Band</th>
                     <th>Height (mm)</th>
+                    @if(Auth::user()->type=='admin')
                     <th>Unite Price ($)</th>
+                    @endif
                     <th>Quantity</th>
                     <th>Link to data sheets</th>
+                    @if(Auth::user()->type=='admin')
                     <th>Total Price ($)</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -211,14 +215,17 @@
                     <td>{{ $setSolution[0]->ports_btw_1_3GH }}</td>
                     <td>{{ $setSolution[0]->ports_bt_3GH }}</td>
                     <td>{{ $setSolution[0]->height_mm }}</td>
+                    @if(Auth::user()->type=='admin')
                     <td>{{ $setSolution[0]->msp_usd }}</td>
-
+                        @endif
                     <td>
                         {{ $firstQuantity  }}
                     </td>
 
                     <td><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
+                    @if(Auth::user()->type=='admin')
                     <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $totalPrice }} </td>
+                @endif
                 </tr>
                 <?php unset($setSolution[0])?>
 
@@ -230,7 +237,8 @@
                     <td>{{ $item->ports_btw_1_3GH }}</td>
                     <td>{{ $item->ports_bt_3GH }}</td>
                     <td>{{ $item->height_mm }}</td>
-                    <td>{{ $item->msp_usd }}</td>
+                    @if(Auth::user()->type=='admin')
+                    <td>{{ $item->msp_usd }}</td>@endif
                     <td>
                         <?php
                             if($secondQuantity!= 0)
