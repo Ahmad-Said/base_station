@@ -51,6 +51,7 @@ class SettingWebLaraController extends Controller
     {
         $isCACHE_RESULT = $request->input("CACHE_RESULT");
         $newLIMIT_ROW_PER_QUERY = $request->input("LIMIT_ROW_PER_QUERY");
+        $newMARGIN_ERROR_FREQ = $request->input("MARGIN_ERROR_FREQ");
         $temp = SettingWebLara::whereSettingName("CACHE_RESULT")->first();
         if (isset($isCACHE_RESULT)) {
             $temp->value = "true";
@@ -59,6 +60,7 @@ class SettingWebLaraController extends Controller
         }
         $temp->save();
         SettingWebLara::setLimitRowPerQuery($newLIMIT_ROW_PER_QUERY);
+        SettingWebLara::setMarginError($newMARGIN_ERROR_FREQ);
 
         $allSetting = SettingWebLara::getAllSettings();
         return view('pages.settingWeb')

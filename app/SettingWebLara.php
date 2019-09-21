@@ -53,6 +53,9 @@ class SettingWebLara extends Model
     const LAST_ANTENNA_DATA_PROVIDED = "LAST_ANTENNA_DATA_PROVIDED";
 
     // Used in analyser controller
+    const MARGIN_ERROR_FREQ = "MARGIN_ERROR_FREQ";
+
+    // Used in analyser controller
     const LIMIT_ROW_PER_QUERY = "LIMIT_ROW_PER_QUERY";
 
     // contain html of help page
@@ -100,6 +103,38 @@ class SettingWebLara extends Model
         $temp->value = 1;
         $temp->save();
         return $temp;
+    }
+
+    /**
+     * Touch LAST_ANTENNA_DATA_PROVIDED Setting to current date
+     *
+     * @return App\SettingWebLara LAST_ANTENNA_DATA_PROVIDED
+     *                            useful for timestamp ->update_at
+     */
+    public static function getMarginError()
+    {
+        $temp = SettingWebLara::whereSettingName(
+            SettingWebLara::MARGIN_ERROR_FREQ
+        )
+            ->first();
+        return $temp->value;
+    }
+
+    /**
+     * Touch LAST_ANTENNA_DATA_PROVIDED Setting to current date
+     *
+     * @return App\SettingWebLara LAST_ANTENNA_DATA_PROVIDED
+     *                            useful for timestamp ->update_at
+     */
+    public static function setMarginError($newMarginError)
+    {
+        $temp = SettingWebLara::whereSettingName(
+            SettingWebLara::MARGIN_ERROR_FREQ
+        )
+            ->first();
+        $temp->value = $newMarginError;
+        $temp->save();
+        return $temp->value;
     }
 
     /**

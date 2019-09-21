@@ -429,6 +429,7 @@ class AnalyserController extends Controller
         $AntennaMaxOrder = array();
         // default was 50000
         $LimitRow = SettingWebLara::getLimitRowPerQuery();
+        $marginError = SettingWebLara::getMarginError();
         // sort array based on ports
         // so when testing combinations starting with biggest ports
         // is better for
@@ -485,7 +486,8 @@ class AnalyserController extends Controller
                     $antennaSet,
                     $port,
                     $band,
-                    $totalTechNbPorts
+                    $totalTechNbPorts,
+                    $marginError
                 )) {
                     $AntennaSolution[] = $antennaSet;
                 }
@@ -530,6 +532,7 @@ class AnalyserController extends Controller
      * @param int   $totalNbPorts The total number of ports of all system
      *                            It is equal to array_sum($port).. sent with
      *                            parameter for performance reason
+     * @param int   $marginError  The allowed fault when comparing frequency
      *
      * @return bool return wherever this set meet condition or not
      */
@@ -537,7 +540,8 @@ class AnalyserController extends Controller
         &$AntennaSet,
         &$port,
         &$band,
-        $totalNbPorts
+        $totalNbPorts,
+        $marginError
     ) {
         // Bands was earlier defined as collection and accessed with magic function
         // ->Bands when mutator and accessors used
@@ -583,8 +587,8 @@ class AnalyserController extends Controller
                 $bandItem = &$allBands[$i];
 
                 if (
-                    $band[$key] >= $bandItem['min']
-                    && $band[$key] <= $bandItem['max']
+                    $band[$key] >= $bandItem['min'] - $marginError
+                    && $band[$key] <= $bandItem['max'] + $marginError
                     && $bandItem['totalPorts'] >= $valuePort
                 ) {
                     $bandItem['totalPorts'] -= $valuePort;
@@ -890,12 +894,6 @@ class AnalyserController extends Controller
             $AntennaSet[$curLabel]["invColor"] = '#' . $invertColor;
         }
         // return $AntennaSet;
-        $isValidSet = AnalyserController::_isValidSetAntenna(
-            $AntennaSet,
-            $port,
-            $band,
-            $totalNbPorts
-        );
         // just to prettily look
         if (!isset($max_height) || $max_height == PHP_INT_MAX) {
             $max_height = "";
@@ -928,6 +926,7 @@ class AnalyserController extends Controller
             }
         );
         // return $allBands;
+        $marginError = SettingWebLara::getMarginError();
         foreach ($port as $key => $valuePort) {
             $found = false;
             // foreach ($allBands as $key2  => $value) {
@@ -937,8 +936,8 @@ class AnalyserController extends Controller
                 $bandItem = &$allBands[$i];
 
                 if (
-                    $band[$key] >= $bandItem['min']
-                    && $band[$key] <= $bandItem['max']
+                    $band[$key] >= $bandItem['min'] - $marginError
+                    && $band[$key] <= $bandItem['max'] + $marginError
                     && $bandItem['totalPorts'] >= $valuePort
                 ) {
                     $bandItem['totalPorts'] -= $valuePort;

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class CachedResult extends Model
 {
     //
-    public $timestamps = false;
     protected $primaryKey = 'query_form';
 
     /**
