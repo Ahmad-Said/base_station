@@ -2,6 +2,66 @@
 @section('content')
 
 @include('antennas.showModal_inc',['offset_table' => 1])
+<?php
+ $totalSystemPorts = array_sum($port);
+ $totalAntennasPorts = array_sum(array_pluck($AntennaSet, "total_nb_ports"))
+
+?>
+
+{{-- Chart Script https://canvasjs.com/jquery-charts/animated-chart/ --}}
+<input id="usedPortsGraph" type="hidden" value="{{ $usedPortsGraph }}" />
+<input id="wastePortsGraph" type="hidden" value="{{ $wastePortsGraph }}" />
+<script>
+    var usedPortsGraph = jQuery.parseJSON($("#usedPortsGraph").val());
+    var wastePortsGraph = jQuery.parseJSON($("#wastePortsGraph").val());
+    window.onload = function () {
+        var optionsUsedPorts = {
+            title: {
+                text: "Used Ports Associations"
+            },
+            subtitles: [{
+                text: "Total Used / Total System =  {{ $usedPorts .'/'. $totalSystemPorts}}"
+            }],
+            animationEnabled: true,
+            data: [{
+                type: "pie",
+                explodeOnClick: true,
+                startAngle: 40,
+                toolTipContent: "<b>{label}</b>: {y} ports",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - {y} ports",
+                dataPoints: usedPortsGraph
+            }]
+        };
+        $("#PortSystemDistribution").CanvasJSChart(optionsUsedPorts);
+
+        var optionsWastePorts = {
+            title: {
+                text: "Waste Unused Ports"
+            },
+            subtitles: [{
+                text: "Total waste / Total availble =  {{ $unusedWastePorts .'/'. $totalAntennasPorts }}"
+            }],
+            animationEnabled: true,
+            data: [{
+                type: "pie",
+                explodeOnClick: true,
+                startAngle: 40,
+                toolTipContent: "<b>{label}</b>: {y} ports",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - {y} ports",
+                dataPoints: wastePortsGraph
+            }]
+        };
+        $("#PortSystemWaste").CanvasJSChart(optionsWastePorts);
+
+}
+</script>
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
 
 <div class="card text-center">
     <div class="card-header">
@@ -15,7 +75,7 @@
                     <th>Antennas Per Sector #</th>
                     <th>Total System Ports #</th>
                     <th>Total Antennas Ports #</th>
-                    <th>Unused ports #</th>
+                    <th>Waste ports (Unused) #</th>
                     <th>Max Height #</th>
                     <th>Total Price ($)</th>
                 </tr>
@@ -24,9 +84,9 @@
                 <tr>
                     <td>{{ $confNb }}</td>
                     <td>{{ count($AntennaSet) }}</td>
-                    <td>{{ array_sum($port) }}</td>
+                    <td>{{ $totalSystemPorts }}</td>
                     <td>
-                        {{ array_sum(array_pluck($AntennaSet, "total_nb_ports")) }}
+                        {{ $totalAntennasPorts }}
                     </td>
                     @if ($unusedWastePorts == 0 )
                     <td bgcolor="#28A745" style="color: white">
@@ -48,7 +108,14 @@
         <br>
 
         {{-- Chart analysis displaying each xg belonging to which antennas --}}
-
+        <div style="{{ ($unusedWastePorts != 0)?'float: left;':'' }}">
+            <div id="PortSystemDistribution" style="height: 370px; width: 100%;"></div>
+        </div>
+        <div style="display:inline-block;">
+            @if ($unusedWastePorts != 0)
+            <div id="PortSystemWaste" style="height: 370px; width: 100%;"></div>
+            @endif
+        </div>
 
 
         <h3 class="text-left"> AntennaSet </h3>

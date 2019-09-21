@@ -432,7 +432,10 @@ class AnalyserController extends Controller
         $marginError = SettingWebLara::getMarginError();
         // sort array based on ports
         // so when testing combinations starting with biggest ports
-        // is better for
+        // is better so tech with less ports do not take the place of
+        // bigger one, in another say let's get rid of the big problem first
+        // if yes then ?? Stop or the inverse?
+        // TODO think
         foreach ($port as $key => $value) {
             $systemG[] = [$port[$key], $band[$key]];
         }
@@ -557,7 +560,8 @@ class AnalyserController extends Controller
         // at low system number it is less useful
         // but later on much system number it can low time
         // since it's comparing directly highest port with hightest
-        // total band ports
+        // total band ports that only if sytemG is sorted by decreasing
+        // order and that what is done with given input
         // need more testing
         // https://stackoverflow.com/questions/2699086/how-to-sort-multi-dimensional-array-by-value
         // sorting bands in increasing order of total ports:
@@ -568,23 +572,21 @@ class AnalyserController extends Controller
         usort(
             $allBands,
             function ($a, $b) {
-                $retval = $b['totalPorts'] <=> $a['totalPorts'];
+                // $retval = $a['totalPorts'] <=> $b['totalPorts'];
                 // if ($retval == 0) {
                 //     $retval = $a['min'] <=> $b['min'];
                 //     if ($retval == 0) {
                 //         $retval = $a['max'] <=> $b['max'];
                 //     }
                 // }
-                return $retval;
+                // current state decreasing order
+                return $b['totalPorts'] <=> $a['totalPorts'];
             }
         );
         foreach ($port as $key => $valuePort) {
             $found = false;
-            // foreach ($allBands as $key2  => $value) {
-            // foreach ($allBands as $key3 => $bandItem) {
-            for ($i = 0; $i < count($allBands); $i++) {
-                // code...
-                $bandItem = &$allBands[$i];
+
+            foreach ($allBands as $i => &$bandItem) {
 
                 if (
                     $band[$key] >= $bandItem['min'] - $marginError
@@ -602,7 +604,6 @@ class AnalyserController extends Controller
                     break;
                 }
             }
-            // }
             if (!$found) {
                 // for sure a false return
                 // because totalNbPorts != 0
@@ -922,19 +923,22 @@ class AnalyserController extends Controller
         usort(
             $allBands,
             function ($a, $b) {
-                return $b['totalPorts'] <=> $a['totalPorts'];
+                return $a['totalPorts'] <=> $b['totalPorts'];
             }
         );
         // return $allBands;
         $marginError = SettingWebLara::getMarginError();
+        $usedPortsGraph = array();
+        $wastePortsGraph = array();
+        $usedPorts = 0;
+        $notFoundLabel = "No Space";
         foreach ($port as $key => $valuePort) {
             $found = false;
-            // foreach ($allBands as $key2  => $value) {
-            // foreach ($allBands as $key3 => $bandItem) {
-            for ($i = 0; $i < count($allBands); $i++) {
-                // code...
-                $bandItem = &$allBands[$i];
 
+            foreach ($allBands as $i => &$bandItem) {
+                $curAntLabel = $bandItem["parentAntennaLabel"];
+                $curAntColor = $AntennaSet[$curAntLabel]["color"];
+                $curAntInvColor = $AntennaSet[$curAntLabel]["invColor"];
                 if (
                     $band[$key] >= $bandItem['min'] - $marginError
                     && $band[$key] <= $bandItem['max'] + $marginError
@@ -942,32 +946,64 @@ class AnalyserController extends Controller
                 ) {
                     $bandItem['totalPorts'] -= $valuePort;
                     $totalNbPorts -= $valuePort;
+                    $usedPorts += $valuePort;
+                    // For graph associations views
+                    $usedPortsGraph[$curAntLabel]["label"] = $curAntLabel;
+                    if (!isset($usedPortsGraph[$curAntLabel]["y"])) {
+                        $usedPortsGraph[$curAntLabel]["y"] = $valuePort;
+                    } else {
+                        $usedPortsGraph[$curAntLabel]["y"] += $valuePort;
+                    }
+                    $usedPortsGraph[$curAntLabel]["color"] = $curAntColor;
 
+                    // For table associations view
                     $techToAntenna[$key]["id"] = $bandItem["parentAntennaID"];
-                    $techToAntenna[$key]["label"] = $bandItem["parentAntennaLabel"];
-                    $techToAntenna[$key]["color"]
-                        = $AntennaSet[$techToAntenna[$key]["label"]]["color"];
+                    $techToAntenna[$key]["label"] = $curAntLabel;
+                    $techToAntenna[$key]["color"] = $curAntColor;
+                    $techToAntenna[$key]["invColor"] = $curAntInvColor;
 
-                    $techToAntenna[$key]["invColor"]
-                        = $AntennaSet[$techToAntenna[$key]["label"]]["invColor"];
+
                     if ($bandItem['totalPorts'] == 0) {
                         unset($allBands[$i]);
                     }
                     $found = true;
                     break;
-                } else {
-                    $techToAntenna[$key]["id"] = -1;
-                    $techToAntenna[$key]["label"] = "No space available";
-                    $techToAntenna[$key]["color"]
-                        = "ccffcc";
-                    $techToAntenna[$key]["invColor"]
-                        = "ffffff";
                 }
+            }
+            if (!$found) {
+                // For graph associations views
+                $usedPortsGraph[$notFoundLabel]["label"] = $notFoundLabel;
+                if (!isset($usedPortsGraph[$notFoundLabel]["y"])) {
+                    $usedPortsGraph[$notFoundLabel]["y"] = $valuePort;
+                } else {
+                    $usedPortsGraph[$notFoundLabel]["y"] += $valuePort;
+                }
+                $usedPortsGraph[$notFoundLabel]["color"] = "#ccffcc";
+                // For table associations view
+                $techToAntenna[$key]["id"] = -1;
+                $techToAntenna[$key]["label"] = "No space available";
+                $techToAntenna[$key]["color"]
+                    = "ccffcc";
+                $techToAntenna[$key]["invColor"]
+                    = "ffffff";
             }
         }
         $unusedWastePorts = 0;
-        foreach ($allBands as $key => $value) {
-            $unusedWastePorts += $value["totalPorts"];
+        foreach ($allBands as $key => &$bandItem) {
+            if ($bandItem["totalPorts"] == 0) {
+                continue;
+            }
+            $unusedWastePorts += $bandItem["totalPorts"];
+            $curAntLabel = $bandItem["parentAntennaLabel"];
+            // For graph waste views
+            $wastePortsGraph[$curAntLabel]["label"] = $curAntLabel;
+            if (!isset($wastePortsGraph[$curAntLabel]["y"])) {
+                $wastePortsGraph[$curAntLabel]["y"] = $bandItem["totalPorts"];
+            } else {
+                $wastePortsGraph[$curAntLabel]["y"] += $bandItem["totalPorts"];
+            }
+            $wastePortsGraph[$curAntLabel]["color"]
+                = $AntennaSet[$curAntLabel]["color"];
         }
         // Sorting technologies based on antennas they belong
         // sorting array to unify request
@@ -977,6 +1013,19 @@ class AnalyserController extends Controller
                 (int) $port[$key], (int) $band[$key], $techToAntenna[$key]
             ];
         }
+        // prettily look: make No Space label the last one
+        usort(
+            $usedPortsGraph,
+            function ($a, $b) {
+                return $a["label"] <=> $b["label"];
+            }
+        );
+        usort(
+            $wastePortsGraph,
+            function ($a, $b) {
+                return $a["label"] <=> $b["label"];
+            }
+        );
         usort(
             $systemG,
             function ($a, $b) {
@@ -990,7 +1039,9 @@ class AnalyserController extends Controller
         $techToAntenna = $colSystemG->pluck(3)->toArray();
 
         $bandSymbols = XgBands::getSymbols($technology, $band);
-
+        // return $usedPortsGraph;
+        $wastePortsGraph = array_values($wastePortsGraph);
+        $usedPortsGraph = array_values($usedPortsGraph);
         // This return view with predefined column and stuff
         return view('analyser.analyseConfig')
             ->with("confNb", $confNb)
@@ -1003,6 +1054,9 @@ class AnalyserController extends Controller
             ->with("bandSymbols", $bandSymbols)
             ->with("port", $port)
             ->with("unusedWastePorts", $unusedWastePorts)
+            ->with("usedPorts", $usedPorts)
+            ->with("usedPortsGraph", json_encode($usedPortsGraph))
+            ->with("wastePortsGraph", json_encode($wastePortsGraph))
             ->with("antennaLabels", $antennaLabels)
             ->with("AntennaSet", $AntennaSet);
     }

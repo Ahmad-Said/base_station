@@ -151,6 +151,10 @@
             @if($isCacheAllowed)
             Showing set from {{ $AntennaSolution->currentPage()*100-100+1 }} to
             {{ $AntennaSolution->currentPage()*100-100+count($AntennaSolution) }}
+
+            <?php $c=$AntennaSolution->currentPage()*100-100+1; ?>
+            @else
+            <?php $c=1; ?>
             @endif
         </div>
         <br>
@@ -199,7 +203,7 @@
         </div>
         <br>
         <br>
-        @if (count($AntennaSolution) >10)
+        @if (count($AntennaSolution) >0)
 
 
 
@@ -226,7 +230,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $c=1 ?>
                 @foreach($AntennaSolution as $key => $setSolution)
                 <tr>
                     <?php
@@ -287,7 +290,7 @@
                     <td>{{ $setSolution[0]->height_mm }}</td>
                     @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
                     <td>{{ $setSolution[0]->msp_usd }}</td>
-                        @endif
+                    @endif
                     <td>
                         {{ $firstQuantity  }}
                     </td>
@@ -295,7 +298,7 @@
                     <td><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
                     @if(Auth::user()->type=='admin')
                     <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $totalPrice }} </td>
-                @endif
+                    @endif
                 </tr>
                 <?php unset($setSolution[0])?>
 

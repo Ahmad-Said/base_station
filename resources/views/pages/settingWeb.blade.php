@@ -80,7 +80,7 @@
                 <div class="form-group">
                     <label for="LIMIT_ROW_PER_QUERY">Allowed Error Margin <=Comparing=> Frequency</label>
             <td>
-                <input id="LIMIT_ROW_PER_QUERY" class="form-control" type="number" min="0" name="LIMIT_ROW_PER_QUERY"
+                <input id="LIMIT_ROW_PER_QUERY" class="form-control" type="number" min="0" name="MARGIN_ERROR_FREQ"
                     value={{ $allSetting["MARGIN_ERROR_FREQ"]->value }}>
             </td>
             <td>
