@@ -36,7 +36,7 @@ class SettingWebLaraController extends Controller
                 ->with("error", "You are not authorized to view this page!");
         }
         $allSetting = SettingWebLara::getAllSettings();
-        return view('pages.settingWeb')
+        return view('analyser.settingWeb')
             ->with("allSetting", $allSetting);
     }
 
@@ -63,7 +63,7 @@ class SettingWebLaraController extends Controller
         SettingWebLara::setMarginError($newMARGIN_ERROR_FREQ);
 
         $allSetting = SettingWebLara::getAllSettings();
-        return view('pages.settingWeb')
+        return view('analyser.settingWeb')
             ->with("allSetting", $allSetting)
             ->with('success', 'Setting Saved');
     }
@@ -78,9 +78,74 @@ class SettingWebLaraController extends Controller
     {
         $temp = AntennasProvider::provideDataToAntennasAndBands();
         $allSetting = SettingWebLara::getAllSettings();
-        return view('pages.settingWeb')
+        return view('analyser.settingWeb')
             ->with("allSetting", $allSetting)
-            ->with('success', 'Data updated to ' . $temp->updated_at . '.');
+            ->with(
+                'success',
+                'Data updated to ' . $temp->updated_at->format("d/m/y  h:i A") . '.'
+            );
+    }
+
+    /**
+     * Get all queries
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getQueriesLog()
+    {
+        $queriesPerPage = 100;
+
+        $allCachedResult = CachedResult::select(
+            [
+                "query_form",
+                "sum_ports", "state_finish",
+                "combination_nb", "solution_count",
+                "email", "updated_at"
+            ]
+        )->orderBy('updated_at', 'desc')->paginate($queriesPerPage);
+        $lastQueryDate = CachedResult::max("updated_at");
+        $currentPage = $allCachedResult->currentPage();
+        $queryNb = $allCachedResult->total() - ($currentPage - 1) * $queriesPerPage;
+
+        $technology = 0;
+        $port = 0;
+        $band = 0;
+        $max_height = 0;
+        $antenna_per_sector = 0;
+        $antenna_preferred = 0;
+        foreach ($allCachedResult->items() as $key => &$itemCache) {
+            $itemCache->unserializeGeneratedSerial(
+                $technology,
+                $port,
+                $band,
+                $max_height,
+                $antenna_per_sector,
+                $antenna_preferred
+            );
+            $itemCache["link"] = AnalyserController::analyseConfigUrlGenerator(
+                $technology,
+                $port,
+                $band,
+                $antenna_per_sector,
+                $antenna_preferred,
+                $max_height,
+                $discard,
+                true
+            );
+            $itemCache["tech"] = "";
+            for ($i = 0; $i < count($technology); $i++) {
+                $itemCache["tech"] .= $technology[$i] . "G";
+                if ($i != count($technology) - 1) {
+                    $itemCache["tech"] .= ", ";
+                } else {
+                    $itemCache["tech"] .= ".";
+                }
+            }
+        }
+        return view('analyser.queryLog')
+            ->with("allCachedResult", $allCachedResult)
+            ->with("lastQueryDate", $lastQueryDate)
+            ->with("queryNb", $queryNb);
     }
 
     /**
@@ -92,7 +157,7 @@ class SettingWebLaraController extends Controller
     {
         CachedResult::truncate();
         $allSetting = SettingWebLara::getAllSettings();
-        return view('pages.settingWeb')
+        return view('analyser.settingWeb')
             ->with("allSetting", $allSetting)
             ->with('error', 'Cache cleared.');
     }

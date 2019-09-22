@@ -89,10 +89,10 @@
                         {{ $totalAntennasPorts }}
                     </td>
                     @if ($unusedWastePorts == 0 )
-                    <td bgcolor="#28A745" style="color: white">
+                    <td style="color: white; background-color:#28A745 ">
 
                         @else
-                    <td bgcolor="#DC3545" style="color: white">
+                    <td style="color: white; background-color: #DC3545">
 
                         @endif
                         {{ $unusedWastePorts }}
@@ -137,7 +137,7 @@
                 </thead>
                 <tbody>
                     @foreach($AntennaSet as $key => $AntennaItem)
-                    <tr bgcolor={{ $AntennaItem->color }} style="color: {{ $AntennaItem->invColor }}">
+                    <tr style="color: {{ $AntennaItem->invColor }} ; background-color: {{ $AntennaItem->color }}  ">
                         <td>{{ $AntennaItem->label }}</td>
                         <td>{{ $AntennaItem->model_nb }}
 

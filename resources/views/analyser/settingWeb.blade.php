@@ -113,6 +113,8 @@
                 Cache control:
             </td>
             <td>
+                <a href="{{ url('QueryLog') }}"><i class="far fa-question-circle"></i></a>
+
                 {{ $allSetting["cacheResultTableInfo"]->Rows }} Queries
                 Using {{ $allSetting["cacheResultTableInfo"]->Data_length/1024/1024  }} MB
             </td>
@@ -130,7 +132,7 @@
                 Last data updated
             </td>
             <td>
-                {{ $allSetting["LAST_ANTENNA_DATA_PROVIDED"]->updated_at }}
+                {{ $allSetting["LAST_ANTENNA_DATA_PROVIDED"]->updated_at->format("d/m/y  h:i A") }}
             </td>
             <td>
                 <a href="/provideAntennasData"

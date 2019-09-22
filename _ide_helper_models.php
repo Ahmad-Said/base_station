@@ -23,13 +23,10 @@ namespace App{
  * @property int $height_mm
  * @property string $link_online
  * @property float $msp_usd
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property array $bands
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereHeightMm($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereLinkOnline($value)
@@ -39,7 +36,6 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas wherePortsBtw13GH($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas wherePortsLt1GH($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereTotalNbPorts($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Antennas whereUpdatedAt($value)
  */
 	class Antennas extends \Eloquent {}
 }
@@ -52,19 +48,17 @@ namespace App{
  * @property int $min
  * @property int $max
  * @property string $color
+ * @property string $totalPorts
  * @property int $antennas_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereAntennasId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereColor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereMax($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereMin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasBands whereTotalPorts($value)
  */
 	class AntennasBands extends \Eloquent {}
 }
@@ -92,10 +86,78 @@ namespace App{
 
 namespace App{
 /**
- * App\AntennasProvider
+ * Antennas Provider
+ * 
+ * This class table is located in (mysql2) another database than default used
+ * in the project web, also to note that columns cannot be accessed by
+ * their names as they change dynamically, so access them by index order.
+ * use columnNamesHelper() as walk around to resolve the issue.
+ * This structure is out of control of the writer of this website.
+ * Mapping of index to column
+ * 1 -> antennas ID : int(11)
+ * 2 -> model number : text
+ * 3 -> Total #RF ports : text
+ * 4 -> #ports (<1GHz) : text
+ * 5 -> #ports (1-3GHz) : text
+ * 6 -> #ports (>3GHz ) : text
+ * 7 -> Number of Calibration ports : text
+ * 8 -> Product Family : int(11)
+ * 9 -> Antenna Type : int(11)
+ * 10 -> Short description : text
+ * 11 -> Gain (<1GHz) [dBi] : text
+ * 12 -> Gain (1-3GHz) [dBi] : text
+ * 13 -> Gain (>3GHz) [dBi] : text
+ * 14 -> Typical HBW @3dB [deg] : text
+ * 15 -> Polarization : text
+ * 16 -> Internal Diplexing : text
+ * 17 -> Antenna size category [m] : text
+ * 18 -> Connectors type : text
+ * 19 -> Electrical Tilt : text
+ * 20 -> Tilt range [deg] : text
+ * 21 -> RET Position : text
+ * 22 -> RET family : text
+ * 23 -> Number of Columns (<1GHz) : text
+ * 24 -> Number of Columns (1-3GHz) : text
+ * 25 -> Number of Columns (>3GHz) : text
+ * 26 -> Height (mm) : text
+ * 27 -> Antenna Width (mm) : text
+ * 28 -> Antenna Depth (mm) : text
+ * 29 -> Antenna Weight [Kg] : text
+ * 30 -> Packing dimensions (HxWxD) [mm] : text
+ * 31 -> Shipping weight [Kg] : text
+ * 32 -> Country of Origin : text
+ * 33 -> Link to product datasheet : text
+ * 34 -> Comments : text
+ * 35 -> Product Status : text
+ * 36 -> Model Name (model number+specifics) : text
+ * 37 -> SAP Number : text
+ * 38 -> DR0 date : date
+ * 39 -> DR1 date : date
+ * 40 -> DR2 date : date
+ * 41 -> DR3 date : date
+ * 42 -> DR4 date : date
+ * 43 -> DR5 date : date
+ * 44 -> DR6 date : date
+ * 45 -> Standard Cost [RMB] : float
+ * 46 -> Standard Cost [USD] : float
+ * 47 -> Standard Cost [EUR] : float
+ * 48 -> MSP [RMB] : float
+ * 49 -> MSP [USD] : float
+ * 50 -> MSP [EUR] : float
+ * 51 -> SVM [%] : float
+ * 52 -> Key Changes : text
+ * 53 -> Date of last update : date
+ * 54 -> ODM or in-house : text
+ * 55 -> Internal comments : text
+ * 56 -> PLM Owner : text
+ * 57 -> Product Segment : text
+ * 58 -> Visible to PLM : text
+ * 59 -> Visible to B&P : text
+ * 60 -> Visible to Sales : text
+ * 61 -> Visible to Customer : text
  *
  * @property int $antennaId
- * @property string|null $xxx
+ * @property string|null $model number
  * @property string|null $Total #RF ports
  * @property string|null $#ports (<1GHz)
  * @property string|null $#ports (1-3GHz)
@@ -119,7 +181,7 @@ namespace App{
  * @property string|null $Number of Columns (<1GHz)
  * @property string|null $Number of Columns (1-3GHz)
  * @property string|null $Number of Columns (>3GHz)
- * @property string|null $Height (mm)
+ * @property string|null $height_mm
  * @property string|null $Antenna Width (mm)
  * @property string|null $Antenna Depth (mm)
  * @property string|null $Antenna Weight [Kg]
@@ -182,7 +244,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereGain(13GHz)[dBi]($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereGain(<1GHz)[dBi]($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereGain(>3GHz)[dBi]($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereHeight(mm)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereHeightMm($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereInternalComments($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereInternalDiplexing($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereKeyChanges($value)
@@ -191,6 +253,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereMSP[RMB]($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereMSP[USD]($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereModelName(modelNumber+specifics)($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereModelNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereNumberOfCalibrationPorts($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereNumberOfColumns(13GHz)($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereNumberOfColumns(<1GHz)($value)
@@ -218,7 +281,6 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereVisibleToCustomer($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereVisibleToPLM($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereVisibleToSales($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\AntennasProvider whereXxx($value)
  */
 	class AntennasProvider extends \Eloquent {}
 }
@@ -227,21 +289,29 @@ namespace App{
 /**
  * App\CachedResult
  *
- * @property int $query_form
+ * @property string $query_form
  * @property string $response_ids
  * @property int $sum_ports
  * @property int $state_finish
+ * @property int $solution_count
  * @property int $combination_nb
  * @property int $antennas_count
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereAntennasCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereCombinationNb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereQueryForm($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereResponseIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereSolutionCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereStateFinish($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereSumPorts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CachedResult whereUpdatedAt($value)
  */
 	class CachedResult extends \Eloquent {}
 }
@@ -304,6 +374,7 @@ namespace App{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $organization
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
@@ -314,6 +385,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsActivated($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereOrganization($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereType($value)

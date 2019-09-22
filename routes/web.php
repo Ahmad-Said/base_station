@@ -59,6 +59,11 @@ Route::get(
 )->name("settingTriggerUpdate");
 Route::delete('/setting', 'SettingWebLaraController@clearCachedResult');
 
+Route::get(
+    '/QueryLog',
+    'SettingWebLaraController@getQueriesLog'
+)->name("QueryLog");
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

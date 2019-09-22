@@ -50,6 +50,7 @@ class XgBands extends Model
             foreach ($allXgBand[$tech] as $itemXg) {
                 if ($itemXg->bands == $band[$key]) {
                     $bandSymbols[] = $itemXg->symbol;
+                    break;
                 }
             }
         }

@@ -55,6 +55,8 @@ class AnalyserController extends Controller
      *                         | antenna_preferred (may not exist) default is one
      *                         | max_height
      *                         | technology[] | port[] | band[]
+     *                         | isToggledCollapseBtn show Full tech info toggled
+     *                         special parameter to show tech info by default
      *
      * @return View The result view
      */
@@ -71,9 +73,6 @@ class AnalyserController extends Controller
                 )
             );
         }
-        // $agent2 = new Agent();
-        // $agent2->isTablet()
-        // return var_dump($agent2->isMobile());
         DebuggerHelper::startRecording("result");
         $technology = $request->input("technology");
         $port = $request->input("port");
@@ -81,8 +80,14 @@ class AnalyserController extends Controller
         $antenna_per_sector = $request->input("antenna_per_sector");
         $max_height = $request->input("max_height");
         $antenna_preferred = $request->input("antenna_preferred");
-        $load_more = $request->session()->get("load");
-        $request->session()->forget("load");
+        // only check later by isset
+        $isToggledCollapseBtn = $request->input("isToggledCollapseBtn");
+        if ($request->hasSession()) {
+            $load_more = $request->session()->get("load");
+            $request->session()->forget("load");
+        } else {
+            $load_more = false;
+        }
         if (!isset($max_height)) {
             $max_height = PHP_INT_MAX;
         }
@@ -149,16 +154,12 @@ class AnalyserController extends Controller
                     return [$item->id => $item];
                 }
             );
-        //    return  $allAntennasBandsMap[854]->bands;
-        //    $test["totalPorts"]-=2;
-        //  return    $allAntennasBandsMap[62]->Bands[0];
-        // return var_dump($allAntennasBandsMap[62]->Bands);
         $generatedSerial = "";
         $isCacheAllowed = SettingWebLara::isCacheAllowed();
 
         // check if cached and handle auto return value
         if ($isCacheAllowed) {
-            $oldCachedResult = AnalyserController::cachedResult(
+            $oldCachedResult = CachedResult::cachedResult(
                 $technology,
                 $port,
                 $band,
@@ -182,20 +183,11 @@ class AnalyserController extends Controller
         ) {
             // if cached and no change in antennas table
             // do load them from serialized array
-            $oldCachedResult->unserializeAndLoad(
+            $oldCachedResult->unserializeAndLoadSolution(
                 $AntennaSolutionIDS,
                 $allAntennasBandsMap,
                 $AntennaSolution
             );
-            // $AntennaSolutionIDS = unserialize($oldCachedResult['response_ids']);
-
-            // foreach ($AntennaSolutionIDS as $key => $setIDS) {
-            //     $setAntenna = array();
-            //     foreach ($setIDS as $key2 => $id) {
-            //         $setAntenna[] = $allAntennasBandsMap[$id];
-            //     }
-            //     $AntennaSolution[] = $setAntenna;
-            // }
             $saveCachedResult = $oldCachedResult;
         } else {
             // end if not cached
@@ -203,6 +195,9 @@ class AnalyserController extends Controller
                 $saveCachedResult = new CachedResult();
                 $saveCachedResult->combination_nb = 0;
                 $saveCachedResult->sum_ports = 0;
+                if (Auth::check()) {
+                    $saveCachedResult->email = Auth::user()->email;
+                }
             } else {
                 // this is used to add more combinations
                 $saveCachedResult = $oldCachedResult;
@@ -254,7 +249,7 @@ class AnalyserController extends Controller
             $saveCachedResult->query_form = $generatedSerial;
             if ($load_more && $isCacheAllowed) {
                 $tempIDS = array();
-                $saveCachedResult->unserializeAndLoad(
+                $saveCachedResult->unserializeAndLoadSolution(
                     $tempIDS,
                     $allAntennasBandsMap,
                     $AntennaSolution
@@ -268,6 +263,7 @@ class AnalyserController extends Controller
                 // if some how a good solution with original ports number
                 // stop searching in any other bigger waste solution
                 $saveCachedResult->sum_ports = $totalNbPorts;
+                $saveCachedResult->solution_count = count($AntennaSolution);
             }
             $saveCachedResult->antennas_count = Antennas::count();
             if ($isCacheAllowed) {
@@ -288,33 +284,6 @@ class AnalyserController extends Controller
                 '>
                 Load more <i class="fas fa-truck"></i></a><br>';
         }
-        // TODO debug messages
-        // $msg .= DebuggerHelper::pingReport("result");
-
-        // // generating price
-        // $antennasIDtoPrice = prices::select(
-        //     "id",
-        //     "price"
-        // )->get()
-        //     // making it as map key id to antenna
-        //     ->mapWithKeys(
-        //         function ($item) {
-        //             return [$item->id => $item];
-        //         }
-        //     );
-        // if ( Auth::user()
-        //     && (Auth::user()->type=="admin" || Auth::user()->type == "salesman" ) ) {
-        //     foreach ( $AntennaSolution as $key => $setSolution ) {
-        //         foreach ( $setSolution as $key2 => $antennaItem ) {
-        //             if ( isset($antennasIDtoPrice[$antennaItem->id]) ) {
-        //                 $AntennaSolution[$key][$key2]["price"] = $antennasIDtoPrice[$antennaItem->id];
-        //             } else {
-        //                 $AntennaSolution[$key][$key2]["price"] = 0;
-        //             }
-        //         }
-        //     }
-        // }
-        // return $AntennaSolution;
 
         // computing total ports of antenna solution
         if (count($AntennaSolution) > 0) {
@@ -360,10 +329,12 @@ class AnalyserController extends Controller
             $AntennaSolution = $paginatedItems;
         }
         // return view('pages.test', ['items' => $paginatedItems]);
+        if (count($AntennaSolution) == 0) {
+            $isToggledCollapseBtn = true;
+        }
 
         $msg .= " <br> Took about "
             . DebuggerHelper::pingTime("result") . " seconds.";
-
 
         // return DebuggerHelper::getReport("result");
         // return $AntennaSolution->lastPage();
@@ -385,11 +356,13 @@ class AnalyserController extends Controller
             ->with("technology", $technology)
             ->with("band", $band)
             ->with("port", $port)
+            ->with("bandSymbols", XgBands::getSymbols($technology, $band))
             ->with("info", $msg)
             ->with("AnalyseConfig_link", $AnalyseConfig_link)
             ->with("AnalyseConfig_link_Example", $AnalyseConfig_link_Example)
             ->with("isCacheAllowed", $isCacheAllowed)
-            ->with("isLoadMore", !$saveCachedResult->state_finish);
+            ->with("isLoadMore", !$saveCachedResult->state_finish)
+            ->with("isToggledCollapseBtn", $isToggledCollapseBtn);
     }
 
     /**
@@ -580,6 +553,7 @@ class AnalyserController extends Controller
                 //     }
                 // }
                 // current state decreasing order
+                // with system input ports also decreasing order
                 return $b['totalPorts'] <=> $a['totalPorts'];
             }
         );
@@ -741,64 +715,7 @@ class AnalyserController extends Controller
         return $possibleCombination;
     }
 
-    /**
-     * Cache result if recently requested
-     *
-     * @param array $technology         Input Form: all technology
-     * @param array $port               Input Form: all ports
-     * @param array $band               Input Form: all bands
-     * @param int   $max_height         The maximum accepted height antennas
-     *                                  (with error of 10)
-     * @param int   $antenna_per_sector allowed nb of antenna in solution set
-     * @param int   $antenna_preferred  priority to this nb and down
-     * @param int   $generatedSerial    id referring to request will be generated
-     *
-     * @return array result Antenna solution
-     */
-    public static function cachedResult(
-        &$technology,
-        &$port,
-        &$band,
-        $max_height,
-        $antenna_per_sector,
-        $antenna_preferred,
-        &$generatedSerial
-    ) {
-        $antennaSolution = array();
-        // sorting array to unify request
-        foreach ($technology as $key => $value) {
-            $systemG[] = [
-                (int) $technology[$key], (int) $port[$key], (int) $band[$key]
-            ];
-        }
-        usort(
-            $systemG,
-            function ($a, $b) {
-                $retval = $a[0] <=> $b[0];
-                if ($retval == 0) {
-                    $retval = $a[1] <=> $b[1];
-                    if ($retval == 0) {
-                        $retval = $a[2] <=> $b[2];
-                    }
-                }
-                return $retval;
-            }
-        );
-        $colSystemG = collect($systemG);
-        $technology = $colSystemG->pluck(0)->toArray();
-        $port = $colSystemG->pluck(1)->toArray();
-        $band = $colSystemG->pluck(2)->toArray();
 
-        $systemG[] = $max_height;
-        $systemG[] = $antenna_per_sector;
-        $systemG[] = $antenna_preferred;
-        $generatedSerial = implode($technology) . ";" .
-            implode($port) . ";" . implode($band) . ";" .
-            $max_height . ";" . $antenna_per_sector
-            . ";" . $antenna_preferred;
-        // $generatedSerial = serialize($systemG);
-        return CachedResult::find($generatedSerial);
-    }
 
     /**
      * Receive form information to analyse them and return result
@@ -878,8 +795,18 @@ class AnalyserController extends Controller
                 ->with("error", "Must Check at least one antennas.");
         }
         if (count($antennasSetIds) > 0 && $antennasSetIds[0] == -1) {
-            return redirect()->back()
-                ->with("error", "Something went wrong, refresh and try again");
+            // automatic show result
+            $queries = [
+                "antenna_per_sector" => $antenna_per_sector,
+                "antenna_preferred" => $antenna_preferred,
+                "max_height" => $max_height,
+                "technology" => $technology,
+                "port" => $port,
+                "band" => $band,
+                "isToggledCollapseBtn" => true
+            ];
+            $showResultRequest = new Request($queries);
+            return $this->showResult($showResultRequest);
         }
         foreach ($antennasSetIds as $key => $id) {
             $curLabel = "A" . $j++;
@@ -1176,6 +1103,7 @@ class AnalyserController extends Controller
      * @param int    $max_height         The maximum accepted height antennas
      *                                   (with error of 10)
      * @param string $fullUrlTemplate    Full url template independent of id and conf
+     * @param bool   $doReturnFullUrl    Do return full Url ?
      *
      * @return array Parsed array of
      */
@@ -1186,7 +1114,8 @@ class AnalyserController extends Controller
         $antenna_per_sector,
         $antenna_preferred,
         $max_height,
-        &$fullUrlTemplate = ""
+        &$fullUrlTemplate = "",
+        $doReturnFullUrl = false
     ) {
         $AnalyseConfig_link =   "Tech=" . implode("_", $technology)
             . "/Pr=" . implode("_", $port)
@@ -1198,6 +1127,9 @@ class AnalyserController extends Controller
             $AnalyseConfig_link .= "/" . $max_height;
         }
         $fullUrlTemplate = "/AnalyseConfig/Conf=0/Ids=-1/" . $AnalyseConfig_link;
+        if ($doReturnFullUrl) {
+            return $fullUrlTemplate;
+        }
         return $AnalyseConfig_link;
     }
 

@@ -120,27 +120,7 @@
                             Modifie Input
                         </i>
                     </h4>
-                    <table id="Tech" class="table table-hover table-responsive-lg table-info table-bordered table-sm"
-                        cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Technology</th>
-                                <th>Port</th>
-                                <th>Frequency</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($technology as $key => $Techitem)
-
-                            <tr>
-                                <td>{{ $technology[$key] }}G</td>
-                                <td>{{ $port[$key] }}</td>
-                                <td>{{ $bandSymbols[$key] }}</td>
-                            </tr>
-
-                            @endforeach
-                        </tbody>
-                    </table>
+                    @include('inc.TechFullForm_inc')
                     <h3 class="text-left">Selected Antennas</h3>
                     <table id="MySelection"
                         class="table table-hover table-responsive-lg table-primary table-bordered table-sm"

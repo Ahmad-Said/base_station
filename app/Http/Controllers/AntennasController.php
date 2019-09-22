@@ -54,7 +54,7 @@ class AntennasController extends Controller
             $band,
             $bandSymbols,
             $confNb,
-            $antennasSetIdss,
+            $discard,
             $antenna_per_sector,
             $antenna_preferred,
             $max_height

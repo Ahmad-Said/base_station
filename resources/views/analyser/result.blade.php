@@ -152,9 +152,9 @@
             Showing set from {{ $AntennaSolution->currentPage()*100-100+1 }} to
             {{ $AntennaSolution->currentPage()*100-100+count($AntennaSolution) }}
 
-            <?php $c=$AntennaSolution->currentPage()*100-100+1; ?>
+            <?php $confNb=$AntennaSolution->currentPage()*100-100+1; ?>
             @else
-            <?php $c=1; ?>
+            <?php $confNb=1; ?>
             @endif
         </div>
         <br>
@@ -203,6 +203,21 @@
         </div>
         <br>
         <br>
+        @if (isset($isToggledCollapseBtn))
+        <script>
+            $(document).ready(function () {
+                $("#collapse_btn").click();
+            });
+        </script>
+        @endif
+        <button id="collapse_btn" class="list-group-item btn btn-info" clicked data-toggle="collapse"
+            data-target="#demo1" style="color: black">
+            Form Request
+        </button>
+        <div id="demo1" class="collapse">
+            @include('inc.TechFullForm_inc')
+        </div>
+
         @if (count($AntennaSolution) >0)
 
 
@@ -272,9 +287,9 @@
                                 }
                             }
                     ?>
-                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $c++ }}
+                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $confNb++ }}
                         <a name="AnalyseConfig"
-                            href="/AnalyseConfig/Conf={{ $c-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
+                            href="/AnalyseConfig/Conf={{ $confNb-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
                             target="_blank">
                             <i class="far fa-question-circle"></i>
                         </a>

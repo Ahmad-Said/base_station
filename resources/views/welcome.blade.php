@@ -3,14 +3,14 @@
 <script>
     function generategp (array) {
             var st='';
-            var nb=2;
+            var i=0;
             array.forEach(element => {
-                st+='<option value='+nb+'>'+element+'</option>';
-                nb*=2;
+                st+='<option value='+portsNb[i++]+'>'+element+'</option>';
             });
             return st;
         }
 
+        var portsNb = [2,4,8,12];
         var gp2=["2 ports","4 ports"];
         var gp3=["2 ports","4 ports"];
         var gp4=["2 ports","4 ports","8 ports"];

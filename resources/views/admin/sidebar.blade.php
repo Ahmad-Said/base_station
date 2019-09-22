@@ -154,6 +154,11 @@
                 <i class="fas fa-cogs"></i>
                 &nbsp Algorithm Setting</a>
         </li>
+        <li class="nav-item border-bottom border-top">
+            <a class="list-group-item list-group-item-action bg-light border-0" href={{ route('QueryLog') }}>
+                <i class="fas fa-history"></i>
+                &nbsp Query History</a>
+        </li>
     </ul>
 </div>
 
