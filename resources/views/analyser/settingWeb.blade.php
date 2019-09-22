@@ -11,7 +11,7 @@
         background-color: #F7F7F7;
     }
 </style>
-<div class="text-center">
+<div class="text-center table-responsive">
 
     <table class="table table-borderless">
         <tr>

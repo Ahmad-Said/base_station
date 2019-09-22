@@ -210,11 +210,12 @@
             });
         </script>
         @endif
-        <button id="collapse_btn" class="list-group-item btn btn-info" clicked data-toggle="collapse"
+        <button id="collapse_btn" class="list-group-item btn btn-outline-info" clicked data-toggle="collapse"
             data-target="#demo1" style="color: black">
             Form Request
         </button>
         <div id="demo1" class="collapse">
+            <br>
             @include('inc.TechFullForm_inc')
         </div>
 
@@ -348,6 +349,7 @@
         <p>Sorry, There is No solution at with given input</p>
         @endif
     </div>
-</div>
 
+</div>
+<br><br><br>
 @endsection

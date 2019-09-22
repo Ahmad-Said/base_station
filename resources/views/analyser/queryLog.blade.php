@@ -37,7 +37,7 @@
 
 <h1>Queries Log</h1>
 <br>
-<div class="card card-body bg-light text-center">
+<div class="card card-body bg-light text-center table-responsive">
     <div class="alert alert-info text-left">
         <i>
             <h5>
@@ -52,7 +52,7 @@
     <br>
     <br>
     @if(count($allCachedResult) >= 1)
-    <table id="dtBasicExample" class="table table-light">
+    <table id="dtBasicExample" class="table table-light table-responsive">
         <thead class="thead-light">
             <tr>
                 <th>Query Nb#</th>
@@ -106,4 +106,5 @@
 <p>No Recent Queries Found</p>
 
 @endif
+<br><br><br>
 @endsection
