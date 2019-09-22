@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use phpDocumentor\Reflection\Types\Boolean;
 
 class ProfileController extends Controller
@@ -116,23 +117,30 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // https://stackoverflow.com/questions/21070281/laravel-validator-to-validate-only-fields-which-exist-in-the-passed-data
         $this->validate(
             $request,
             [
                 'name' => ['required', 'string', 'max:255'],
                 'email' =>
                 ['required', 'string', 'email', 'max:255'],
+                'password' => ['nullable', 'string', 'min:8']
             ]
         );
 
         // just to get rid off sending id as parameter url such as in modal
         $id = $request->input('userid');
-        try {
-            User::whereId($id)->update($request->all('name', 'email'));
-        } catch (\Throwable $th) {
-            return  redirect()->back()->withInput()
-                ->with('warning', 'Something Went Wrong, Email Already Exist!');
+        // try {
+        $updateRequest = $request->all('name', 'email');
+        $password = $request->input('password');
+        if (isset($password)) {
+            $updateRequest["password"] = Hash::make($password);
         }
+        User::whereId($id)->update($updateRequest);
+        // } catch (\Throwable $th) {
+        //     return  redirect()->back()->withInput()
+        //         ->with('warning', 'Something Went Wrong, Email Already Exist!');
+        // }
         // old way
         // $user = User::find($request->input('id'));
         // $user->name = $request->input("name");
