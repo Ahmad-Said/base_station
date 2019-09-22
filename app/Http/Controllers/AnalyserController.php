@@ -277,11 +277,11 @@ class AnalyserController extends Controller
         $msg .= "<br>";
         if (!$saveCachedResult->state_finish) {
             $msg .= " You can press load link to generate more solutions";
+            // href=' . $request->fullUrlWithQuery(["load" => true]) .
             $msg .=
                 '<a class="btn-sm btn-danger btn-sm waves-effect
                   btn-outline-danger load-link one-time"
-                     href=' . $request->fullUrlWithQuery(["load" => true]) .
-                '>
+                     href=/result?' . $request->fullUrlWithQuery(["load" => true]) . '>
                 Load more <i class="fas fa-truck"></i></a><br>';
         }
 
@@ -407,7 +407,11 @@ class AnalyserController extends Controller
         // so when testing combinations starting with biggest ports
         // is better so tech with less ports do not take the place of
         // bigger one, in another say let's get rid of the big problem first
-        // if yes then ?? Stop or the inverse?
+        // a new research made show that sorting antennas ports must
+        // differ than sorting tech ports so here sort systemG by decreasing
+        // ports and antennas ports later on by increasing ports
+        // additional details check: simple algorithm approach.docx at
+        // https://drive.google.com/open?id=10pqhu4wnlxTAlBCEZZPNn3DEWGYh3Bd6
         // TODO think
         foreach ($port as $key => $value) {
             $systemG[] = [$port[$key], $band[$key]];
@@ -492,8 +496,6 @@ class AnalyserController extends Controller
         } else {
             $saveCachedResult->state_finish = true;
         }
-        // // TODO
-        // return DebuggerHelper::pingReport().count($possibleCombination);
         return $AntennaSolution;
     }
     /**
@@ -552,9 +554,9 @@ class AnalyserController extends Controller
                 //         $retval = $a['max'] <=> $b['max'];
                 //     }
                 // }
-                // current state decreasing order
+                // current state increasing order
                 // with system input ports also decreasing order
-                return $b['totalPorts'] <=> $a['totalPorts'];
+                return $a['totalPorts'] <=> $b['totalPorts'];
             }
         );
         foreach ($port as $key => $valuePort) {
@@ -785,6 +787,8 @@ class AnalyserController extends Controller
         $technology = explode("_", $technology);
         $port =  explode("_", $port);
         $band = explode("_", $band);
+        // will contain an associative array from antenna label
+        // to antennas see later on definition
         $AntennaSet = array();
         $totalNbPorts = array_sum($port);
         $i = 0;
@@ -805,6 +809,9 @@ class AnalyserController extends Controller
                 "band" => $band,
                 "isToggledCollapseBtn" => true
             ];
+            if ($request->has("load")) {
+                $queries["load"] = "true";
+            }
             $showResultRequest = new Request($queries);
             return $this->showResult($showResultRequest);
         }
@@ -850,10 +857,32 @@ class AnalyserController extends Controller
         usort(
             $allBands,
             function ($a, $b) {
+                // increasing sort of antennas ports
                 return $a['totalPorts'] <=> $b['totalPorts'];
             }
         );
         // return $allBands;
+        // decreasing sort of technologies ports
+        $systemG = array();
+        foreach ($technology as $key => $value) {
+            $systemG[] = [
+                (int) $technology[$key],
+                (int) $port[$key], (int) $band[$key]
+            ];
+        }
+        usort(
+            $systemG,
+            function ($a, $b) {
+                return $a[1] <=> $b[1];
+            }
+        );
+        $colSystemG = collect($systemG);
+        $technology = $colSystemG->pluck(0)->toArray();
+        $port = $colSystemG->pluck(1)->toArray();
+        $band = $colSystemG->pluck(2)->toArray();
+        // return $systemG;
+
+
         $marginError = SettingWebLara::getMarginError();
         $usedPortsGraph = array();
         $wastePortsGraph = array();
@@ -934,6 +963,7 @@ class AnalyserController extends Controller
         }
         // Sorting technologies based on antennas they belong
         // sorting array to unify request
+        $systemG = array();
         foreach ($technology as $key => $value) {
             $systemG[] = [
                 (int) $technology[$key],
