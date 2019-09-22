@@ -43,7 +43,7 @@ class CreateCachedResultsTable extends Migration
             $table->integer("antennas_count");
 
             $table->integer("combination_nb")->default(0);
-            $table->boolean("solution_count")->default(0);
+            $table->integer("solution_count")->default(0);
 
 
             // Log query information

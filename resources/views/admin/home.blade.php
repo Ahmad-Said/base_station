@@ -158,7 +158,11 @@
                         <div class="form-group">
                             <label class="col-form-label" for="email">Email</label>
                             <input type="text" name="email" class="form-control" id="email" required
-                                pattern=".*@rfsworld.com" title="example@rfsworld.com">
+                                title="example@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="password">New Password</label>
+                            <input type="text" name="password" class="form-control" id="password">
                         </div>
                     </div>
                 </div>
