@@ -131,7 +131,7 @@ class ProfileController extends Controller
         // just to get rid off sending id as parameter url such as in modal
         $id = $request->input('userid');
         // try {
-        $updateRequest = $request->all('name', 'email');
+        $updateRequest = $request->all('name', 'email', 'organization', 'type');
         $password = $request->input('password');
         if (isset($password)) {
             $updateRequest["password"] = Hash::make($password);

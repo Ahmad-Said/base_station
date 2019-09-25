@@ -17,12 +17,18 @@
             var id = row.children('td:first').text();
             var name = row.children('td:eq(1)').text();
             var email = row.find('td:eq(2)').text().trim();
+            var type =row.find('td:eq(3)').text().trim();
+            var organization = row.find('td:eq(4)').text().trim();
+
             // Update the modal's content. We'll use jQuery here,
             // but you could use a data binding library or other methods instead.
             var modal = $('#EditDemo');
             modal.find('.modal-body #name').val(name);
             modal.find('.modal-body #email').val(email);
             modal.find('.modal-body #user_id').val(id);
+            modal.find('.modal-body #type').val(type);
+            modal.find('.modal-body #organization').val(organization);
+
         });
     });
 
@@ -163,6 +169,14 @@
                         <div class="form-group">
                             <label class="col-form-label" for="password">New Password</label>
                             <input type="text" name="password" class="form-control" id="password">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="organization">Organization</label>
+                            <input type="text" name="organization" class="form-control" id="organization">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="type">Type</label>
+                            <input type="text" name="type" class="form-control" id="type">
                         </div>
                     </div>
                 </div>
