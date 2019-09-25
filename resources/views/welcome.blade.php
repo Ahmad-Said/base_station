@@ -61,7 +61,9 @@ for ($i=2; $i <=5 ; $i++) {
                 <div class="card-header">
                     <h4 style="text-align:center">
                         Enter Item Details
-                        <button type="submit" class="" id="generate-link-submit" name="generateLinkOnly" value="exist">
+                        <button type="submit" class="" id="generate-link-submit" name="generateLinkOnly" value="exist"
+                            data-toggle="tooltip" data-delay="0" data-placement="top"
+                            title="Generate Link to clipboard">
                             <span class="fas fa-link"></span>
                             <i class="fas fa-spinner fa-spin" id='myspinner2' style="display: none"></i>
                             <i id="submit-text-generate-link"> </i>

@@ -96,7 +96,6 @@
             }
     });
 </script>
-
 <script>
     $(document).ready(function () {
             $('#dtBasicExample').DataTable();
@@ -110,29 +109,63 @@
             });
         });
 
+        function generateLinkToClip() {
+            copyStringToClipboard("{{ URL::to('/').$AnalyseConfig_link_Example }}");
+            var info = $("#link_copeid_info");
+            info.slideDown(500).delay(5000).slideUp(500);
+        }
+        function copyStringToClipboard (str) {
+                // Create new element
+                var el = document.createElement('textarea');
+                // Set value (string to be copied)
+                el.value = str;
+                // Set non-editable to avoid focus and move outside of view
+                el.setAttribute('readonly', '');
+                el.style = {position: 'absolute', left: '-9999px'};
+                document.body.appendChild(el);
+                // Select text inside element
+                el.select();
+                // Copy text to clipboard
+                document.execCommand('copy');
+                // Remove temporary element
+                document.body.removeChild(el);
+            }
 </script>
 
 <div class="card text-center table-responsive" style="border-width:2px;">
     <div class="card-header" style="color:#fc0703; background-color:#d6d7d4">
-        <h4><b>Results</b></h4>
+        <h4><b>
+                Results
+                <button id="result_link" style="color:#fc0703; background-color:#d6d7d4" data-toggle="tooltip"
+                    data-delay="0" data-placement="top" title="Copy Link to clipboard" onclick="generateLinkToClip()">
+                    <i class="fas fa-link"></i>
+                </button>
+                <div id="link_copeid_info" style="display: none;">
+                    <a href="{{ URL::to('/').$AnalyseConfig_link_Example }}">
+                        Link Copeid to Clipboard
+                    </a>
+                </div>
     </div>
-    <div class="card-body">
-        @if (count($AntennaSolution)> 0)
-        <div class="float-left">
-            @if ($isCacheAllowed)
+    </b>
+    </h4>
+</div>
+<div class="card-body">
+    @if (count($AntennaSolution)> 0)
+    <div class="float-left">
+        @if ($isCacheAllowed)
 
-            Pages
-            @endif
-            @if (count($AntennaSolution) >10)
-            @if ($isCacheAllowed)
+        Pages
+        @endif
+        @if (count($AntennaSolution) >10)
+        @if ($isCacheAllowed)
 
-            <select name="page_selection" id="page_selection" class="form-control-sm" onchange='location =
+        <select name="page_selection" id="page_selection" class="form-control-sm" onchange='location =
             "{{ url()->current() . "?" }}"
             +"page="+$(this).val()+"&"
             +"{{http_build_query(Request::except("page")) }}"
             '>
-                @endif
-                <?php
+            @endif
+            <?php
                 if($isCacheAllowed){
                     for ($i=1; $i <= $AntennaSolution->lastPage(); $i++) {
                         echo "<option value=".$i;
@@ -143,112 +176,111 @@
                     }
                 }
             ?>
-                @if ($isCacheAllowed)
+            @if ($isCacheAllowed)
 
-            </select>
-            @endif
-            @endif
-            @if($isCacheAllowed)
-            Showing set from {{ $AntennaSolution->currentPage()*100-100+1 }} to
-            {{ $AntennaSolution->currentPage()*100-100+count($AntennaSolution) }}
-
-            <?php $confNb=$AntennaSolution->currentPage()*100-100+1; ?>
-            @else
-            <?php $confNb=1; ?>
-            @endif
-        </div>
-        <br>
-        <br>
-
-
-
-        {{-- @else --}}
-        @if ($isCacheAllowed)
-
-        <a class="btn btn-default btn-block toggle-pagination"><i class="fas fa-expand-arrows-alt"></i> Toggle
-            Pagination</a>
-        {!! $AntennaSolution->links() !!}
+        </select>
         @endif
-
-
         @endif
+        @if($isCacheAllowed)
+        Showing set from {{ $AntennaSolution->currentPage()*100-100+1 }} to
+        {{ $AntennaSolution->currentPage()*100-100+count($AntennaSolution) }}
 
-        <div class="float-left">
-            {!! Form::open(['action' => ['AnalyserController@editForm'] , 'method' => 'GET', 'enctype' =>
-            'multipart/form-data']) !!}
-            <input type="hidden" name=technology value="<?php print base64_encode(serialize($technology)) ?>">
-            <input type="hidden" name=band value="<?php print base64_encode(serialize($band)) ?>">
-            <input type="hidden" name=port value="<?php print base64_encode(serialize($port)) ?>">
-            <input type="hidden" name=antenna_per_sector value="<?php echo $antenna_per_sector; ?>">
-            <input type="hidden" name=antenna_preferred value="<?php echo $antenna_preferred; ?>">
-            <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
-            <button type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input">
-                <i class="fas fa-backward"></i>
-                Modifie Input
-                <i class="fas fa-cog"></i>
-            </button>
-            {!! Form::close() !!}
-        </div>
-        <div class="float-right">
-            {!! Form::open(['action' => ['AntennasController@pickAntennas'], 'method' => 'GET', 'enctype' =>
-            'multipart/form-data']) !!}
-            <input type="hidden" name=antennasSetIds value="">
-            <input type="hidden" name="url_full_get" value={{ $AnalyseConfig_link_Example }}>
-            <button type="submit" class="btn btn-primary" value="Test against Custom Antennas">
-                <i class="far fa-angry"></i>
-                Test against Custom Antennas
-                <i class="fas fa-forward"></i>
-            </button>
-            {!! Form::close() !!}
-        </div>
-        <br>
-        <br>
-        @if (isset($isToggledCollapseBtn))
-        <script>
-            $(document).ready(function () {
+        <?php $confNb=$AntennaSolution->currentPage()*100-100+1; ?>
+        @else
+        <?php $confNb=1; ?>
+        @endif
+    </div>
+    <br>
+    <br>
+
+
+
+    {{-- @else --}}
+    @if ($isCacheAllowed)
+
+    <a class="btn btn-default btn-block toggle-pagination"><i class="fas fa-expand-arrows-alt"></i> Toggle
+        Pagination</a>
+    {!! $AntennaSolution->links() !!}
+    @endif
+
+
+    @endif
+
+    <div class="float-left">
+        {!! Form::open(['action' => ['AnalyserController@editForm'] , 'method' => 'GET', 'enctype' =>
+        'multipart/form-data']) !!}
+        <input type="hidden" name=technology value="<?php print base64_encode(serialize($technology)) ?>">
+        <input type="hidden" name=band value="<?php print base64_encode(serialize($band)) ?>">
+        <input type="hidden" name=port value="<?php print base64_encode(serialize($port)) ?>">
+        <input type="hidden" name=antenna_per_sector value="<?php echo $antenna_per_sector; ?>">
+        <input type="hidden" name=antenna_preferred value="<?php echo $antenna_preferred; ?>">
+        <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
+        <button type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input">
+            <i class="fas fa-backward"></i>
+            Modifie Input
+            <i class="fas fa-cog"></i>
+        </button>
+        {!! Form::close() !!}
+    </div>
+    <div class="float-right">
+        {!! Form::open(['action' => ['AntennasController@pickAntennas'], 'method' => 'GET', 'enctype' =>
+        'multipart/form-data']) !!}
+        <input type="hidden" name=antennasSetIds value="">
+        <input type="hidden" name="url_full_get" value={{ $AnalyseConfig_link_Example }}>
+        <button type="submit" class="btn btn-primary" value="Test against Custom Antennas">
+            <i class="far fa-angry"></i>
+            Test against Custom Antennas
+            <i class="fas fa-forward"></i>
+        </button>
+        {!! Form::close() !!}
+    </div>
+    <br>
+    <br>
+    @if (isset($isToggledCollapseBtn))
+    <script>
+        $(document).ready(function () {
                 $("#collapse_btn").click();
             });
-        </script>
-        @endif
-        <button id="collapse_btn" class="list-group-item btn btn-outline-info" clicked data-toggle="collapse"
-            data-target="#demo1" style="color: black">
-            Form Request
-        </button>
-        <div id="demo1" class="collapse">
-            <br>
-            @include('inc.TechFullForm_inc')
-        </div>
+    </script>
+    @endif
+    <button id="collapse_btn" class="list-group-item btn btn-info" clicked data-toggle="collapse" data-target="#demo1"
+        style="color: black">
+        Form Request
+    </button>
+    <div id="demo1" class="collapse">
+        @include('inc.TechFullForm_inc')
+    </div>
 
-        @if (count($AntennaSolution) >0)
-
+    @if (count($AntennaSolution) >0)
 
 
-        <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
-            cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Configuration #</th>
-                    <th># Antennas Per Sector</th>
-                    <th>Antenna Model Number</th>
-                    <th>Total Ports #</th>
-                    <th>Low Band</th>
-                    <th>Mid Band</th>
-                    <th>High Band</th>
-                    <th>Height (mm)</th>
-                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
-                    <th>Unite Price ($)</th>
-                    @endif
-                    <th>Quantity</th>
-                    <th>Link to data sheets</th>
-                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
-                    <th>Total Price ($)</th>
-                    @endif
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($AntennaSolution as $key => $setSolution)
-                <tr>
-                    <?php
+
+    <table id="dtBasicExample" class="table table-hover table-responsive-lg  table-striped table-bordered table-sm"
+        cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Configuration #</th>
+                <th># Antennas Per Sector</th>
+                <th>Antenna Model Number</th>
+                <th>Total Ports #</th>
+                <th>Low Band</th>
+                <th>Mid Band</th>
+                <th>High Band</th>
+                <th>Height (mm)</th>
+                @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
+                <th>Unite Price ($)</th>
+                @endif
+                <th>Quantity</th>
+                <th>Link to data sheets</th>
+                @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
+                <th>Total Price ($)</th>
+                @endif
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($AntennaSolution as $key => $setSolution)
+            <tr>
+                <?php
                         $totalPrice = 0;
                         $secondQuantity = 0;
                         $totalRow= count($setSolution);
@@ -288,48 +320,48 @@
                                 }
                             }
                     ?>
-                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $confNb++ }}
-                        <a name="AnalyseConfig"
-                            href="/AnalyseConfig/Conf={{ $confNb-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
-                            target="_blank">
-                            <i class="far fa-question-circle"></i>
-                        </a>
+                <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $confNb++ }}
+                    <a name="AnalyseConfig"
+                        href="/AnalyseConfig/Conf={{ $confNb-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
+                        target="_blank">
+                        <i class="far fa-question-circle"></i>
+                    </a>
 
 
-                    </td>
-                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
-                    <td>{{ $setSolution[0]->model_nb }}</td>
-                    <td>{{ $setSolution[0]->total_nb_ports }}</td>
-                    <td>{{ $setSolution[0]->ports_lt_1GH }}</td>
-                    <td>{{ $setSolution[0]->ports_btw_1_3GH }}</td>
-                    <td>{{ $setSolution[0]->ports_bt_3GH }}</td>
-                    <td>{{ $setSolution[0]->height_mm }}</td>
-                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
-                    <td>{{ $setSolution[0]->msp_usd }}</td>
-                    @endif
-                    <td>
-                        {{ $firstQuantity  }}
-                    </td>
+                </td>
+                <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
+                <td>{{ $setSolution[0]->model_nb }}</td>
+                <td>{{ $setSolution[0]->total_nb_ports }}</td>
+                <td>{{ $setSolution[0]->ports_lt_1GH }}</td>
+                <td>{{ $setSolution[0]->ports_btw_1_3GH }}</td>
+                <td>{{ $setSolution[0]->ports_bt_3GH }}</td>
+                <td>{{ $setSolution[0]->height_mm }}</td>
+                @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
+                <td>{{ $setSolution[0]->msp_usd }}</td>
+                @endif
+                <td>
+                    {{ $firstQuantity  }}
+                </td>
 
-                    <td><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
-                    @if(Auth::user()->type=='admin')
-                    <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $totalPrice }} </td>
-                    @endif
-                </tr>
-                <?php unset($setSolution[0])?>
+                <td><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
+                @if(Auth::user()->type=='admin')
+                <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $totalPrice }} </td>
+                @endif
+            </tr>
+            <?php unset($setSolution[0])?>
 
-                @foreach ($setSolution as $item)
-                <tr>
-                    <td>{{ $item->model_nb }}</td>
-                    <td>{{ $item->total_nb_ports }}</td>
-                    <td>{{ $item->ports_lt_1GH }}</td>
-                    <td>{{ $item->ports_btw_1_3GH }}</td>
-                    <td>{{ $item->ports_bt_3GH }}</td>
-                    <td>{{ $item->height_mm }}</td>
-                    @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
-                    <td>{{ $item->msp_usd }}</td>@endif
-                    <td>
-                        <?php
+            @foreach ($setSolution as $item)
+            <tr>
+                <td>{{ $item->model_nb }}</td>
+                <td>{{ $item->total_nb_ports }}</td>
+                <td>{{ $item->ports_lt_1GH }}</td>
+                <td>{{ $item->ports_btw_1_3GH }}</td>
+                <td>{{ $item->ports_bt_3GH }}</td>
+                <td>{{ $item->height_mm }}</td>
+                @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
+                <td>{{ $item->msp_usd }}</td>@endif
+                <td>
+                    <?php
                             if($secondQuantity!= 0)
                                 echo 2;
                             else {
@@ -337,18 +369,19 @@
                             }
                         ?>
 
-                    </td>
-                    <td><a href="{{ $item->link_online }}">Data sheet</a></td>
+                </td>
+                <td><a href="{{ $item->link_online }}">Data sheet</a></td>
 
-                </tr>
-                @endforeach
-                @endforeach
-            </tbody>
-        </table>
-        @else
-        <p>Sorry, There is No solution at with given input</p>
-        @endif
-    </div>
+            </tr>
+            @endforeach
+            @endforeach
+        </tbody>
+    </table>
+    @else
+    <p>Sorry, There is No solution at with given input</p>
+    @endif
+</div>
+</div>
 
 </div>
 <br><br><br>
