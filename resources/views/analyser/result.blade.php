@@ -111,8 +111,8 @@
 
         function generateLinkToClip() {
             copyStringToClipboard("{{ URL::to('/').$AnalyseConfig_link_Example }}");
-            var info = $("#link_copeid_info");
-            info.slideDown(500).delay(5000).slideUp(500);
+            // var info = $("#link_copeid_info");
+            // info.slideDown(500).delay(5000).slideUp(500);
         }
         function copyStringToClipboard (str) {
                 // Create new element
@@ -135,19 +135,20 @@
 <div class="card text-center table-responsive" style="border-width:2px;">
     <div class="card-header" style="color:#fc0703; background-color:#d6d7d4">
         <h4><b>
-                Results
-                <button id="result_link" style="color:#fc0703; background-color:#d6d7d4" data-toggle="tooltip"
-                    data-delay="0" data-placement="top" title="Copy Link to clipboard" onclick="generateLinkToClip()">
-                    <i class="fas fa-link"></i>
+                Results<br>
+                <button id="result_link" style="color:blue;" title="Copy Link to clipboard"
+                    onclick="generateLinkToClip()">
+                    {{-- <i class="fas fa-link"></i> --}}
+                    <h6> Copy link to clipboard<h6>
                 </button>
-                <div id="link_copeid_info" style="display: none;">
+                {{-- <div id="link_copeid_info" style="display: none;">
                     <a href="{{ URL::to('/').$AnalyseConfig_link_Example }}">
-                        Link Copeid to Clipboard
-                    </a>
-                </div>
-    </div>
-    </b>
-    </h4>
+                Link Copeid to Clipboard
+                </a>
+    </div> --}}
+</div>
+</b>
+</h4>
 </div>
 <div class="card-body">
     @if (count($AntennaSolution)> 0)
@@ -217,7 +218,7 @@
         <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
         <button type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input">
             <i class="fas fa-backward"></i>
-            Modifie Input
+            Modify Input
             <i class="fas fa-cog"></i>
         </button>
         {!! Form::close() !!}
@@ -313,47 +314,49 @@
                                 }
                             }
                     ?>
-                <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $confNb++ }}
+                <td style="vertical-align: middle;" align="center"  rowspan={{ $totalRow }}>{{ $confNb++ }}
+                        @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
+
                     <a name="AnalyseConfig"
                         href="/AnalyseConfig/Conf={{ $confNb-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
                         target="_blank">
                         <i class="far fa-question-circle"></i>
                     </a>
-
+@endif
 
                 </td>
-                <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
-                <td>{{ $setSolution[0]->model_nb }}</td>
-                <td>{{ $setSolution[0]->total_nb_ports }}</td>
-                <td>{{ $setSolution[0]->ports_lt_1GH }}</td>
-                <td>{{ $setSolution[0]->ports_btw_1_3GH }}</td>
-                <td>{{ $setSolution[0]->ports_bt_3GH }}</td>
-                <td>{{ $setSolution[0]->height_mm }}</td>
+                <td style="vertical-align: middle;"  align="center" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
+                <td align="center" >{{ $setSolution[0]->model_nb }}</td>
+                <td align="center">{{ $setSolution[0]->total_nb_ports }}</td>
+                <td align="center">{{ $setSolution[0]->ports_lt_1GH }}</td>
+                <td align="center">{{ $setSolution[0]->ports_btw_1_3GH }}</td>
+                <td align="center">{{ $setSolution[0]->ports_bt_3GH }}</td>
+                <td align="center">{{ $setSolution[0]->height_mm }}</td>
                 @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
-                <td>{{ $setSolution[0]->msp_usd }}</td>
+                <td align="center">{{ $setSolution[0]->msp_usd }}</td>
                 @endif
                 <td>
                     {{ $firstQuantity  }}
                 </td>
 
-                <td><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
+                <td align="center"><a href="{{ $setSolution[0]->link_online }}">Data sheet</a></td>
                 @if(Auth::user()->type=='admin')
-                <td style="vertical-align: middle;" rowspan={{ $totalRow }}>{{ $totalPrice }} </td>
+                <td style="vertical-align: middle;" align="center" rowspan={{ $totalRow }}>{{ $totalPrice }} </td>
                 @endif
             </tr>
             <?php unset($setSolution[0])?>
 
             @foreach ($setSolution as $item)
             <tr>
-                <td>{{ $item->model_nb }}</td>
-                <td>{{ $item->total_nb_ports }}</td>
-                <td>{{ $item->ports_lt_1GH }}</td>
-                <td>{{ $item->ports_btw_1_3GH }}</td>
-                <td>{{ $item->ports_bt_3GH }}</td>
-                <td>{{ $item->height_mm }}</td>
+                <td align="center" >{{ $item->model_nb }}</td>
+                <td align="center">{{ $item->total_nb_ports }}</td>
+                <td align="center">{{ $item->ports_lt_1GH }}</td>
+                <td align="center">{{ $item->ports_btw_1_3GH }}</td>
+                <td align="center">{{ $item->ports_bt_3GH }}</td>
+                <td align="center">{{ $item->height_mm }}</td>
                 @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
-                <td>{{ $item->msp_usd }}</td>@endif
-                <td>
+                <td align="center">{{ $item->msp_usd }}</td>@endif
+                <td align="center">
                     <?php
                             if($secondQuantity!= 0)
                                 echo 2;
@@ -363,7 +366,7 @@
                         ?>
 
                 </td>
-                <td><a href="{{ $item->link_online }}">Data sheet</a></td>
+                <td align="center"><a href="{{ $item->link_online }}">Datasheet</a></td>
 
             </tr>
             @endforeach

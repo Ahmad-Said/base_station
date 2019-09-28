@@ -33,9 +33,9 @@
                 cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th>Minimum Frequecy</th>
-                        <th>Maximum Frequecy</th>
-                        <th>Symbol</th>
+                        <th>Minimum Frequecy band</th>
+                        <th>Maximum Frequecy band</th>
+                        <th>Radio Technology</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>

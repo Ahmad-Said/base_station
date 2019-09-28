@@ -25,9 +25,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/about" style="color:black;">Help</a>
-            </li>
+
             @endif @else
 
             {{-- <div class="dropdown"> --}}
@@ -42,6 +40,15 @@
                     <a class="dropdown-item" href="/profile">
                         Profile
                     </a>
+                    @if(Auth::user()!=null && (Auth::user()->type=='customer' || Auth::user()->type=='salesman'))
+                    <a class="dropdown-item" href="/posts">Posts</a>
+                    <a class="dropdown-item" href="/about" style="color:black;">Help</a>
+                    @endif
+                    @if(Auth::user()!=null && (Auth::user()->type=='salesman'))
+                    <a class="dropdown-item" href={{ route('QueryLog') }}>
+                          Query History</a>
+
+                    @endif
                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                        document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}

@@ -100,7 +100,7 @@
             </td>
             <td>
                 {{ Form::submit('Save Setting',
-                        ['class'=>'bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg',"style" => "vertical-align: middle;"]) }}
+                        ['class'=>'bg-success text-light font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg',"style" => "vertical-align: middle;"]) }}
 
                 {!! Form::close() !!}
             </td>
@@ -137,8 +137,8 @@
             </td>
             <td>
                 <a href="/provideAntennasData"
-                    class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
-                    Trigger update
+                    class="bg-primary text-light font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
+                    Update database
                 </a>
             </td>
         </tr>

@@ -91,7 +91,7 @@
                                         </button>
                                         <a href="/profile/{{ $user->id }}/edit" role="button"
                                             class="btn btn-warning btn-sm waves-effect  btn-warning">
-                                            {{-- <span class="fas fa-user-slash"></span> --}}Status
+                                            {{-- <span class="fas fa-user-slash"></span> --}}@if ($user->is_activated) Disable @else Enable @endif
                                         </a>
                                         <button type="button"
                                             class="btn btn-danger btn-sm waves-effect  btn-danger delbtn"
@@ -151,7 +151,7 @@
                 <!-- used for update function -->
                 {{ csrf_field() }}
                 <!-- because of pages expired error -->
-                <div class="card text-white bg-dark mb-0">
+                <div class="card text-white bg-danger mb-0">
                     <div class="card-header">
                         <h2 class="m-0">Edit User</h2>
                     </div>
@@ -176,7 +176,10 @@
                         </div>
                         <div class="form-group">
                             <label class="col-form-label" for="type">Type</label>
-                            <input type="text" name="type" class="form-control" id="type">
+                            <select id="type" class="custom-select form-control" name="type">
+                                <option value="customer">Customer</option>
+                                <option value="salesman">Salesman</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -218,7 +221,7 @@
                     <input type="hidden" name="userid" class="form-control" id="user_id" value="">
                 </div>
                 <div class="card-footer flex-center">
-                    <button type="button" class="btn  btn-info waves-effect float-left" data-dismiss="modal">No</button>
+                    <button type="button" class="btn  btn-success waves-effect float-left" data-dismiss="modal">No</button>
                     <button type="submit" class="btn  btn-danger waves-effect float-right">Yes</button>
                 </div>
             </div>
