@@ -54,8 +54,7 @@ class AnalyserController extends Controller
      *                         | antenna_per_sector
      *                         | antenna_preferred (may not exist) default is one
      *                         | max_height
-     *                         | technology[] | port[] | band[]
-     *                         | isToggledCollapseBtn show Full tech info toggled
+     *                         | technology[] | port[] | band[] bandIds
      *                         special parameter to show tech info by default
      *
      * @return View The result view
@@ -77,11 +76,11 @@ class AnalyserController extends Controller
         $technology = $request->input("technology");
         $port = $request->input("port");
         $band = $request->input("band");
+        $bandInfo = XgBands::getFullInfoFromIds($band);
         $antenna_per_sector = $request->input("antenna_per_sector");
         $max_height = $request->input("max_height");
         $antenna_preferred = $request->input("antenna_preferred");
         // only check later by isset
-        $isToggledCollapseBtn = $request->input("isToggledCollapseBtn");
         if ($request->hasSession()) {
             $load_more = $request->session()->get("load");
             $request->session()->forget("load");
@@ -206,7 +205,7 @@ class AnalyserController extends Controller
             $beginRowFrom = $saveCachedResult->combination_nb;
             // trying to compute solution such all ports in all antennas
             // are filled with no waste i.e. $totalNbPorts = $totalTechNbPorts;
-            $AntennaSolution = AnalyserController::_solutionCalculator(
+            $AntennaSolution =  AnalyserController::_solutionCalculator(
                 $totalNbPorts,
                 $totalTechNbPorts,
                 $port,
@@ -281,7 +280,8 @@ class AnalyserController extends Controller
             $msg .=
                 '<a class="btn-sm btn-danger btn-sm waves-effect
                   btn-outline-danger load-link one-time"
-                     href=/result?' . $request->fullUrlWithQuery(["load" => true]) . '>
+                     href=/result?' . $request->fullUrlWithQuery(["load" => true])
+                . '>
                 Load more <i class="fas fa-truck"></i></a><br>';
         }
 
@@ -293,21 +293,21 @@ class AnalyserController extends Controller
             }
         }
 
+        // Define how many items we want to be visible in each page
+        $perPage = SettingWebLara::getSolutionPerPageResult();
+
         if ($isCacheAllowed) {
 
 
             // paginating items for faster browsing
             // https://arjunphp.com/laravel-5-pagination-array/
-            // good for custumization:
+            // good for customization:
             // https://laracasts.com/discuss/channels/laravel/custom-pagination-number-of-pages-before-dots
             // Get current page form url e.x. &page=1
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             // return $currentPage;
             // Create a new Laravel collection from the array data
             $itemCollection = collect($AntennaSolution);
-
-            // Define how many items we want to be visible in each page
-            $perPage = 100;
 
             // Slice the collection to get the items to display in current page
             $currentPageItems = $itemCollection->slice(
@@ -322,16 +322,13 @@ class AnalyserController extends Controller
                 $perPage
             );
 
-            // set url path for generted links
+            // set url path for generated links
             $paginatedItems->setPath($request->fullUrl());
 
             // $paginatedItems->onEachSide(PHP_INT_MAX);
             $AntennaSolution = $paginatedItems;
         }
         // return view('pages.test', ['items' => $paginatedItems]);
-        if (count($AntennaSolution) == 0) {
-            $isToggledCollapseBtn = true;
-        }
 
         $msg .= " <br> Took about "
             . DebuggerHelper::pingTime("result") . " seconds.";
@@ -356,13 +353,13 @@ class AnalyserController extends Controller
             ->with("technology", $technology)
             ->with("band", $band)
             ->with("port", $port)
-            ->with("bandSymbols", XgBands::getSymbols($technology, $band))
+            ->with("bandSymbols", XgBands::getSymbols($band))
             ->with("info", $msg)
             ->with("AnalyseConfig_link", $AnalyseConfig_link)
             ->with("AnalyseConfig_link_Example", $AnalyseConfig_link_Example)
             ->with("isCacheAllowed", $isCacheAllowed)
-            ->with("isLoadMore", !$saveCachedResult->state_finish)
-            ->with("isToggledCollapseBtn", $isToggledCollapseBtn);
+            ->with("perPage", $perPage)
+            ->with("isLoadMore", !$saveCachedResult->state_finish);
     }
 
     /**
@@ -402,7 +399,6 @@ class AnalyserController extends Controller
         $AntennaMaxOrder = array();
         // default was 50000
         $LimitRow = SettingWebLara::getLimitRowPerQuery();
-        $marginError = SettingWebLara::getMarginError();
         // sort array based on ports
         // so when testing combinations starting with biggest ports
         // is better so tech with less ports do not take the place of
@@ -419,13 +415,13 @@ class AnalyserController extends Controller
         usort(
             $systemG,
             function ($a, $b) {
-                $retval = $b[0] <=> $a[0];
-                return $retval;
+                return $b[0] <=> $a[0];
             }
         );
         $colSystemG = collect($systemG);
         $port = $colSystemG->pluck(0)->toArray();
         $band = $colSystemG->pluck(1)->toArray();
+        $bandInfo = XgBands::getFullInfoFromIds($band);
 
         // start from preferred antenna number then loop over until solution found
         $AntennaMaxOrder[] = $antenna_preferred;
@@ -446,16 +442,7 @@ class AnalyserController extends Controller
                 $saveCachedResult->combination_nb,
                 $LimitRow
             );
-            // return count($possibleCombination);
-            // return DebuggerHelper::pingReport();
-            // // TODO
-            // return $possibleCombination;
-            // testing possible combination and adding to solution
             DebuggerHelper::startRecording("filtering combination");
-            // info('This is some useful information.');
-            // info($possibleCombination);
-            // error_log('Some message here.');
-
 
             foreach ($possibleCombination as $key => $value) {
                 $antennaSet = array();
@@ -465,9 +452,8 @@ class AnalyserController extends Controller
                 if (AnalyserController::_isValidSetAntenna(
                     $antennaSet,
                     $port,
-                    $band,
-                    $totalTechNbPorts,
-                    $marginError
+                    $bandInfo,
+                    $totalTechNbPorts
                 )) {
                     $AntennaSolution[] = $antennaSet;
                 }
@@ -506,20 +492,18 @@ class AnalyserController extends Controller
      *
      * @param array $AntennaSet   All antenna to test against
      * @param array $port         All ports of technologies in same order with $band
-     * @param array $band         All bands of technologies in same order with $port
+     * @param array $bandInfo     All bands models of Tech in same order with $port
      * @param int   $totalNbPorts The total number of ports of all system
      *                            It is equal to array_sum($port).. sent with
      *                            parameter for performance reason
-     * @param int   $marginError  The allowed fault when comparing frequency
      *
      * @return bool return wherever this set meet condition or not
      */
     private static function _isValidSetAntenna(
         &$AntennaSet,
         &$port,
-        &$band,
-        $totalNbPorts,
-        $marginError
+        &$bandInfo,
+        $totalNbPorts
     ) {
         // Bands was earlier defined as collection and accessed with magic function
         // ->Bands when mutator and accessors used
@@ -535,7 +519,7 @@ class AnalyserController extends Controller
         // at low system number it is less useful
         // but later on much system number it can low time
         // since it's comparing directly highest port with hightest
-        // total band ports that only if sytemG is sorted by decreasing
+        // total band ports that only if systemG is sorted by decreasing
         // order and that what is done with given input
         // need more testing
         // https://stackoverflow.com/questions/2699086/how-to-sort-multi-dimensional-array-by-value
@@ -547,13 +531,6 @@ class AnalyserController extends Controller
         usort(
             $allBands,
             function ($a, $b) {
-                // $retval = $a['totalPorts'] <=> $b['totalPorts'];
-                // if ($retval == 0) {
-                //     $retval = $a['min'] <=> $b['min'];
-                //     if ($retval == 0) {
-                //         $retval = $a['max'] <=> $b['max'];
-                //     }
-                // }
                 // current state increasing order
                 // with system input ports also decreasing order
                 return $a['totalPorts'] <=> $b['totalPorts'];
@@ -565,8 +542,8 @@ class AnalyserController extends Controller
             foreach ($allBands as $i => &$bandItem) {
 
                 if (
-                    $band[$key] >= $bandItem['min'] - $marginError
-                    && $band[$key] <= $bandItem['max'] + $marginError
+                    $bandInfo[$key]->minFreq >= $bandItem['min']
+                    && $bandInfo[$key]->maxFreq <= $bandItem['max']
                     && $bandItem['totalPorts'] >= $valuePort
                 ) {
                     $bandItem['totalPorts'] -= $valuePort;
@@ -627,7 +604,7 @@ class AnalyserController extends Controller
         //     WHERE a1.`height_mm` <= ?
         //     AND a2.`height_mm` <= ?
         //     AND a1.`id` >= a2.`id`
-        //     AND (a1.`total_nb_ports` + a2.`total_nb_ports`) = ?',
+        //     AND (a1.`total_nb_ports` + a2.`total_nb_ports`) = ?  LIMIT 0,50000',
         //     [$max_height, $max_height, $sumPorts]
         // );
         $query = 'SELECT';
@@ -686,24 +663,17 @@ class AnalyserController extends Controller
 
         DebuggerHelper::startRecording("query combination");
         $allAntennas = DB::select($query, $queryBinding);
-        // if (count($allAntennas) >= $LimitRow) {
-        //     $query = $temp . " ORDER by rand() Limit " . $LimitRow;
-        //     $allAntennas = DB::select($query, $queryBinding);
-        // }
-        // return memory_get_usage()/1024/1024;
-        // // TODO
+
         DebuggerHelper::addMsg(
             DebuggerHelper::pingReport("query combination"),
             "result"
         );
         DebuggerHelper::addMsg(
-            "query is " . $query . "  and binding parameter are " . implode(",", $queryBinding),
+            "query is " . $query . "  and binding parameter are "
+                . implode(",", $queryBinding),
             "result"
         );
-        // return DebuggerHelper::pingReport() . " count is " . count($allAntennas);
-        // return $query;
-        // return 750;
-        // clearing output from useless data
+
         $possibleCombination = array();
         foreach ($allAntennas as $key => $value) {
             $possibleCombination[] = array_values((get_object_vars($value)));
@@ -787,6 +757,7 @@ class AnalyserController extends Controller
         $technology = explode("_", $technology);
         $port =  explode("_", $port);
         $band = explode("_", $band);
+        $bandInfo = XgBands::getFullInfoFromIds($band);
         // will contain an associative array from antenna label
         // to antennas see later on definition
         $AntennaSet = array();
@@ -806,8 +777,7 @@ class AnalyserController extends Controller
                 "max_height" => $max_height,
                 "technology" => $technology,
                 "port" => $port,
-                "band" => $band,
-                "isToggledCollapseBtn" => true
+                "band" => $band
             ];
             if ($request->has("load")) {
                 $queries["load"] = "true";
@@ -828,6 +798,15 @@ class AnalyserController extends Controller
             $AntennaSet[$curLabel]["color"] = '#' . $curColor;
             $AntennaSet[$curLabel]["invColor"] = '#' . $invertColor;
         }
+
+        // test defined original _isValidSetAntenna
+        // return var_dump($this::_isValidSetAntenna(
+        //     $AntennaSet,
+        //     $port,
+        //     $bandInfo,
+        //     $totalNbPorts
+        // ));
+
         // return $AntennaSet;
         // just to prettily look
         if (!isset($max_height) || $max_height == PHP_INT_MAX) {
@@ -883,7 +862,6 @@ class AnalyserController extends Controller
         // return $systemG;
 
 
-        $marginError = SettingWebLara::getMarginError();
         $usedPortsGraph = array();
         $wastePortsGraph = array();
         $usedPorts = 0;
@@ -896,8 +874,8 @@ class AnalyserController extends Controller
                 $curAntColor = $AntennaSet[$curAntLabel]["color"];
                 $curAntInvColor = $AntennaSet[$curAntLabel]["invColor"];
                 if (
-                    $band[$key] >= $bandItem['min'] - $marginError
-                    && $band[$key] <= $bandItem['max'] + $marginError
+                    $bandInfo[$key]->minFreq >= $bandItem['min']
+                    && $bandInfo[$key]->maxFreq <= $bandItem['max']
                     && $bandItem['totalPorts'] >= $valuePort
                 ) {
                     $bandItem['totalPorts'] -= $valuePort;
@@ -995,7 +973,7 @@ class AnalyserController extends Controller
         $band = $colSystemG->pluck(2)->toArray();
         $techToAntenna = $colSystemG->pluck(3)->toArray();
 
-        $bandSymbols = XgBands::getSymbols($technology, $band);
+        $bandSymbols = XgBands::getSymbols($band);
         // return $usedPortsGraph;
         $wastePortsGraph = array_values($wastePortsGraph);
         $usedPortsGraph = array_values($usedPortsGraph);
@@ -1114,7 +1092,7 @@ class AnalyserController extends Controller
         $antenna_per_sector = $result["antenna_per_sector"];
         $antenna_preferred = $result["antenna_preferred"];
         $max_height = $result["max_height"];
-        $bandSymbols = XgBands::getSymbols($technology, $band);
+        $bandSymbols = XgBands::getSymbols($band);
         return $result;
     }
 

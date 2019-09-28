@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use View;
 use App\XgBands;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class XgBandsController extends Controller
 {
@@ -55,10 +56,20 @@ class XgBandsController extends Controller
         $band = new XgBands();
         $band->xg = $request->input("xg");
         $band->symbol = $request->input("symbol");
-        $band->bands = $request->input("band");
-
+        $band->minFreq = $request->input("minFreq");
+        $band->maxFreq = $request->input("maxFreq");
+        $scrollAfterSubmit = $request->input("scrollAfterSubmit");
+        if ($band->minFreq > $band->maxFreq) {
+            return redirect(url()->previous() . '#' . $scrollAfterSubmit)
+                ->with(
+                    'error',
+                    'Minimum Frequency cannot be bigger than Maximum Frequency'
+                );
+        }
         $band->save();
-        return redirect('/bands')->with('success', 'Band Added');
+        // https://stackoverflow.com/questions/38847087/laravel-redirect-back-with-location
+        return redirect(url()->previous() . '#' . $scrollAfterSubmit)
+            ->with('success', 'Band Added');
     }
 
     /**
@@ -88,7 +99,7 @@ class XgBandsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request xg | symbol | band
+     * @param \Illuminate\Http\Request $request xg | symbol | minFreq |maxFreq
      * @param int                      $id      The id
      *
      * @return \Illuminate\Http\Response
@@ -96,33 +107,48 @@ class XgBandsController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $newBand = $request->input("band");
+        $minFreq = $request->input("minFreq");
+        $maxFreq = $request->input("maxFreq");
         $newSymbol = $request->input("symbol");
+        $scrollAfterSubmit = $request->input("scrollAfterSubmit");
 
         $band = XgBands::find($id);
-        $oldBand = $band->bands;
 
-        $band->bands = $newBand;
+        $band->minFreq = $minFreq;
+        $band->maxFreq = $maxFreq;
 
-        $newSymbol = preg_replace("#$oldBand#", "$newBand", $newSymbol);
 
         $band->symbol = $newSymbol;
+
+        if ($band->minFreq > $band->maxFreq) {
+            return redirect(url()->previous() . '#' . $scrollAfterSubmit)
+                ->with(
+                    'error',
+                    'Minimum Frequency cannot be bigger than Maximum Frequency'
+                );
+        }
+
         $band->update();
-        return redirect('/bands')->with('success', 'Band Updated');
+        return redirect(url()->previous() . '#' . $scrollAfterSubmit)
+            ->with('success', 'Band Updated');
+        // return redirect('/bands')->with('success', 'Band Updated');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id The id
+     * @param \Illuminate\Http\Request $request xg | symbol | band
+     * @param int                      $id      The id
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //
+        $scrollAfterSubmit = $request->input("scrollAfterSubmit");
         $ban = XgBands::find($id);
         $ban->delete();
-        return redirect('/bands')->with('success', 'Band Deleted');
+        return redirect(url()->previous() . '#' . $scrollAfterSubmit)
+            ->with('success', 'Band Deleted');
     }
 }

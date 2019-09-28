@@ -25,7 +25,7 @@
         function generategf (array) {
             var st='';
             array.forEach(element => {
-                st+='<option value='+element.bands+'>'+element.symbol+'</option>';
+                st+='<option value='+element.id+'>'+element.symbol+'</option>';
             });
             return st;
         }

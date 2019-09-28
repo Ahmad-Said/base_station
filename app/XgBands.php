@@ -12,7 +12,8 @@ class XgBands extends Model
      * Properties:
      * "id"
      * "xg"
-     * "bands"
+     * "minFreq"
+     * "maxFreq"
      * "symbol"
      */
 
@@ -37,23 +38,43 @@ class XgBands extends Model
     /**
      * Return all bands and their shortcuts
      *
-     * @param array $technology technology array
-     * @param array $band       band array
+     * @param array $bandIds bandIds array
      *
-     * @return array An associative array of bands ex: index 2 => 2g bands
+     * @return array An 1d array of bands symbols same order as given array
      */
-    public static function getSymbols(array $technology, array $band)
+    public static function getSymbols(array $bandIds)
     {
-        $bandSymbols = array();
-        $allXgBand = XgBands::getBands();
-        foreach ($technology as $key => $tech) {
-            foreach ($allXgBand[$tech] as $itemXg) {
-                if ($itemXg->bands == $band[$key]) {
-                    $bandSymbols[] = $itemXg->symbol;
-                    break;
-                }
+        $allXgBand = XgBands::whereIn('id', $bandIds)->get()->mapWithKeys(
+            function ($item) {
+                return [$item->id => $item];
             }
+        );
+        $bandSymbols = array();
+        foreach ($bandIds as $bandId) {
+            $bandSymbols[] = $allXgBand[$bandId]->symbol;
         }
         return $bandSymbols;
+    }
+
+    /**
+     * Return all bands and their shortcuts
+     *
+     * @param array $bandIds band array ids
+     *
+     * @return array An array of App\Bands of given array
+     */
+    public static function getFullInfoFromIds(array $bandIds)
+    {
+        // https://stackoverflow.com/questions/30706603/can-i-do-model-whereid-array-multiple-where-conditions/43643737
+        $allXgBand = XgBands::whereIn('id', $bandIds)->get()->mapWithKeys(
+            function ($item) {
+                return [$item->id => $item];
+            }
+        );
+        $allRequestedBand = array();
+        foreach ($bandIds as $bandId) {
+            $allRequestedBand[] = $allXgBand[$bandId];
+        }
+        return $allRequestedBand;
     }
 }

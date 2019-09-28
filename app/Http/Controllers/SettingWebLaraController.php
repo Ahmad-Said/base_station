@@ -51,7 +51,8 @@ class SettingWebLaraController extends Controller
     {
         $isCACHE_RESULT = $request->input("CACHE_RESULT");
         $newLIMIT_ROW_PER_QUERY = $request->input("LIMIT_ROW_PER_QUERY");
-        $newMARGIN_ERROR_FREQ = $request->input("MARGIN_ERROR_FREQ");
+        $newLIMIT_SOLUTION_PER_PAGE_RESULT
+            = $request->input("LIMIT_SOLUTION_PER_PAGE_RESULT");
         $temp = SettingWebLara::whereSettingName("CACHE_RESULT")->first();
         if (isset($isCACHE_RESULT)) {
             $temp->value = "true";
@@ -60,7 +61,7 @@ class SettingWebLaraController extends Controller
         }
         $temp->save();
         SettingWebLara::setLimitRowPerQuery($newLIMIT_ROW_PER_QUERY);
-        SettingWebLara::setMarginError($newMARGIN_ERROR_FREQ);
+        SettingWebLara::setSolutionPerPageResult($newLIMIT_SOLUTION_PER_PAGE_RESULT);
 
         $allSetting = SettingWebLara::getAllSettings();
         return view('analyser.settingWeb')
@@ -76,7 +77,7 @@ class SettingWebLaraController extends Controller
      */
     public function triggerUpdateProvidedData(Request $request)
     {
-        $temp = AntennasProvider::provideDataToAntennasAndBands();
+        $temp = AntennasProvider::provideDataToAntennasAndBands(true);
         $allSetting = SettingWebLara::getAllSettings();
         return view('analyser.settingWeb')
             ->with("allSetting", $allSetting)

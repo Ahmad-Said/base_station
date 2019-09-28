@@ -53,7 +53,7 @@ class SettingWebLara extends Model
     const LAST_ANTENNA_DATA_PROVIDED = "LAST_ANTENNA_DATA_PROVIDED";
 
     // Used in analyser controller
-    const MARGIN_ERROR_FREQ = "MARGIN_ERROR_FREQ";
+    const LIMIT_SOLUTION_PER_PAGE_RESULT = "LIMIT_SOLUTION_PER_PAGE_RESULT";
 
     // Used in analyser controller
     const LIMIT_ROW_PER_QUERY = "LIMIT_ROW_PER_QUERY";
@@ -100,7 +100,7 @@ class SettingWebLara extends Model
             SettingWebLara::LAST_ANTENNA_DATA_PROVIDED
         )
             ->first();
-        $temp->value = 1;
+        $temp->value = !$temp->value; // just to update timeStamps
         $temp->save();
         return $temp;
     }
@@ -111,10 +111,10 @@ class SettingWebLara extends Model
      * @return App\SettingWebLara LAST_ANTENNA_DATA_PROVIDED
      *                            useful for timestamp ->update_at
      */
-    public static function getMarginError()
+    public static function getSolutionPerPageResult()
     {
         $temp = SettingWebLara::whereSettingName(
-            SettingWebLara::MARGIN_ERROR_FREQ
+            SettingWebLara::LIMIT_SOLUTION_PER_PAGE_RESULT
         )
             ->first();
         return $temp->value;
@@ -123,16 +123,18 @@ class SettingWebLara extends Model
     /**
      * Touch LAST_ANTENNA_DATA_PROVIDED Setting to current date
      *
+     * @param int $newSolutionPerPage Used for pagination where there is many results
+     *
      * @return App\SettingWebLara LAST_ANTENNA_DATA_PROVIDED
      *                            useful for timestamp ->update_at
      */
-    public static function setMarginError($newMarginError)
+    public static function setSolutionPerPageResult($newSolutionPerPage)
     {
         $temp = SettingWebLara::whereSettingName(
-            SettingWebLara::MARGIN_ERROR_FREQ
+            SettingWebLara::LIMIT_SOLUTION_PER_PAGE_RESULT
         )
             ->first();
-        $temp->value = $newMarginError;
+        $temp->value = $newSolutionPerPage;
         $temp->save();
         return $temp->value;
     }

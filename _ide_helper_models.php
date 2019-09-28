@@ -109,7 +109,7 @@ namespace App{
  * 13 -> Gain (>3GHz) [dBi] : text
  * 14 -> Typical HBW @3dB [deg] : text
  * 15 -> Polarization : text
- * 16 -> Internal Diplexing : text
+ * 16 -> Internal Duplexing : text
  * 17 -> Antenna size category [m] : text
  * 18 -> Connectors type : text
  * 19 -> Electrical Tilt : text
@@ -293,9 +293,9 @@ namespace App{
  * @property string $response_ids
  * @property int $sum_ports
  * @property int $state_finish
- * @property int $solution_count
- * @property int $combination_nb
  * @property int $antennas_count
+ * @property int $combination_nb
+ * @property int $solution_count
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -400,13 +400,15 @@ namespace App{
  *
  * @property int $id
  * @property int $xg
- * @property int $bands
+ * @property int $minFreq
+ * @property int $maxFreq
  * @property string $symbol
  * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands whereBands($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands whereMaxFreq($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands whereMinFreq($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands whereSymbol($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\XgBands whereXg($value)
  */

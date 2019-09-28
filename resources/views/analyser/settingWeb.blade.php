@@ -78,10 +78,11 @@
         <tr style="background-color: #F7F7F7">
             <td>
                 <div class="form-group">
-                    <label for="LIMIT_ROW_PER_QUERY">Allowed Error Margin <=Comparing=> Frequency</label>
+                    <label for="LIMIT_ROW_PER_QUERY">Solutions count Per page in results</label>
             <td>
-                <input id="LIMIT_ROW_PER_QUERY" class="form-control" type="number" min="0" name="MARGIN_ERROR_FREQ"
-                    value={{ $allSetting["MARGIN_ERROR_FREQ"]->value }}>
+                <input id="LIMIT_ROW_PER_QUERY" class="form-control" type="number" min="0"
+                    name="LIMIT_SOLUTION_PER_PAGE_RESULT"
+                    value={{ $allSetting["LIMIT_SOLUTION_PER_PAGE_RESULT"]->value }}>
             </td>
             <td>
                 <i class="fas fa-level-down-alt"></i>

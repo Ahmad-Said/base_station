@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * 13 -> Gain (>3GHz) [dBi] : text
  * 14 -> Typical HBW @3dB [deg] : text
  * 15 -> Polarization : text
- * 16 -> Internal Diplexing : text
+ * 16 -> Internal Duplexing : text
  * 17 -> Antenna size category [m] : text
  * 18 -> Connectors type : text
  * 19 -> Electrical Tilt : text
@@ -157,6 +157,8 @@ class AntennasProvider extends Model
      * Column needed index -> property  type
      *
      * @param bool $doTouchUpdated touch last updated setting and return it
+     *                             this setting was added as work around to resolve
+     *                             seeder error see DatabaseSeeder@run->false
      *
      * @return App\SettingWebLara CACHE_RESULT useful for timestamp ->update_at
      */

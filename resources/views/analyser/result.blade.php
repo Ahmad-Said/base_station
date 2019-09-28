@@ -182,10 +182,10 @@
         @endif
         @endif
         @if($isCacheAllowed)
-        Showing set from {{ $AntennaSolution->currentPage()*100-100+1 }} to
-        {{ $AntennaSolution->currentPage()*100-100+count($AntennaSolution) }}
+        Showing set from {{ $AntennaSolution->currentPage()*$perPage-$perPage+1 }} to
+        {{ $AntennaSolution->currentPage()*$perPage-$perPage+count($AntennaSolution) }}
 
-        <?php $confNb=$AntennaSolution->currentPage()*100-100+1; ?>
+        <?php $confNb=$AntennaSolution->currentPage()*$perPage-$perPage+1; ?>
         @else
         <?php $confNb=1; ?>
         @endif
@@ -236,18 +236,11 @@
     </div>
     <br>
     <br>
-    @if (isset($isToggledCollapseBtn))
-    <script>
-        $(document).ready(function () {
-                $("#collapse_btn").click();
-            });
-    </script>
-    @endif
-    <button id="collapse_btn" class="list-group-item btn btn-info" clicked data-toggle="collapse" data-target="#demo1"
-        style="color: black">
+
+    <h4>
         Form Request
-    </button>
-    <div id="demo1" class="collapse">
+    </h4>
+    <div id="demo1">
         @include('inc.TechFullForm_inc')
     </div>
 

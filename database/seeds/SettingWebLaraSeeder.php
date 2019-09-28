@@ -27,7 +27,7 @@ class SettingWebLaraSeeder extends Seeder
                 "created_at" =>  \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()
             ),
             array(
-                'setting_name' => 'MARGIN_ERROR_FREQ', 'value' => '10',
+                'setting_name' => 'LIMIT_SOLUTION_PER_PAGE_RESULT', 'value' => '100',
                 "created_at" =>  \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()
             ),
             array(

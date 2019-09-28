@@ -16,7 +16,8 @@ class CreateXgBandsTable extends Migration
         Schema::create('xg_bands', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('xg');
-            $table->integer('bands');
+            $table->integer('minFreq');
+            $table->integer('maxFreq');
             $table->string('symbol');
         });
     }
