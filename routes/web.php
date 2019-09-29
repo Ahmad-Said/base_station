@@ -67,3 +67,9 @@ Route::get(
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get(
+    '/updateDatabaseByGetCron',
+    'SettingWebLaraController@updateDatabaseByGetCron'
+);

@@ -111,8 +111,8 @@
 
         function generateLinkToClip() {
             copyStringToClipboard("{{ URL::to('/').$AnalyseConfig_link_Example }}");
-            // var info = $("#link_copeid_info");
-            // info.slideDown(500).delay(5000).slideUp(500);
+            var info = $("#link_copeid_info");
+            info.slideDown(500).delay(5000).slideUp(500);
         }
         function copyStringToClipboard (str) {
                 // Create new element
@@ -138,17 +138,19 @@
                 Results<br>
                 <button id="result_link" style="color:blue;" title="Copy Link to clipboard"
                     onclick="generateLinkToClip()">
-                    {{-- <i class="fas fa-link"></i> --}}
-                    <h6> Copy link to clipboard<h6>
+                    <h6> <i class="fas fa-link"></i> Copy link to clipboard<h6>
                 </button>
-                {{-- <div id="link_copeid_info" style="display: none;">
-                    <a href="{{ URL::to('/').$AnalyseConfig_link_Example }}">
-                Link Copeid to Clipboard
-                </a>
-    </div> --}}
-</div>
-</b>
-</h4>
+
+                <div id="link_copeid_info" style="display: none;">
+                    <small>
+                        <a href="{{ URL::to('/').$AnalyseConfig_link_Example }}">
+                            Link Copied to Clipboard
+                        </a>
+                    </small>
+                </div>
+    </div>
+    </b>
+    </h4>
 </div>
 <div class="card-body">
     @if (count($AntennaSolution)> 0)
@@ -188,6 +190,7 @@
 
         <?php $confNb=$AntennaSolution->currentPage()*$perPage-$perPage+1; ?>
         @else
+        Showing {{ count($AntennaSolution) }} Solutions.
         <?php $confNb=1; ?>
         @endif
     </div>
@@ -223,6 +226,7 @@
         </button>
         {!! Form::close() !!}
     </div>
+    @if (Auth::user()->type=='admin' || Auth::user()->type=='salesman')
     <div class="float-right">
         {!! Form::open(['action' => ['AntennasController@pickAntennas'], 'method' => 'GET', 'enctype' =>
         'multipart/form-data']) !!}
@@ -235,6 +239,7 @@
         </button>
         {!! Form::close() !!}
     </div>
+    @endif
     <br>
     <br>
 
@@ -314,19 +319,19 @@
                                 }
                             }
                     ?>
-                <td style="vertical-align: middle;" align="center"  rowspan={{ $totalRow }}>{{ $confNb++ }}
-                        @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
+                <td style="vertical-align: middle;" align="center" rowspan={{ $totalRow }}>{{ $confNb++ }}
+                    {{-- @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman') --}}
 
                     <a name="AnalyseConfig"
                         href="/AnalyseConfig/Conf={{ $confNb-1 }}/Ids={{ $idConcat }}/{{ $AnalyseConfig_link }}"
                         target="_blank">
                         <i class="far fa-question-circle"></i>
                     </a>
-@endif
+                    {{-- @endif --}}
 
                 </td>
-                <td style="vertical-align: middle;"  align="center" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
-                <td align="center" >{{ $setSolution[0]->model_nb }}</td>
+                <td style="vertical-align: middle;" align="center" rowspan={{ $totalRow }}>{{  $totalNbAntennas}}</td>
+                <td align="center">{{ $setSolution[0]->model_nb }}</td>
                 <td align="center">{{ $setSolution[0]->total_nb_ports }}</td>
                 <td align="center">{{ $setSolution[0]->ports_lt_1GH }}</td>
                 <td align="center">{{ $setSolution[0]->ports_btw_1_3GH }}</td>
@@ -348,7 +353,7 @@
 
             @foreach ($setSolution as $item)
             <tr>
-                <td align="center" >{{ $item->model_nb }}</td>
+                <td align="center">{{ $item->model_nb }}</td>
                 <td align="center">{{ $item->total_nb_ports }}</td>
                 <td align="center">{{ $item->ports_lt_1GH }}</td>
                 <td align="center">{{ $item->ports_btw_1_3GH }}</td>

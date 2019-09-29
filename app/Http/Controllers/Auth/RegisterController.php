@@ -72,22 +72,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if(Auth::user()->type=='admin')
-        $data['is_activated']=1;
+        if (Auth::user() && Auth::user()->type == 'admin')
+            $data['is_activated'] = 1;
         else
-        $data['is_activated']=0;
+            $data['is_activated'] = 0;
 
-            return User::create(
-                [
-                    'name' => $data['name'],
-                    'organization' => $data['organization'],
-                    'type' => $data['type'],
-                    'is_activated'=>$data['is_activated'],
-                    'email' => $data['email'],
-                    'password' => Hash::make($data['password']),
-                ]
-            );
-
+        return User::create(
+            [
+                'name' => $data['name'],
+                'organization' => $data['organization'],
+                'type' => $data['type'],
+                'is_activated' => $data['is_activated'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]
+        );
     }
 
 
@@ -105,8 +104,8 @@ class RegisterController extends Controller
         // return $request->all();
         $this->validator($request->all())->validate();
         event(new Registered($user = $this->create($request->all())));
-        if(Auth::user()->type=='admin')
-        return Redirect::route('home')->with('success', 'Operation Successful !<i class="far fa-smile"></i>');
+        if (Auth::user() && Auth::user()->type == 'admin')
+            return Redirect::route('home')->with('success', 'Operation Successful !<i class="far fa-smile"></i>');
 
         return Redirect::back()->with('success', 'Operation Successful !<br>Wait for Site admin to approve it.<br>Have a nice day <i class="far fa-smile"></i>');
     }

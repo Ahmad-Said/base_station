@@ -29,6 +29,16 @@ then add those lines at bottom:
 
 save the file and you should see: crontab: installing new crontab
 
+another approach to update database based on get method is by this link
+/updateDatabaseByGetCron
+which require no permission to update database and should be secret if
+you think it cause any vulnerabilities to the system just go to /routes/web.php
+and comment these lines at end of file:
+// Route::get(
+//     '/updateDatabaseByGetCron',
+//     'SettingWebLaraController@updateDatabaseByGetCron'
+// );
+
 
 
 

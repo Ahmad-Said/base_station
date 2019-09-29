@@ -85,7 +85,8 @@
 
     input[type=button],
     input[type=submit],
-    input[type=reset],a {
+    input[type=reset],
+    a {
         background-color: #CA0106;
         border: none;
         color: white;
@@ -109,13 +110,15 @@
 
     input[type=button]:hover,
     input[type=submit]:hover,
-    input[type=reset]:hover,a {
+    input[type=reset]:hover,
+    a {
         background-color: #951e21;
     }
 
     input[type=button]:active,
     input[type=submit]:active,
-    input[type=reset]:active,a {
+    input[type=reset]:active,
+    a {
         -moz-transform: scale(0.95);
         -webkit-transform: scale(0.95);
         -o-transform: scale(0.95);
@@ -310,11 +313,11 @@
         <!-- Login Form -->
         <form method="POST" action="{{ route('login') }}" style='margin-top:20px; '>
             @csrf
-            <p style="color: #CA0106">
-                    BSA Site Configurator
+            <h1 style="color: #CA0106">
+                BSA Site Configurator
 
 
-            </p>
+            </h1>
 
             <input type="email" name="email" id="email"
                 class="fadeIn second form-control{{ $errors->has('email') ? ' is-invalid' : '' }} " placeholder="Email"
@@ -326,14 +329,15 @@
             </span> @endif
             <input id="password" type="password"
                 class="fadeIn third form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
-                required autocomplete="current-password"  placeholder="Password"> @if ($errors->has('password'))
+                required autocomplete="current-password" placeholder="Password"> @if ($errors->has('password'))
             <br><span class="invalid-feedback" role="alert">
                 <strong style="color:#CA0106">{{ $errors->first('password') }}</strong>
             </span> @endif
 
             <input type="submit" class="fadeIn fourth" value="Log In" style='margin-top:20px; '>
             <a href="{{ route('register') }}" class="fadeIn fourth" style='margin-top:20px;'>{{ __('Register') }}</a>
-            {{-- <input type="button" href="{{ route('register') }}"  class="fadeIn fourth" style='margin-top:20px;' value="{{ __('Register') }}"> --}}
+            {{-- <input type="button" href="{{ route('register') }}" class="fadeIn fourth" style='margin-top:20px;'
+            value="{{ __('Register') }}"> --}}
 
         </form>
 
