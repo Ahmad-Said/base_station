@@ -89,10 +89,17 @@
                                             Edit
                                             {{-- <span class="fas fa-user-edit"></span> --}}
                                         </button>
+                                        @if ($user->is_activated)
                                         <a href="/profile/{{ $user->id }}/edit" role="button"
-                                            class="btn btn-warning btn-sm waves-effect  btn-warning">
-                                            {{-- <span class="fas fa-user-slash"></span> --}}@if ($user->is_activated) Disable @else Enable @endif
+                                            class="btn btn-warning btn-sm waves-effect">
+                                            Disable
                                         </a>
+                                        @else
+                                        <a href="/profile/{{ $user->id }}/edit" role="button"
+                                            class="btn btn-success btn-sm waves-effect">
+                                            Enable
+                                        </a>
+                                        @endif
                                         <button type="button"
                                             class="btn btn-danger btn-sm waves-effect  btn-danger delbtn"
                                             data-userid="{{ $user->id }}" data-toggle="modal"
@@ -221,7 +228,8 @@
                     <input type="hidden" name="userid" class="form-control" id="user_id" value="">
                 </div>
                 <div class="card-footer flex-center">
-                    <button type="button" class="btn  btn-success waves-effect float-left" data-dismiss="modal">No</button>
+                    <button type="button" class="btn  btn-success waves-effect float-left"
+                        data-dismiss="modal">No</button>
                     <button type="submit" class="btn  btn-danger waves-effect float-right">Yes</button>
                 </div>
             </div>

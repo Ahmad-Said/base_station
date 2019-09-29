@@ -100,7 +100,7 @@
             </td>
             <td>
                 {{ Form::submit('Save Setting',
-                        ['class'=>'bg-success text-light font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg',"style" => "vertical-align: middle;"]) }}
+                        ['class'=>'btn btn-success uppercase',"style" => "vertical-align: middle;"]) }}
 
                 {!! Form::close() !!}
             </td>
@@ -136,8 +136,7 @@
                 {{ $allSetting["LAST_ANTENNA_DATA_PROVIDED"]->updated_at->format("d/m/y  h:i A") }}
             </td>
             <td>
-                <a href="/provideAntennasData"
-                    class="bg-primary text-light font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
+                <a href="/provideAntennasData" class="btn btn-primary uppercase">
                     Update database
                 </a>
             </td>

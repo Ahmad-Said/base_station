@@ -101,10 +101,6 @@
 </div>
 {!! Form::close() !!}
 
-{!! Form::open(['action' => ['AnalyserController@analyseConfigHelper'] , 'method' => 'GET', 'enctype' =>
-'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
-<input type="hidden" name="previousUrl" value={{ $previousUrl }}>
-<input type="hidden" name="previousSetIDS" value={{ implode("_",$antennasSetIds) }}>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -122,6 +118,14 @@
                     </h4>
                     @include('inc.TechFullForm_inc')
                     <h3 class="text-left">Selected Antennas</h3>
+
+
+                    {!! Form::open(['action' => ['AnalyserController@analyseConfigHelper'] , 'method' => 'GET',
+                    'enctype' =>
+                    'multipart/form-data', 'class' => 'form-prevent-multiple-submits']) !!}
+                    <input type="hidden" name="previousUrl" value={{ $previousUrl }}>
+                    <input type="hidden" name="previousSetIDS" value={{ implode("_",$antennasSetIds) }}>
+
                     <table id="MySelection"
                         class="table table-hover table-responsive-lg table-primary table-bordered table-sm"
                         cellspacing="0" width="100%">
@@ -142,6 +146,8 @@
                         </tbody>
                     </table>
 
+                    <input type="submit" class="btn btn-primary" id="generate-link-submit" value="Proceed To analyse" />
+                    {!! Form::close() !!}
 
 
                     <table id="dtBasicExample"
@@ -222,9 +228,7 @@
                 </div>
             </div>
         </div>
-        <input type="submit" class="btn btn-primary" id="generate-link-submit" value="Proceed To analyse" />
     </div>
 </div>
-{!! Form::close() !!}
 
 @endsection

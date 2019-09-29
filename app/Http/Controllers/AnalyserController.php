@@ -196,6 +196,7 @@ class AnalyserController extends Controller
                 $saveCachedResult->sum_ports = 0;
                 if (Auth::check()) {
                     $saveCachedResult->email = Auth::user()->email;
+                    $saveCachedResult->type = Auth::user()->type;
                 }
             } else {
                 // this is used to add more combinations

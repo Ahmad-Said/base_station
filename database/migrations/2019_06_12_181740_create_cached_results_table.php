@@ -48,6 +48,7 @@ class CreateCachedResultsTable extends Migration
 
             // Log query information
             $table->string('email')->default("guest"); // reference logged user who did it
+            $table->string('type')->default("guest"); // reference logged user who did it
             $table->timestamps(); // at what time
         });
     }

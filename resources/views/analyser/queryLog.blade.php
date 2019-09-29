@@ -43,6 +43,7 @@
             <tr>
                 <th>Query Nb#</th>
                 <th>User</th>
+                <th>Type</th>
                 <th>System Tech</th>
                 <th>Total ports</th>
                 <th>Combinations Numbers</th>
@@ -58,6 +59,7 @@
                     <a href="{{ $item->link }}" target="_blank"><i class="far fa-question-circle"></i></a>
                 </td>
                 <td>{{ $item->email }}</td>
+                <td>{{ $item->type }}</td>
                 <td>{{ $item->tech }}</td>
                 <td>{{ $item->sum_ports }}</td>
                 <td>{{ $item->combination_nb }}</td>

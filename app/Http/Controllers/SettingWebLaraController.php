@@ -21,7 +21,7 @@ class SettingWebLaraController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except("updateDatabaseByGetCron");
     }
 
     /**
@@ -88,6 +88,24 @@ class SettingWebLaraController extends Controller
     }
 
     /**
+     * Get all data from database mysql2 to default database.
+     *
+     * @param \Illuminate\Http\Request $request testing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateDatabaseByGetCron(Request $request)
+    {
+        $temp = AntennasProvider::provideDataToAntennasAndBands(true);
+        $allSetting = SettingWebLara::getAllSettings();
+        return redirect()->back()
+            ->with(
+                'success',
+                'Data updated to ' . $temp->updated_at->format("d/m/y  h:i A") . '.'
+            );
+    }
+
+    /**
      * Get all queries
      *
      * @return \Illuminate\Http\Response
@@ -101,7 +119,7 @@ class SettingWebLaraController extends Controller
                 "query_form",
                 "sum_ports", "state_finish",
                 "combination_nb", "solution_count",
-                "email", "updated_at"
+                "email", "type", "updated_at"
             ]
         )->orderBy('updated_at', 'desc')->paginate($queriesPerPage);
         $lastQueryDate = CachedResult::max("updated_at");
