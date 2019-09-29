@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         @else
-                        <input name='type' id='type' type='hidden' value='newUser'>
+                        <input name='type' id='type' type='hidden' value='customer'>
                         @endif
 
                         <div class="form-group row">

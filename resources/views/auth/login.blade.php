@@ -40,18 +40,18 @@
         justify-content: center;
         width: 100%;
         min-height: 100%;
-        padding: 0px;
+        padding: 55px;
     }
 
     #formContent {
         -webkit-border-radius: 10px 10px 10px 10px;
         border-radius: 10px 10px 10px 10px;
         background: #fff;
-        padding: 30px;
+        padding: 0px;
         width: 90%;
         max-width: 450px;
         position: relative;
-        padding: 0px;
+        /* padding: 0px; */
         -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
         box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
         text-align: center;
@@ -60,7 +60,7 @@
     #formFooter {
         background-color: #f6f6f6;
         border-top: 1px solid #dce8f1;
-        padding: 25px;
+        padding: 30px;
         text-align: center;
         -webkit-border-radius: 0 0 10px 10px;
         border-radius: 0 0 10px 10px;
@@ -313,11 +313,11 @@
         <!-- Login Form -->
         <form method="POST" action="{{ route('login') }}" style='margin-top:20px; '>
             @csrf
-            <h1 style="color: #CA0106">
+            <h5 style="color: #CA0106">
                 BSA Site Configurator
 
 
-            </h1>
+            </h5>
 
             <input type="email" name="email" id="email"
                 class="fadeIn second form-control{{ $errors->has('email') ? ' is-invalid' : '' }} " placeholder="Email"
@@ -335,7 +335,7 @@
             </span> @endif
 
             <input type="submit" class="fadeIn fourth" value="Log In" style='margin-top:20px; '>
-            <a href="{{ route('register') }}" class="fadeIn fourth" style='margin-top:20px;'>{{ __('Register') }}</a>
+            <a href="{{ route('register') }}" class="fadeIn fourth" style='margin-top:20px; background-color: CA0106;'>{{ __('Register') }}</a>
             {{-- <input type="button" href="{{ route('register') }}" class="fadeIn fourth" style='margin-top:20px;'
             value="{{ __('Register') }}"> --}}
 
