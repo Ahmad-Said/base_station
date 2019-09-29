@@ -50,7 +50,7 @@
                 <p class="card-text">
                     <div class="form-group">
                         <input name="password" disabled="disabled" class="form-control edit" type="password"
-                            value="{{ $a->password }}">
+                            value="">
                     </div>
                 </p>
             </div>

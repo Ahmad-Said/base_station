@@ -1,3 +1,5 @@
+@extends('layouts.app')
+@section('content')
 <style>
     /* BASIC */
 
@@ -341,3 +343,4 @@
 
     </div>
 </div>
+@endsection
