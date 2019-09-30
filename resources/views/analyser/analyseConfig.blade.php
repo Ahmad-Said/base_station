@@ -39,10 +39,10 @@
 
         var optionsWastePorts = {
             title: {
-                text: "Waste Unused Ports"
+                text: "Unused Ports"
             },
             subtitles: [{
-                text: "Total waste / Total availble =  {{ $unusedWastePorts .'/'. $totalAntennasPorts }}"
+                text: "Total Unused / Total availble =  {{ $unusedWastePorts .'/'. $totalAntennasPorts }}"
             }],
             animationEnabled: true,
             data: [{
@@ -75,7 +75,7 @@
                     <th>Antennas Per Sector #</th>
                     <th>Total System Ports #</th>
                     <th>Total Antennas Ports #</th>
-                    <th>Waste ports (Unused) #</th>
+                    <th>Unused ports #</th>
                     <th>Max Height #</th>
                     <th>Total Price ($)</th>
                 </tr>
@@ -131,7 +131,7 @@
                         <th>Mid Band</th>
                         <th>High Band</th>
                         <th>Height (mm)</th>
-                        <th>Unite Price ($)</th>
+                        <th>Unit Price ($)</th>
                         <th>Link to data sheets</th>
                     </tr>
                 </thead>
@@ -214,7 +214,7 @@
         <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
         <br>
         <div style="text-align:center">
-            <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input" />
+            <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modify Input" />
         </div>
         <br>
         <br>

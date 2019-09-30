@@ -97,7 +97,7 @@
 <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
 <br>
 <div style="text-align:center">
-    <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input" hidden />
+    <input type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modify Input" hidden />
 </div>
 {!! Form::close() !!}
 
@@ -113,7 +113,7 @@
                         Technologies
                         <i id="trigger-modify" class="btn btn-info btn-sm">
                             <i class="fas fa-cog"></i>
-                            Modifie Input
+                            Modify Input
                         </i>
                     </h4>
                     @include('inc.TechFullForm_inc')
@@ -138,7 +138,7 @@
                                 <th>Mid Band</th>
                                 <th>High Band</th>
                                 <th>Height (mm)</th>
-                                <th>Unite Price ($)</th>
+                                <th>Unit Price ($)</th>
                                 <th>Link to data sheets</th>
                             </tr>
                         </thead>
@@ -146,7 +146,7 @@
                         </tbody>
                     </table>
 
-                    <input type="submit" class="btn btn-primary" id="generate-link-submit" value="Proceed To analyse" />
+                    <input type="submit" class="btn btn-primary" id="generate-link-submit" value="Proceed To analyze" />
                     {!! Form::close() !!}
 
 
@@ -162,7 +162,7 @@
                                 <th>Mid Band</th>
                                 <th>High Band</th>
                                 <th>Height (mm)</th>
-                                <th>Unite Price ($)</th>
+                                <th>Unit Price ($)</th>
                                 <th>Link to data sheets</th>
                             </tr>
                         </thead>
@@ -213,7 +213,7 @@
                                 <th>Mid Band</th>
                                 <th>High Band</th>
                                 <th>Height (mm)</th>
-                                <th>Unite Price ($)</th>
+                                <th>Unit Price ($)</th>
                                 <th>Link to data sheets</th>
                             </tr>
                         </tfoot>

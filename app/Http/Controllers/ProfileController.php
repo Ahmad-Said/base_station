@@ -136,6 +136,13 @@ class ProfileController extends Controller
         if (isset($password)) {
             $updateRequest["password"] = Hash::make($password);
         }
+        if (User::whereEmail($updateRequest['email'])
+            ->where("id", "!=", $id)->exists()
+        ) {
+            return redirect()->back()
+                ->with('warning', 'Something Went Wrong, Email Already Exist!');
+        }
+
         User::whereId($id)->update($updateRequest);
         // } catch (\Throwable $th) {
         //     return  redirect()->back()->withInput()

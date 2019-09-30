@@ -67,9 +67,9 @@ class LoginController extends Controller
                 Thanks you.'><i class='fas fa-paper-plane'> Contact Admin</i></a>
                 ";
                 return redirect()
-                    ->back();
-                    // ->withInput($request->only($this->username(), 'remember'));
-                    // ->withErrors(['active' => $msg]);
+                    ->back()
+                    ->withInput($request->only($this->username(), 'remember'))
+                    ->withErrors(['active' => $msg]);
             }
         }
 

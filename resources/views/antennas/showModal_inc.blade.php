@@ -6,7 +6,7 @@
      <th>Mid Band</th>
      <th>High Band</th>
      <th>Height (mm)</th>
-     <th>Unite Price ($)</th>
+     <th>Unit Price ($)</th>
      <th>Link to data sheets</th>
 
      simple button template:

@@ -219,7 +219,7 @@
         <input type="hidden" name=antenna_per_sector value="<?php echo $antenna_per_sector; ?>">
         <input type="hidden" name=antenna_preferred value="<?php echo $antenna_preferred; ?>">
         <input type="hidden" name=max_height value="<?php echo $max_height; ?>">
-        <button type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modifie Input">
+        <button type="submit" id="backBtn" name="backBtn" class="btn btn-primary" value="Modify Input">
             <i class="fas fa-backward"></i>
             Modify Input
             <i class="fas fa-cog"></i>
@@ -267,7 +267,7 @@
                 <th>High Band</th>
                 <th>Height (mm)</th>
                 @if(Auth::user()->type=='admin' || Auth::user()->type=='salesman')
-                <th>Unite Price ($)</th>
+                <th>Unit Price ($)</th>
                 @endif
                 <th>Quantity</th>
                 <th>Link to data sheets</th>

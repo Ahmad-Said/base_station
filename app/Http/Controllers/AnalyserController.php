@@ -247,6 +247,8 @@ class AnalyserController extends Controller
                 }
             }
             $saveCachedResult->query_form = $generatedSerial;
+            // TODO if there recent solution with add 2 ports
+            // and found solution with no extra ports do discard saved cached result
             if ($load_more && $isCacheAllowed) {
                 $tempIDS = array();
                 $saveCachedResult->unserializeAndLoadSolution(
